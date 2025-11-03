@@ -212,7 +212,7 @@ export default function NordConnect() {
 
         <div className="grid md:grid-cols-3 gap-6">
           {filteredRooms.map((r) => (
-            <Card key={r.id} className={`transition ${activeRoom===r.id ? "ring-2 ring-blue-500" : ""}`}>
+            <Cardkey={r.id}className={`transition flex flex-col justify-between h-[260px] ${activeRoom === r.id ? "ring-2 ring-blue-500" : ""}`}>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
