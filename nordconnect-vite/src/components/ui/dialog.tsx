@@ -1,9 +1,6 @@
 import * as React from "react";
 
-type DialogCtx = {
-  open: boolean;
-  setOpen: (v: boolean) => void;
-};
+type DialogCtx = { open: boolean; setOpen: (v: boolean) => void };
 const Ctx = React.createContext<DialogCtx | null>(null);
 
 type RootProps = React.PropsWithChildren<{
@@ -11,25 +8,21 @@ type RootProps = React.PropsWithChildren<{
   onOpenChange?: (open: boolean) => void;
 }>;
 
-/**
- * Dialog-root. Kan brukes kontrollert (med open/onOpenChange) eller ukontrollert.
- */
+/** Dialog-root: funker både kontrollert (open/onOpenChange) og ukontrollert. */
 export const Dialog: React.FC<RootProps> = ({ open, onOpenChange, children }) => {
-  const isControlled = typeof open === "boolean";
+  const controlled = typeof open === "boolean";
   const [internal, setInternal] = React.useState(false);
-  const isOpen = isControlled ? (open as boolean) : internal;
+  const isOpen = controlled ? (open as boolean) : internal;
 
   const setOpen = (v: boolean) => {
-    if (!isControlled) setInternal(v);
+    if (!controlled) setInternal(v);
     onOpenChange?.(v);
   };
 
   // Lukk på Escape
   React.useEffect(() => {
     if (!isOpen) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
-    };
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen]);
@@ -38,13 +31,11 @@ export const Dialog: React.FC<RootProps> = ({ open, onOpenChange, children }) =>
 };
 
 type TriggerProps = React.PropsWithChildren<{ asChild?: boolean }>;
-
 export const DialogTrigger: React.FC<TriggerProps> = ({ asChild = false, children }) => {
   const ctx = React.useContext(Ctx);
   if (!ctx) return <>{children}</>;
 
   const handleClick = (e: any) => {
-    // Bevar eksisterende onClick på child
     if (React.isValidElement(children) && (children as any).props?.onClick) {
       (children as any).props.onClick(e);
     }
@@ -52,11 +43,8 @@ export const DialogTrigger: React.FC<TriggerProps> = ({ asChild = false, childre
   };
 
   if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children as React.ReactElement, {
-      onClick: handleClick,
-    });
+    return React.cloneElement(children as React.ReactElement, { onClick: handleClick });
   }
-
   return (
     <button type="button" onClick={handleClick}>
       {children}
@@ -64,7 +52,10 @@ export const DialogTrigger: React.FC<TriggerProps> = ({ asChild = false, childre
   );
 };
 
-export const DialogContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className = "", ...p }) => {
+export const DialogContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  className = "",
+  ...p
+}) => {
   const ctx = React.useContext(Ctx);
   if (!ctx || !ctx.open) return null;
 
@@ -84,14 +75,17 @@ export const DialogContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ 
   );
 };
 
-export const DialogHeader: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className = "", ...p }) => (
-  <div className={`mb-2 ${className}`} {...p} />
-);
+export const DialogHeader: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  className = "",
+  ...p
+}) => <div className={`mb-2 ${className}`} {...p} />;
 
-export const DialogTitle: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className = "", ...p }) => (
-  <div className={`text-lg font-semibold ${className}`} {...p} />
-);
+export const DialogTitle: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  className = "",
+  ...p
+}) => <div className={`text-lg font-semibold ${className}`} {...p} />;
 
-export const DialogDescription: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className = "", ...p }) => (
-  <div className={`text-sm text-slate-600 ${className}`} {...p} />
-);
+export const DialogDescription: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  className = "",
+  ...p
+}) => <div className={`text-sm text-slate-600 ${className}`} {...p} />;
