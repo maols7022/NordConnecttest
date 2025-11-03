@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 
 type DialogCtx = { open: boolean; setOpen: (v: boolean) => void };
 const Ctx = React.createContext<DialogCtx | null>(null);
@@ -8,7 +9,7 @@ type RootProps = React.PropsWithChildren<{
   onOpenChange?: (open: boolean) => void;
 }>;
 
-/** Dialog-root: funker både kontrollert (open/onOpenChange) og ukontrollert. */
+/** Dialog-root: funker kontrollert (open/onOpenChange) og ukontrollert. */
 export const Dialog: React.FC<RootProps> = ({ open, onOpenChange, children }) => {
   const controlled = typeof open === "boolean";
   const [internal, setInternal] = React.useState(false);
@@ -18,6 +19,16 @@ export const Dialog: React.FC<RootProps> = ({ open, onOpenChange, children }) =>
     if (!controlled) setInternal(v);
     onOpenChange?.(v);
   };
+
+  // Lås body-scroll når åpen
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isOpen]);
 
   // Lukk på Escape
   React.useEffect(() => {
@@ -61,11 +72,16 @@ export const DialogContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
 
   const stop: React.MouseEventHandler<HTMLDivElement> = (e) => e.stopPropagation();
 
-  return (
-    <div className="fixed inset-0 z-50" onClick={() => ctx.setOpen(false)}>
-      {/* Bakgrunn */}
-      <div className="fixed inset-0 bg-black/30" />
-      {/* Panel */}
+  const node = (
+    <div
+      className="fixed inset-0 z-50 pointer-events-auto"
+      onClick={() => ctx.setOpen(false)}
+      aria-modal="true"
+      role="dialog"
+    >
+      {/* Mørk bakgrunn som fanger klikk */}
+      <div className="fixed inset-0 bg-black/40" />
+      {/* Selve panelet */}
       <div
         className={`relative z-10 mx-auto mt-24 w-[min(90vw,48rem)] rounded-2xl border bg-white p-4 shadow-xl ${className}`}
         onClick={stop}
@@ -73,6 +89,9 @@ export const DialogContent: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
       />
     </div>
   );
+
+  // Render i portal til body
+  return ReactDOM.createPortal(node, document.body);
 };
 
 export const DialogHeader: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
