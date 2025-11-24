@@ -524,39 +524,34 @@ export default function NordConnect() {
                 ))}
               </div>
 
-              {/* Små ikonknapper for lyd/video/skjerm/fil */}
+              {/* Ikonknapper i normal størrelse */}
               <div className="mt-3 flex flex-wrap gap-2">
                 <Button
                   variant="secondary"
-                  className="h-9 w-9 p-0"
                   title="Mic"
                 >
                   <Mic className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="secondary"
-                  className="h-9 w-9 p-0"
                   title="Kamera"
                 >
                   <Video className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="secondary"
-                  className="h-9 w-9 p-0"
                   title="Lyd"
                 >
                   <Headphones className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="outline"
-                  className="h-9 w-9 p-0"
                   title="Del skjerm (demo)"
                 >
                   <ScreenShare className="h-4 w-4" />
                 </Button>
                 <Button
                   variant="outline"
-                  className="h-9 w-9 p-0"
                   title="Del fil (demo)"
                 >
                   <FileUp className="h-4 w-4" />
