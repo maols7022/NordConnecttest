@@ -184,6 +184,12 @@ export default function NordConnect() {
             <a href="#rooms" className="hover:underline">
               Rom
             </a>
+             <a href="/video-demo" className="hover:underline">
+                      Kamera-demo
+                    </a>
+                    <a href="/breakout-demo" className="hover:underline">
+                      Breakout-demo
+                    </a>
           </nav>
 
           {/* Høyre: knapper + mobilmeny */}
@@ -216,12 +222,6 @@ export default function NordConnect() {
                     </a>
                     <a href="#rooms" className="hover:underline">
                       Rom
-                    </a>
-                    <a href="/video-demo" className="hover:underline">
-                      Kamera-demo
-                    </a>
-                    <a href="/breakout-demo" className="hover:underline">
-                      Breakout-demo
                     </a>
                   </div>
                 </SheetContent>
