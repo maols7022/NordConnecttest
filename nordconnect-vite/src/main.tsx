@@ -7,6 +7,7 @@ import RoomPage from "./pages/RoomPage";
 import VideoDemoPage from "./pages/VideoDemoPage"; // Quizkveld
 import StudyGroupDemoPage from "./pages/StudyGroupDemoPage"; // Studiegruppe
 import BreakoutDemoPage from "./pages/BreakoutDemoPage"; // Breakout-rom
+import HowItWorksPage from "./pages/HowItWorksPage";
 
 import "./index.css";
 
@@ -14,17 +15,13 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        {/* Forsiden / hovedprototypen */}
-        <Route path="/" element={<NordConnect />} />
-
-        {/* Rom-visning som egen side, f.eks. /room/kaffe */}
-        <Route path="/room/:id" element={<RoomPage />} />
-
-        {/* Demo-sider */}
-        <Route path="/quiz-demo" element={<VideoDemoPage />} />
-        <Route path="/study-demo" element={<StudyGroupDemoPage />} />
-        <Route path="/breakout-demo" element={<BreakoutDemoPage />} />
-      </Routes>
+  <Route path="/" element={<NordConnect />} />
+  <Route path="/room/:id" element={<RoomPage />} />
+  <Route path="/quiz-demo" element={<VideoDemoPage />} />
+  <Route path="/study-demo" element={<StudyGroupDemoPage />} />
+  <Route path="/breakout-demo" element={<BreakoutDemoPage />} />
+  <Route path="/how-it-works" element={<HowItWorksPage />} />
+</Routes>
     </BrowserRouter>
   </React.StrictMode>
 );
