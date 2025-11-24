@@ -4,11 +4,24 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
-import { Mic, Video, Headphones, ArrowLeft } from "lucide-react";
+import {
+  Mic,
+  Video,
+  Headphones,
+  ArrowLeft,
+  ScreenShare,
+  FileUp,
+} from "lucide-react";
 
-// Del disse to fra NordConnect.tsx om du vil unngå duplisering
 const mockUsers = ["Anna", "Bjørn", "Chen", "Dina", "Elias", "Fatima", "Gustav", "Hanna"];
-const ROOM_INDEX: Record<string, { name: string; description: string }> = {
+
+const ROOM_INDEX: Record<
+  string,
+  {
+    name: string;
+    description: string;
+  }
+> = {
   kaffe: { name: "Kaffepraten", description: "Uformell prat. Kom og gå som du vil." },
   fokus: { name: "Fokusrom – stille", description: "Pomodoro-økter og stille samskriving." },
   ent1002: { name: "ENT1002 – Diskusjon", description: "Spørsmål, notater, og samarbeid." },
@@ -41,6 +54,7 @@ export default function RoomPage() {
       <main className="max-w-6xl mx-auto px-4 py-8">
         {meta ? (
           <div className="grid md:grid-cols-3 gap-4">
+            {/* Hoved-chatkort */}
             <Card className="md:col-span-2">
               <CardHeader>
                 <CardTitle>{meta.name}</CardTitle>
@@ -60,6 +74,7 @@ export default function RoomPage() {
               </CardContent>
             </Card>
 
+            {/* Sidepanel med deltakere og kontroller */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">Deltakere (mock)</CardTitle>
@@ -67,7 +82,10 @@ export default function RoomPage() {
               <CardContent>
                 <div className="grid grid-cols-2 gap-2">
                   {peopleInRoom(6).map((p, i) => (
-                    <div key={p + i} className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg border">
+                    <div
+                      key={p + i}
+                      className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg border"
+                    >
                       <Avatar className="h-7 w-7 border">
                         <AvatarFallback>{p[0]}</AvatarFallback>
                       </Avatar>
@@ -90,6 +108,15 @@ export default function RoomPage() {
                     Lyd
                   </Button>
                 </div>
+
+                <Button variant="outline" className="mt-2 w-full">
+                  <ScreenShare className="h-4 w-4 mr-1" />
+                  Del skjerm (demo)
+                </Button>
+                <Button variant="outline" className="mt-2 w-full">
+                  <FileUp className="h-4 w-4 mr-1" />
+                  Del fil (demo)
+                </Button>
 
                 <Button className="mt-3 w-full" variant="outline" onClick={() => nav(-1)}>
                   Lukk rom (til forsiden)
