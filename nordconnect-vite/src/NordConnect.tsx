@@ -19,6 +19,8 @@ import {
   Globe,
   ChevronRight,
   Clock,
+  ScreenShare,
+  FileUp,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -222,94 +224,46 @@ export default function NordConnect() {
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="max-w-6xl mx-auto px-4 pt-12 pb-8">
-        <div className="grid md:grid-cols-2 gap-10 items-start">
-          <div>
-            <motion.h1
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-3xl md:text-5xl font-bold leading-tight"
-            >
-              Der nettstudenter møtes –{" "}
-              <span className="text-blue-600">digitalt</span>
-            </motion.h1>
-            <p className="mt-4 text-lg text-slate-600">
-              Lavterskel, uformelt og trygt fellesskap for studenter ved
-              Handelshøgskolen. Hopp inn i et rom når du vil – prat, studer
-              eller bare vær til stede.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Button size="lg">
-                <PlayCircle className="h-5 w-5 mr-2" />
-                Bli med nå
-              </Button>
-              <Button size="lg" variant="outline">
-                <Monitor className="h-5 w-5 mr-2" />
-                Se demo
-              </Button>
-            </div>
-
-            {/* Varsel-ticker */}
-            <div className="mt-6 flex items-center gap-2 text-sm text-slate-600">
-              <Clock className="h-4 w-4" />
-              <div className="overflow-x-auto whitespace-nowrap">
-                {notifications.map((n, i) => (
-                  <Badge key={i} variant="secondary" className="mr-2">
-                    {n}
-                  </Badge>
-                ))}
-              </div>
-            </div>
+      {/* Hero – ryddigere, uten demo-ruter */}
+      <section className="max-w-4xl mx-auto px-4 pt-12 pb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center md:text-left"
+        >
+          <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+            Der nettstudenter møtes –{" "}
+            <span className="text-blue-600">digitalt</span>
+          </h1>
+          <p className="mt-4 text-lg text-slate-600">
+            Lavterskel, uformelt og trygt fellesskap for studenter ved
+            Handelshøgskolen. Hopp inn i et rom når du vil – prat, studer
+            eller bare vær til stede.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3 justify-center md:justify-start">
+            <Button size="lg">
+              <PlayCircle className="h-5 w-5 mr-2" />
+              Bli med nå
+            </Button>
+            <Button size="lg" variant="outline">
+              <Monitor className="h-5 w-5 mr-2" />
+              Se demo
+            </Button>
           </div>
 
-          {/* Demo-panel med romkort */}
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="bg-white rounded-2xl shadow-xl border p-4"
-          >
-            <div className="grid grid-cols-3 gap-3">
-              {rooms.slice(0, 6).map((r) => (
-                <Card
-                  key={r.id}
-                  className="transition shadow-sm hover:shadow-md hover:-translate-y-0.5 duration-150 h-[190px] flex flex-col"
-                >
-                  <CardHeader className="pb-2">
-                    <div className="flex items-center gap-2">
-                      <ActiveIcon Icon={r.icon} />
-                      <CardTitle className="text-base line-clamp-1">
-                        {r.name}
-                      </CardTitle>
-                    </div>
-                    <div className="text-xs text-slate-500">{r.type}</div>
-                  </CardHeader>
-                  <CardContent className="pt-0 mt-auto flex flex-col">
-                    <div className="flex items-center gap-2 text-sm mb-2">
-                      <Users className="h-4 w-4" />
-                      {r.online} online
-                    </div>
-                    <Button
-                      size="sm"
-                      className="w-full mb-2"
-                      onClick={() => setActiveRoom(r.id)}
-                    >
-                      Åpne rom (popup)
-                    </Button>
-                    <Link
-                      to={`/room/${r.id}`}
-                      className="inline-flex items-center justify-center rounded-md border text-sm font-medium h-8 px-3 w-full"
-                    >
-                      Åpne som side
-                    </Link>
-                  </CardContent>
-                </Card>
+          {/* Varsel-ticker */}
+          <div className="mt-6 flex items-center gap-2 text-sm text-slate-600 justify-center md:justify-start">
+            <Clock className="h-4 w-4" />
+            <div className="overflow-x-auto whitespace-nowrap">
+              {notifications.map((n, i) => (
+                <Badge key={i} variant="secondary" className="mr-2">
+                  {n}
+                </Badge>
               ))}
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </section>
 
       {/* About */}
@@ -353,7 +307,7 @@ export default function NordConnect() {
 
       {/* Rom-seksjon */}
       <section id="rooms" className="max-w-6xl mx-auto px-4 py-12">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-4 gap-4 flex-wrap">
           <h2 className="text-2xl font-bold">Utforsk rom</h2>
           <div className="flex items-center gap-2 w-full max-w-md">
             <Input
@@ -570,6 +524,20 @@ export default function NordConnect() {
                   Lyd
                 </Button>
               </div>
+              <Button
+                variant="outline"
+                className="mt-2 w-full"
+              >
+                <ScreenShare className="h-4 w-4 mr-1" />
+                Del skjerm (demo)
+              </Button>
+              <Button
+                variant="outline"
+                className="mt-2 w-full"
+              >
+                <FileUp className="h-4 w-4 mr-1" />
+                Del fil (demo)
+              </Button>
               <Button
                 className="mt-3 w-full"
                 variant="outline"
