@@ -95,7 +95,8 @@ export default function BreakoutDemoPage() {
               <div className="grid md:grid-cols-3 gap-4">
                 {/* Plenums-visning / host */}
                 <div className="md:col-span-2 space-y-3">
-                  <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-48 relative">
+                  {/* Større «kamera»-flate for å fylle mer av kortet */}
+                  <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-72 relative">
                     <div className="w-full h-full bg-gradient-to-tr from-slate-800 to-slate-700 flex items-center justify-center">
                       <span className="text-sm opacity-80 text-center px-4">
                         [ Plenum – vert oppsummerer og gir instruksjoner før breakout – demo ]
@@ -114,13 +115,31 @@ export default function BreakoutDemoPage() {
                     </div>
                   </div>
 
-                  {/* Instruksjonstekst */}
+                  {/* Litt ekstra innhold under videoen, for å unngå tomrom */}
                   <div className="rounded-lg border bg-slate-50 px-3 py-2 text-xs text-slate-600">
-                    <p>
+                    <p className="mb-1">
                       I en ekte løsning kan verten fordele deltakerne automatisk eller manuelt
                       til breakout-rommene under. Etter gruppearbeid kan alle returnere
                       til plenum for oppsummering.
                     </p>
+                    <div className="mt-2">
+                      <div className="font-semibold text-[11px] text-slate-700 mb-1">
+                        Eksempel: noen av deltakerne i plenum (demo)
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {["Anna", "Bjørn", "Chen", "Dina", "Elias", "Fatima"].map((name) => (
+                          <div
+                            key={name}
+                            className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white border text-[11px]"
+                          >
+                            <Avatar className="h-5 w-5 border">
+                              <AvatarFallback>{initials(name)}</AvatarFallback>
+                            </Avatar>
+                            <span className="truncate max-w-[80px]">{name}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
 
                   {/* Vert-kontroller (mock) */}
