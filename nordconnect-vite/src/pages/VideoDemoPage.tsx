@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -34,6 +34,10 @@ function initials(name: string) {
 export default function VideoDemoPage() {
   const nav = useNavigate();
 
+  // enkel state for demo av mic/kamera på vert
+  const [hostMicOn, setHostMicOn] = useState(true);
+  const [hostCamOn, setHostCamOn] = useState(true);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
       {/* Topplinje */}
@@ -45,15 +49,16 @@ export default function VideoDemoPage() {
               Tilbake
             </Button>
             <div>
-              <div className="text-sm font-semibold">Kamera-demo – Quizkveld</div>
+              <div className="text-sm font-semibold">Kamera-demo – arrangementrom</div>
               <div className="text-xs text-slate-500">
-                Viser et arrangement der verten har kamera på, og andre kan delta muntlig eller skriftlig.
+                Viser et digitalt arrangement der verten har kamera på, og andre kan delta
+                muntlig eller skriftlig.
               </div>
             </div>
           </div>
           <div className="hidden md:flex items-center gap-2 text-xs text-slate-500">
             <Clock className="h-3 w-3" />
-            <span>Quizkveld: 19:00–20:00 (demo)</span>
+            <span>Arrangement: 19:00–20:00 (demo)</span>
           </div>
         </div>
       </header>
@@ -64,9 +69,10 @@ export default function VideoDemoPage() {
           <Card>
             <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
               <div>
-                <CardTitle>Quizkveld – vert med kamera</CardTitle>
+                {/* ny, mer generell overskrift */}
+                <CardTitle>Arrangementrom – vert med kamera</CardTitle>
                 <p className="text-sm text-slate-600 mt-1">
-                  Vert har kamera på, deltakerne kan velge selv. Noen er med på lyd, andre
+                  Verten har kamera på, deltakerne kan velge selv. Noen er med på lyd, andre
                   deltar kun i chat. Alt du ser her er kun visuell demo.
                 </p>
               </div>
@@ -76,7 +82,7 @@ export default function VideoDemoPage() {
               </Badge>
             </CardHeader>
             <CardContent>
-              {/* Event-banner øverst i rommet */}
+              {/* Event-banner øverst i rommet – her sier vi at det er quizkveld */}
               <EventBanner
                 title="Quizkveld – tema: entreprenørskap"
                 subtitle="Uformelt digitalt arrangement for nettstudenter."
@@ -101,7 +107,7 @@ export default function VideoDemoPage() {
                         </div>
                       </div>
                       <div className="flex items-center gap-1">
-                        <StatusIcon micOn cameraOn />
+                        <StatusIcon micOn={hostMicOn} cameraOn={hostCamOn} />
                       </div>
                     </div>
                     <div className="absolute top-2 left-2">
@@ -139,25 +145,38 @@ export default function VideoDemoPage() {
                     ))}
                   </div>
 
-                  {/* Kontroller (mock, kun UI) */}
+                  {/* Kontroller (nå interaktive, uten ekstra hvite knapper) */}
                   <div className="mt-2 flex flex-wrap gap-2">
-                    <Button variant="secondary" title="Mic">
-                      <Mic className="h-4 w-4" />
+                    {/* MIC-toggle */}
+                    <Button
+                      variant={hostMicOn ? "secondary" : "outline"}
+                      title={hostMicOn ? "Slå av mikrofon (demo)" : "Skru på mikrofon (demo)"}
+                      onClick={() => setHostMicOn((v) => !v)}
+                    >
+                      {hostMicOn ? (
+                        <Mic className="h-4 w-4" />
+                      ) : (
+                        <MicOff className="h-4 w-4" />
+                      )}
                     </Button>
-                    <Button variant="secondary" title="Kamera">
-                      <Video className="h-4 w-4" />
+
+                    {/* KAMERA-toggle */}
+                    <Button
+                      variant={hostCamOn ? "secondary" : "outline"}
+                      title={hostCamOn ? "Slå av kamera (demo)" : "Skru på kamera (demo)"}
+                      onClick={() => setHostCamOn((v) => !v)}
+                    >
+                      {hostCamOn ? (
+                        <Video className="h-4 w-4" />
+                      ) : (
+                        <VideoOff className="h-4 w-4" />
+                      )}
                     </Button>
-                    <Button variant="outline" title="Skru av kamera (demo)">
-                      <VideoOff className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" title="Mute (demo)">
-                      <MicOff className="h-4 w-4" />
-                    </Button>
-                    {/* Del skjerm i samme mørke stil som de andre */}
+
+                    {/* Del skjerm – mørk knapp, som før */}
                     <Button variant="secondary" title="Del skjerm (demo)">
                       <ScreenShare className="h-4 w-4" />
                     </Button>
-                    {/* Merk: Del fil er flyttet ned til chat-boksen */}
                   </div>
                 </div>
               </div>
