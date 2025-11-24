@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   ArrowLeft,
   Users,
@@ -14,6 +15,8 @@ import {
   ScreenShare,
   FileUp,
   Clock,
+  MessageCircle,
+  Send,
 } from "lucide-react";
 
 const quizParticipants = ["Anna", "Bjørn", "Chen", "Dina", "Elias", "Fatima"];
@@ -43,7 +46,7 @@ export default function VideoDemoPage() {
             <div>
               <div className="text-sm font-semibold">Kamera-demo – Quizkveld</div>
               <div className="text-xs text-slate-500">
-                Viser et arrangement der verten har kamera på.
+                Viser et arrangement der verten har kamera på, og andre kan delta muntlig eller skriftlig.
               </div>
             </div>
           </div>
@@ -54,102 +57,151 @@ export default function VideoDemoPage() {
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        <Card>
-          <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            <div>
-              <CardTitle>Quizkveld – vert med kamera</CardTitle>
-              <p className="text-sm text-slate-600 mt-1">
-                Vert har kamera på, deltakerne kan velge selv. Dette er kun en
-                visuell demo (ingen ekte video/lyd).
-              </p>
-            </div>
-            <Badge variant="secondary" className="flex items-center gap-1">
-              <Users className="h-3 w-3" />
-              18 deltakere (demo)
-            </Badge>
-          </CardHeader>
-          <CardContent>
-            <div className="grid md:grid-cols-3 gap-4">
-              {/* Vert-video */}
-              <div className="md:col-span-2">
-                <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-56 relative">
-                  <div className="w-full h-full bg-gradient-to-tr from-slate-800 to-slate-700 flex items-center justify-center">
-                    <span className="text-sm opacity-80">
-                      [ Vert med kamera aktiv – demo ]
-                    </span>
-                  </div>
-                  <div className="absolute left-0 right-0 bottom-0 bg-black/50 backdrop-blur px-3 py-2 flex items-center justify-between">
-                    <div>
-                      <div className="text-xs font-medium">Nina (vert)</div>
-                      <div className="text-[10px] text-slate-200/80">
-                        Fagansvarlig / host
+      <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+        {/* Hovedkort: vert med kamera */}
+        <section>
+          <Card>
+            <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <div>
+                <CardTitle>Quizkveld – vert med kamera</CardTitle>
+                <p className="text-sm text-slate-600 mt-1">
+                  Vert har kamera på, deltakerne kan velge selv. Noen er med på lyd, andre
+                  deltar kun i chat. Alt du ser her er kun visuell demo.
+                </p>
+              </div>
+              <Badge variant="secondary" className="flex items-center gap-1">
+                <Users className="h-3 w-3" />
+                18 deltakere (demo)
+              </Badge>
+            </CardHeader>
+            <CardContent>
+              <div className="grid md:grid-cols-3 gap-4">
+                {/* Vert-video */}
+                <div className="md:col-span-2">
+                  <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-56 relative">
+                    <div className="w-full h-full bg-gradient-to-tr from-slate-800 to-slate-700 flex items-center justify-center">
+                      <span className="text-sm opacity-80">
+                        [ Vert med kamera aktiv – demo ]
+                      </span>
+                    </div>
+                    <div className="absolute left-0 right-0 bottom-0 bg-black/50 backdrop-blur px-3 py-2 flex items-center justify-between">
+                      <div>
+                        <div className="text-xs font-medium">Nina (vert)</div>
+                        <div className="text-[10px] text-slate-200/80">
+                          Fagansvarlig / host
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <StatusIcon micOn cameraOn />
                       </div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <StatusIcon micOn cameraOn />
+                    <div className="absolute top-2 left-2">
+                      <Badge variant="destructive" className="text-[10px] px-2 py-0.5">
+                        LIVE
+                      </Badge>
                     </div>
                   </div>
-                  <div className="absolute top-2 left-2">
-                    <Badge variant="destructive" className="text-[10px] px-2 py-0.5">
-                      LIVE
-                    </Badge>
+                </div>
+
+                {/* Deltakere i små ruter */}
+                <div className="space-y-3">
+                  <div className="text-xs text-slate-500">
+                    Eksempel på deltakere (demo)
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {quizParticipants.map((name, i) => (
+                      <div
+                        key={name + i}
+                        className="rounded-lg border bg-slate-50 p-2 flex items-center justify-between gap-2"
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <Avatar className="h-7 w-7 border">
+                            <AvatarFallback>{initials(name)}</AvatarFallback>
+                          </Avatar>
+                          <span className="text-xs font-medium truncate">
+                            {name}
+                          </span>
+                        </div>
+                        <StatusIcon
+                          micOn={i < 2}
+                          cameraOn={i === 0 || i === 1}
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Kontroller (mock, kun UI) */}
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <Button variant="secondary" title="Mic">
+                      <Mic className="h-4 w-4" />
+                    </Button>
+                    <Button variant="secondary" title="Kamera">
+                      <Video className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" title="Skru av kamera (demo)">
+                      <VideoOff className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" title="Mute (demo)">
+                      <MicOff className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" title="Del skjerm (demo)">
+                      <ScreenShare className="h-4 w-4" />
+                    </Button>
+                    <Button variant="outline" title="Del fil (demo)">
+                      <FileUp className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </section>
 
-              {/* Deltakere i små ruter */}
-              <div className="space-y-3">
-                <div className="text-xs text-slate-500">
-                  Eksempel på deltakere (demo)
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {quizParticipants.map((name, i) => (
-                    <div
-                      key={name + i}
-                      className="rounded-lg border bg-slate-50 p-2 flex items-center justify-between gap-2"
-                    >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <Avatar className="h-7 w-7 border">
-                          <AvatarFallback>{initials(name)}</AvatarFallback>
-                        </Avatar>
-                        <span className="text-xs font-medium truncate">
-                          {name}
-                        </span>
-                      </div>
-                      <StatusIcon
-                        micOn={i < 2}
-                        cameraOn={i === 0 || i === 1}
-                      />
-                    </div>
-                  ))}
-                </div>
-
-                {/* Kontroller (mock, kun UI) */}
-                <div className="mt-2 flex flex-wrap gap-2">
-                  <Button variant="secondary" title="Mic">
-                    <Mic className="h-4 w-4" />
-                  </Button>
-                  <Button variant="secondary" title="Kamera">
-                    <Video className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" title="Skru av kamera (demo)">
-                    <VideoOff className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" title="Mute (demo)">
-                    <MicOff className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" title="Del skjerm (demo)">
-                    <ScreenShare className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" title="Del fil (demo)">
-                    <FileUp className="h-4 w-4" />
-                  </Button>
-                </div>
+        {/* Tekstchat – skriftlig deltakelse */}
+        <section>
+          <Card>
+            <CardHeader className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <MessageCircle className="h-5 w-5 text-blue-600" />
+                <CardTitle className="text-base">Tekstchat (demo)</CardTitle>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+              <span className="text-xs text-slate-500">
+                Viser at du kan delta kun skriftlig – uten kamera og mic.
+              </span>
+            </CardHeader>
+            <CardContent>
+              <div className="border rounded-lg p-3 bg-slate-50">
+                <div className="text-xs text-slate-500 mb-2">
+                  Eksempel på meldinger:
+                </div>
+                <div className="space-y-2 max-h-44 overflow-auto text-sm">
+                  <ChatBubble name="Anna">
+                    Jeg følger bare med i chat i dag, men quiz høres gøy ut 😄
+                  </ChatBubble>
+                  <ChatBubble name="Bjørn">
+                    Kan noen gjenta spørsmålet? Jeg fikk ikke helt med meg.
+                  </ChatBubble>
+                  <ChatBubble name="Chen">
+                    Jeg vil helst ikke ha kamera på, men skriver gjerne svar her 😊
+                  </ChatBubble>
+                  <ChatBubble name="Nina (vert)" align="right">
+                    Helt fint å delta bare skriftlig – alle må gjøre det som føles komfortabelt 💙
+                  </ChatBubble>
+                </div>
+                <div className="mt-3 flex gap-2">
+                  <Input placeholder="Skriv en melding… (demo – ikke ekte chat)" />
+                  <Button type="button">
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+                <p className="mt-2 text-[11px] text-slate-500">
+                  I en ekte løsning ville dette vært en fullverdig chat, der enkelte
+                  kanskje kun skriver, mens andre både snakker og skriver.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
       </main>
     </div>
   );
@@ -180,6 +232,29 @@ function StatusIcon({ micOn, cameraOn }: { micOn: boolean; cameraOn: boolean }) 
           <VideoOff className="h-3 w-3 text-white" />
         )}
       </span>
+    </div>
+  );
+}
+
+function ChatBubble({
+  name,
+  children,
+  align = "left",
+}: {
+  name: string;
+  children: React.ReactNode;
+  align?: "left" | "right";
+}) {
+  return (
+    <div className={`flex ${align === "right" ? "justify-end" : "justify-start"}`}>
+      <div
+        className={`max-w-[80%] rounded-2xl px-3 py-2 text-xs shadow-sm ${
+          align === "right" ? "bg-blue-600 text-white" : "bg-white border"
+        }`}
+      >
+        <div className="text-[9px] opacity-70 mb-1">{name}</div>
+        <div>{children}</div>
+      </div>
     </div>
   );
 }
