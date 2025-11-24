@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import App from "./App";
 import RoomPage from "./pages/RoomPage";
+import VideoDemoPage from "./pages/VideoDemoPage";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
@@ -10,6 +11,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/room/:id" element={<RoomPage />} />
+        <Route path="/video-demo" element={<VideoDemoPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
