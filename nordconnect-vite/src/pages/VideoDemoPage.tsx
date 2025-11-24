@@ -153,12 +153,11 @@ export default function VideoDemoPage() {
                     <Button variant="outline" title="Mute (demo)">
                       <MicOff className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" title="Del skjerm (demo)">
+                    {/* Del skjerm i samme mørke stil som de andre */}
+                    <Button variant="secondary" title="Del skjerm (demo)">
                       <ScreenShare className="h-4 w-4" />
                     </Button>
-                    <Button variant="outline" title="Del fil (demo)">
-                      <FileUp className="h-4 w-4" />
-                    </Button>
+                    {/* Merk: Del fil er flyttet ned til chat-boksen */}
                   </div>
                 </div>
               </div>
@@ -197,15 +196,29 @@ export default function VideoDemoPage() {
                     Helt fint å delta bare skriftlig – alle må gjøre det som føles komfortabelt 💙
                   </ChatBubble>
                 </div>
+
+                {/* INPUTRAD: del fil + skriv + send */}
                 <div className="mt-3 flex gap-2">
-                  <Input placeholder="Skriv en melding… (demo – ikke ekte chat)" />
-                  <Button type="button">
+                  <Button
+                    variant="outline"
+                    type="button"
+                    title="Del fil (demo)"
+                    className="shrink-0"
+                  >
+                    <FileUp className="h-4 w-4" />
+                  </Button>
+                  <Input
+                    placeholder="Skriv en melding… (demo – ikke ekte chat)"
+                    className="flex-1"
+                  />
+                  <Button type="button" className="shrink-0">
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>
+
                 <p className="mt-2 text-[11px] text-slate-500">
                   I en ekte løsning ville dette vært en fullverdig chat, der enkelte
-                  kanskje kun skriver, mens andre både snakker og skriver.
+                  kanskje kun skriver, mens andre både snakker og skriver – og kan legge ved filer.
                 </p>
               </div>
             </CardContent>
