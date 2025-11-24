@@ -209,9 +209,9 @@ export default function NordConnect() {
                     <a href="#about" className="hover:underline">
                       Om
                     </a>
-                    <a href="#how" className="hover:underline">
-                      Slik funker det
-                    </a>
+                    <Link to="/how-it-works" className="hover:underline">
+  Slik funker det
+</Link>
                     <a href="#rooms" className="hover:underline">
                       Rom
                     </a>
