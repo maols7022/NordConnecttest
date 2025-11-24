@@ -184,12 +184,13 @@ export default function NordConnect() {
             <a href="#rooms" className="hover:underline">
               Rom
             </a>
-             <a href="/video-demo" className="hover:underline">
-                      Kamera-demo
-                    </a>
-                    <a href="/breakout-demo" className="hover:underline">
-                      Breakout-demo
-                    </a>
+            {/* Nye test/demo-sider */}
+            <Link to="/video-demo" className="hover:underline">
+              Kamera-demo
+            </Link>
+            <Link to="/breakout-demo" className="hover:underline">
+              Breakout-demo
+            </Link>
           </nav>
 
           {/* Høyre: knapper + mobilmeny */}
@@ -223,6 +224,13 @@ export default function NordConnect() {
                     <a href="#rooms" className="hover:underline">
                       Rom
                     </a>
+                    {/* Demo-lenker også i mobilmeny */}
+                    <Link to="/video-demo" className="hover:underline">
+                      Kamera-demo
+                    </Link>
+                    <Link to="/breakout-demo" className="hover:underline">
+                      Breakout-demo
+                    </Link>
                   </div>
                 </SheetContent>
               </Sheet>
@@ -231,7 +239,7 @@ export default function NordConnect() {
         </div>
       </header>
 
-      {/* Hero – ren uten demo-ruter */}
+      {/* Hero */}
       <section className="max-w-4xl mx-auto px-4 pt-12 pb-8">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
@@ -532,34 +540,19 @@ export default function NordConnect() {
 
               {/* Ikonknapper i normal størrelse */}
               <div className="mt-3 flex flex-wrap gap-2">
-                <Button
-                  variant="secondary"
-                  title="Mic"
-                >
+                <Button variant="secondary" title="Mic">
                   <Mic className="h-4 w-4" />
                 </Button>
-                <Button
-                  variant="secondary"
-                  title="Kamera"
-                >
+                <Button variant="secondary" title="Kamera">
                   <Video className="h-4 w-4" />
                 </Button>
-                <Button
-                  variant="secondary"
-                  title="Lyd"
-                >
+                <Button variant="secondary" title="Lyd">
                   <Headphones className="h-4 w-4" />
                 </Button>
-                <Button
-                  variant="outline"
-                  title="Del skjerm (demo)"
-                >
+                <Button variant="outline" title="Del skjerm (demo)">
                   <ScreenShare className="h-4 w-4" />
                 </Button>
-                <Button
-                  variant="outline"
-                  title="Del fil (demo)"
-                >
+                <Button variant="outline" title="Del fil (demo)">
                   <FileUp className="h-4 w-4" />
                 </Button>
               </div>
