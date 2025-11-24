@@ -218,8 +218,11 @@ export default function NordConnect() {
                       Rom
                     </a>
                     <a href="/video-demo" className="hover:underline">
-  Kamera-demo
-</a>
+                      Kamera-demo
+                    </a>
+                    <a href="/breakout-demo" className="hover:underline">
+                      Breakout-demo
+                    </a>
                   </div>
                 </SheetContent>
               </Sheet>
