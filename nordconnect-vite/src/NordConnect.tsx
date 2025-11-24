@@ -375,11 +375,12 @@ export default function NordConnect() {
                       </Button>
                     )}
                     <Link
-                      to={`/room/${r.id}`}
-                      className="inline-flex items-center justify-center rounded-md border text-sm font-medium h-9 px-3"
-                    >
-                      Som side
-                    </Link>
+  to={`/room/${r.id}`}
+  className="inline-flex items-center justify-center rounded-md border h-9 w-9"
+  title="Åpne som side"
+>
+  <Expand className="h-4 w-4" />
+</Link>
                   </div>
                 </div>
 
