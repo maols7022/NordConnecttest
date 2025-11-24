@@ -18,6 +18,7 @@ import {
   MessageCircle,
   Send,
 } from "lucide-react";
+import EventBanner from "@/components/EventBanner";
 
 const quizParticipants = ["Anna", "Bjørn", "Chen", "Dina", "Elias", "Fatima"];
 
@@ -75,6 +76,14 @@ export default function VideoDemoPage() {
               </Badge>
             </CardHeader>
             <CardContent>
+              {/* Event-banner øverst i rommet */}
+              <EventBanner
+                title="Quizkveld – tema: entreprenørskap"
+                subtitle="Uformelt digitalt arrangement for nettstudenter."
+                host="Nina (fagansvarlig)"
+                time="19:00–20:00"
+              />
+
               <div className="grid md:grid-cols-3 gap-4">
                 {/* Vert-video */}
                 <div className="md:col-span-2">
