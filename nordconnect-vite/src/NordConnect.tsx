@@ -457,19 +457,29 @@ export default function NordConnect() {
       </footer>
 
       {/* Aktivt rom – popup-dialog */}
-      <Dialog
-        open={!!activeRoom}
-        onOpenChange={(open) => !open && setActiveRoom(null)}
+   <Dialog
+  open={!!activeRoom}
+  onOpenChange={(open) => !open && setActiveRoom(null)}
+>
+  <DialogContent className="max-w-2xl relative">
+    {activeRoom && (
+      <Link
+        to={`/room/${activeRoom}`}
+        className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full border bg-white/80 hover:bg-slate-100"
+        title="Åpne som side"
       >
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>
-              {rooms.find((r) => r.id === activeRoom)?.name || "Rom"}
-            </DialogTitle>
-            <DialogDescription>
-              Uformell prat. Kamera valgfritt. Husk å være inkluderende.
-            </DialogDescription>
-          </DialogHeader>
+        <Expand className="h-4 w-4" />
+      </Link>
+    )}
+
+    <DialogHeader>
+      <DialogTitle>
+        {rooms.find((r) => r.id === activeRoom)?.name || "Rom"}
+      </DialogTitle>
+      <DialogDescription>
+        Uformell prat. Kamera valgfritt. Husk å være inkluderende.
+      </DialogDescription>
+    </DialogHeader>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="md:col-span-2 bg-slate-50 rounded-xl p-3 border">
               <div className="text-xs text-slate-500 mb-2">
