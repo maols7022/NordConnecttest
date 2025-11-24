@@ -175,17 +175,14 @@ export default function NordConnect() {
           </div>
 
           {/* Midten: meny */}
-          <nav className="hidden md:flex items-center gap-6 text-sm justify-center">
-            <a href="#about" className="hover:underline">
-              Om
-            </a>
-            <a href="#how" className="hover:underline">
-              Slik funker det
-            </a>
-            <a href="#rooms" className="hover:underline">
-              Rom
-            </a>
-          </nav>
+         <nav className="hidden md:flex items-center gap-6 text-sm justify-center">
+  <a href="#about" className="hover:underline">Om</a>
+  <Link to="/how-it-works" className="hover:underline">
+    Slik funker det
+  </Link>
+  <a href="#rooms" className="hover:underline">Rom</a>
+</nav>
+
 
           {/* Høyre: knapper + mobilmeny */}
           <div className="flex items-center justify-end gap-2">
