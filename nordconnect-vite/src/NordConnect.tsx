@@ -462,7 +462,7 @@ export default function NordConnect() {
         onOpenChange={(open) => !open && setActiveRoom(null)}
       >
         {/* Større dialog + expand-ikon */}
-        <DialogContent className="max-w-5xl relative">
+        <DialogContent className="max-w-6xl relative">
           {activeRoom && (
             <Link
               to={`/room/${activeRoom}`}
