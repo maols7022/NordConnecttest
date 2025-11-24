@@ -108,12 +108,11 @@ export default function StudyGroupDemoPage() {
                   <Button variant="secondary" title="Lyd">
                     <Headphones className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" title="Del skjerm (demo)">
+                  {/* Del skjerm i mørk stil som de andre */}
+                  <Button variant="secondary" title="Del skjerm (demo)">
                     <ScreenShare className="h-4 w-4" />
                   </Button>
-                  <Button variant="outline" title="Del fil (demo)">
-                    <FileUp className="h-4 w-4" />
-                  </Button>
+                  {/* Merk: Del fil er flyttet ned til chat */}
                 </div>
                 <p className="text-[11px] text-slate-500">
                   I praksis kan noen ha kamera av og kun bidra gjennom skriftlig chat.
@@ -154,15 +153,29 @@ export default function StudyGroupDemoPage() {
                     Ja! Chat er supert – bare skriv når du vil, så kan vi ta muntlig oppfølging om du vil senere.
                   </ChatBubble>
                 </div>
+
+                {/* INPUTRAD: del fil + skriv + send */}
                 <div className="mt-3 flex gap-2">
-                  <Input placeholder="Skriv en melding… (demo – ikke ekte chat)" />
-                  <Button type="button">
+                  <Button
+                    variant="outline"
+                    type="button"
+                    title="Del fil (demo)"
+                    className="shrink-0"
+                  >
+                    <FileUp className="h-4 w-4" />
+                  </Button>
+                  <Input
+                    placeholder="Skriv en melding… (demo – ikke ekte chat)"
+                    className="flex-1"
+                  />
+                  <Button type="button" className="shrink-0">
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>
+
                 <p className="mt-2 text-[11px] text-slate-500">
                   I en ekte løsning ville du kunne bruke chat til å stille spørsmål, gi svar
-                  og følge med – selv om du ikke ønsker å snakke.
+                  og følge med – selv om du ikke ønsker å snakke, og eventuelt legge ved filer.
                 </p>
               </div>
             </CardContent>
