@@ -95,48 +95,41 @@ export default function BreakoutDemoPage() {
               <div className="grid md:grid-cols-3 gap-4">
                 {/* Plenums-visning / host */}
                 <div className="md:col-span-2 space-y-3">
-                  {/* Større «kamera»-flate for å fylle mer av kortet */}
-                  <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-100 relative">
+
+                  {/* Større firkantet kameravisning */}
+                  <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-96 relative">
                     <div className="w-full h-full bg-gradient-to-tr from-slate-800 to-slate-700 flex items-center justify-center">
                       <span className="text-sm opacity-80 text-center px-4">
-                        [ Plenum – vert oppsummerer og gir instruksjoner før breakout – demo ]
+                        [ Vert – kamera/scene – demo ]
                       </span>
                     </div>
+
+                    {/* Overlay med navn + status */}
                     <div className="absolute left-0 right-0 bottom-0 bg-black/50 backdrop-blur px-3 py-2 flex items-center justify-between">
                       <div>
                         <div className="text-xs font-medium">Nina (vert)</div>
-                        <div className="text-[10px] text-slate-200/80">
-                          Leder økten og fordeler deltakerne
-                        </div>
+                        <div className="text-[10px] text-slate-200/80">Presenterer</div>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <StatusIcon micOn cameraOn />
-                      </div>
+                      <StatusIcon micOn cameraOn />
                     </div>
                   </div>
 
-                  {/* Vert-kontroller (mock) */}
-                  <div className="flex flex-wrap gap-2 items-center justify-between">
-                    <div className="flex flex-wrap gap-2">
-                      <Button variant="secondary" title="Mic">
-                        <Mic className="h-4 w-4" />
-                      </Button>
-                      <Button variant="secondary" title="Kamera">
-                        <Video className="h-4 w-4" />
-                      </Button>
-                      {/* Del skjerm i mørk stil som de andre */}
-                      <Button variant="secondary" title="Del skjerm (demo)">
-                        <ScreenShare className="h-4 w-4" />
-                      </Button>
-                    </div>
-                    <p className="text-[11px] text-slate-500">
-                      Alt du ser her er kun UI – ingen faktisk fordeling eller video/lyd.
-                    </p>
+                  {/* Vert-kontroller */}
+                  <div className="flex flex-wrap gap-2 items-center">
+                    <Button variant="secondary" title="Mic">
+                      <Mic className="h-4 w-4" />
+                    </Button>
+                    <Button variant="secondary" title="Kamera">
+                      <Video className="h-4 w-4" />
+                    </Button>
+                    <Button variant="secondary" title="Del skjerm">
+                      <ScreenShare className="h-4 w-4" />
+                    </Button>
                   </div>
                 </div>
 
-                {/* Liste over breakout-rom */}
-                <div className="space-y-3">
+                {/* Breakout-romliste — scrollable */}
+                <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
                   {breakoutRooms.map((room) => (
                     <div key={room.id} className="rounded-lg border bg-white p-3 space-y-2">
                       <div className="flex items-center justify-between gap-2">
@@ -152,7 +145,8 @@ export default function BreakoutDemoPage() {
                           {room.participants.length} deltakere
                         </Badge>
                       </div>
-                      <div className="flex flex-wrap gap-1 mt-1">
+
+                      <div className="flex flex-wrap gap-1">
                         {room.participants.map((name) => (
                           <div
                             key={room.id + name}
@@ -165,6 +159,7 @@ export default function BreakoutDemoPage() {
                           </div>
                         ))}
                       </div>
+
                       <div className="flex gap-2 mt-2">
                         <Button variant="outline" className="text-xs flex-1">
                           Bli med i rommet
@@ -176,12 +171,13 @@ export default function BreakoutDemoPage() {
                     </div>
                   ))}
                 </div>
+
               </div>
             </CardContent>
           </Card>
         </section>
 
-        {/* Plenums-chat – viser skriftlig kanal + fildeling ved input */}
+        {/* Chat nederst – beholdes som før */}
         <section>
           <Card>
             <CardHeader className="flex items-center justify-between">
@@ -189,56 +185,31 @@ export default function BreakoutDemoPage() {
                 <MessageCircle className="h-5 w-5 text-blue-600" />
                 <CardTitle className="text-base">Plenums-chat (demo)</CardTitle>
               </div>
-              <span className="text-xs text-slate-500">
-                Skriftlig kanal som kan brukes både før og etter breakout.
-              </span>
             </CardHeader>
             <CardContent>
               <div className="border rounded-lg p-3 bg-slate-50">
-                <div className="text-xs text-slate-500 mb-2">
-                  Eksempel på hvordan chatten kan brukes sammen med breakout-rom:
-                </div>
                 <div className="space-y-2 max-h-44 overflow-auto text-sm">
                   <ChatBubble name="Nina (vert)">
-                    Nå deler jeg dere inn i grupper. Bruk 10 minutter på å diskutere spørsmålet som står i toppteksten i hvert rom 👇
+                    Husk: Breakout starter om 2 minutter 👇
                   </ChatBubble>
                   <ChatBubble name="Anna">
-                    Jeg er litt usikker på hvor jeg skal, men ser at jeg havnet i Gruppe 1 – stemmer det? 🙂
+                    Klar! Skal vi levere oppsummering her etterpå?
                   </ChatBubble>
                   <ChatBubble name="Nina (vert)" align="right">
-                    Ja, Anna – du er i Gruppe 1. Dere jobber med forventninger til studiet 💬
-                  </ChatBubble>
-                  <ChatBubble name="Jonas">
-                    Kan vi dele notatmalen her i plenum etterpå?
-                  </ChatBubble>
-                  <ChatBubble name="Nina (vert)" align="right">
-                    Absolutt – last den gjerne opp her i chatten etter gruppediskusjonen.
+                    Ja – legg igjen notatene her 😊
                   </ChatBubble>
                 </div>
 
-                {/* INPUTRAD: del fil + skriv + send */}
+                {/* INPUTRAD */}
                 <div className="mt-3 flex gap-2">
-                  <Button
-                    variant="outline"
-                    type="button"
-                    title="Del fil (demo)"
-                    className="shrink-0"
-                  >
+                  <Button variant="outline" className="shrink-0">
                     <FileUp className="h-4 w-4" />
                   </Button>
-                  <Input
-                    placeholder="Skriv en melding… (demo – ikke ekte chat)"
-                    className="flex-1"
-                  />
-                  <Button type="button" className="shrink-0">
+                  <Input placeholder="Skriv en melding…" className="flex-1" />
+                  <Button className="shrink-0">
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>
-
-                <p className="mt-2 text-[11px] text-slate-500">
-                  I en ekte løsning kunne studenter legge ved notater, oppgavetekster eller korte oppsummeringer
-                  fra gruppene sine her – uten å måtte ta ordet i plenum.
-                </p>
               </div>
             </CardContent>
           </Card>
@@ -256,22 +227,14 @@ function StatusIcon({ micOn, cameraOn }: { micOn: boolean; cameraOn: boolean }) 
           micOn ? "bg-emerald-500/80" : "bg-red-500/80"
         }`}
       >
-        {micOn ? (
-          <Mic className="h-3 w-3 text-white" />
-        ) : (
-          <MicOff className="h-3 w-3 text-white" />
-        )}
+        {micOn ? <Mic className="h-3 w-3 text-white" /> : <MicOff className="h-3 w-3 text-white" />}
       </span>
       <span
         className={`inline-flex h-6 w-6 items-center justify-center rounded-full ${
           cameraOn ? "bg-emerald-500/80" : "bg-slate-500/80"
         }`}
       >
-        {cameraOn ? (
-          <Video className="h-3 w-3 text-white" />
-        ) : (
-          <VideoOff className="h-3 w-3 text-white" />
-        )}
+        {cameraOn ? <Video className="h-3 w-3 text-white" /> : <VideoOff className="h-3 w-3 text-white" />}
       </span>
     </div>
   );
