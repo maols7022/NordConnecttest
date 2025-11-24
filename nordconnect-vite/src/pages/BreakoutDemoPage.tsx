@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import {
   ArrowLeft,
   Users,
-  UserCircle2,
   Mic,
   MicOff,
   Video,
@@ -59,7 +58,7 @@ export default function BreakoutDemoPage() {
       <header className="border-b bg-white/80 backdrop-blur sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <Button variant="secondary" onClick={() => nav(-1)}>
+            <Button variant="outline" onClick={() => nav(-1)}>
               <ArrowLeft className="h-4 w-4 mr-2" />
               Tilbake
             </Button>
@@ -78,6 +77,7 @@ export default function BreakoutDemoPage() {
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+        {/* Hovedseksjon: plenum + grupper */}
         <section>
           <Card>
             <CardHeader>
@@ -120,6 +120,25 @@ export default function BreakoutDemoPage() {
                       I en ekte løsning kan verten fordele deltakerne automatisk eller manuelt
                       til breakout-rommene under. Etter gruppearbeid kan alle returnere
                       til plenum for oppsummering.
+                    </p>
+                  </div>
+
+                  {/* Vert-kontroller (mock) */}
+                  <div className="flex flex-wrap gap-2 items-center justify-between">
+                    <div className="flex flex-wrap gap-2">
+                      <Button variant="secondary" title="Mic">
+                        <Mic className="h-4 w-4" />
+                      </Button>
+                      <Button variant="secondary" title="Kamera">
+                        <Video className="h-4 w-4" />
+                      </Button>
+                      {/* Del skjerm i mørk stil som de andre */}
+                      <Button variant="secondary" title="Del skjerm (demo)">
+                        <ScreenShare className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <p className="text-[11px] text-slate-500">
+                      Alt du ser her er kun UI – ingen faktisk fordeling eller video/lyd.
                     </p>
                   </div>
                 </div>
@@ -166,34 +185,125 @@ export default function BreakoutDemoPage() {
                   ))}
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </section>
 
-              {/* Kontroller for vert (mock) */}
-              <div className="mt-4 flex flex-wrap gap-2 items-center justify-between">
-                <div className="flex flex-wrap gap-2">
-                  <Button variant="secondary" title="Mic">
-                    <Mic className="h-4 w-4" />
-                  </Button>
-                  <Button variant="secondary" title="Kamera">
-                    <Video className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" title="Del skjerm (demo)">
-                    <ScreenShare className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" title="Del fil (demo)">
+        {/* Plenums-chat – viser skriftlig kanal + fildeling ved input */}
+        <section>
+          <Card>
+            <CardHeader className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <MessageCircle className="h-5 w-5 text-blue-600" />
+                <CardTitle className="text-base">Plenums-chat (demo)</CardTitle>
+              </div>
+              <span className="text-xs text-slate-500">
+                Skriftlig kanal som kan brukes både før og etter breakout.
+              </span>
+            </CardHeader>
+            <CardContent>
+              <div className="border rounded-lg p-3 bg-slate-50">
+                <div className="text-xs text-slate-500 mb-2">
+                  Eksempel på hvordan chatten kan brukes sammen med breakout-rom:
+                </div>
+                <div className="space-y-2 max-h-44 overflow-auto text-sm">
+                  <ChatBubble name="Nina (vert)">
+                    Nå deler jeg dere inn i grupper. Bruk 10 minutter på å diskutere spørsmålet som står i toppteksten i hvert rom 👇
+                  </ChatBubble>
+                  <ChatBubble name="Anna">
+                    Jeg er litt usikker på hvor jeg skal, men ser at jeg havnet i Gruppe 1 – stemmer det? 🙂
+                  </ChatBubble>
+                  <ChatBubble name="Nina (vert)" align="right">
+                    Ja, Anna – du er i Gruppe 1. Dere jobber med forventninger til studiet 💬
+                  </ChatBubble>
+                  <ChatBubble name="Jonas">
+                    Kan vi dele notatmalen her i plenum etterpå?
+                  </ChatBubble>
+                  <ChatBubble name="Nina (vert)" align="right">
+                    Absolutt – last den gjerne opp her i chatten etter gruppediskusjonen.
+                  </ChatBubble>
+                </div>
+
+                {/* INPUTRAD: del fil + skriv + send */}
+                <div className="mt-3 flex gap-2">
+                  <Button
+                    variant="outline"
+                    type="button"
+                    title="Del fil (demo)"
+                    className="shrink-0"
+                  >
                     <FileUp className="h-4 w-4" />
                   </Button>
+                  <Input
+                    placeholder="Skriv en melding… (demo – ikke ekte chat)"
+                    className="flex-1"
+                  />
+                  <Button type="button" className="shrink-0">
+                    <Send className="h-4 w-4" />
+                  </Button>
                 </div>
-                <p className="text-[11px] text-slate-500">
-                  Alt du ser her er kun UI – ingen faktisk fordeling eller video/lyd.
+
+                <p className="mt-2 text-[11px] text-slate-500">
+                  I en ekte løsning kunne studenter legge ved notater, oppgavetekster eller korte oppsummeringer
+                  fra gruppene sine her – uten å måtte ta ordet i plenum.
                 </p>
               </div>
             </CardContent>
           </Card>
         </section>
+      </main>
+    </div>
+  );
+}
 
-        {/* Tekstchat i plenum – skriftlig kanal */}
-        <section>
-          <Card>
-            <CardHeader className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <MessageCircle className="
+function StatusIcon({ micOn, cameraOn }: { micOn: boolean; cameraOn: boolean }) {
+  return (
+    <div className="flex items-center gap-1">
+      <span
+        className={`inline-flex h-6 w-6 items-center justify-center rounded-full ${
+          micOn ? "bg-emerald-500/80" : "bg-red-500/80"
+        }`}
+      >
+        {micOn ? (
+          <Mic className="h-3 w-3 text-white" />
+        ) : (
+          <MicOff className="h-3 w-3 text-white" />
+        )}
+      </span>
+      <span
+        className={`inline-flex h-6 w-6 items-center justify-center rounded-full ${
+          cameraOn ? "bg-emerald-500/80" : "bg-slate-500/80"
+        }`}
+      >
+        {cameraOn ? (
+          <Video className="h-3 w-3 text-white" />
+        ) : (
+          <VideoOff className="h-3 w-3 text-white" />
+        )}
+      </span>
+    </div>
+  );
+}
+
+function ChatBubble({
+  name,
+  children,
+  align = "left",
+}: {
+  name: string;
+  children: React.ReactNode;
+  align?: "left" | "right";
+}) {
+  return (
+    <div className={`flex ${align === "right" ? "justify-end" : "justify-start"}`}>
+      <div
+        className={`max-w-[80%] rounded-2xl px-3 py-2 text-xs shadow-sm ${
+          align === "right" ? "bg-blue-600 text-white" : "bg-white border"
+        }`}
+      >
+        <div className="text-[9px] opacity-70 mb-1">{name}</div>
+        <div>{children}</div>
+      </div>
+    </div>
+  );
+}
