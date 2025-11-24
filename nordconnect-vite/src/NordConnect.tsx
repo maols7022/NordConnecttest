@@ -4,7 +4,6 @@ import {
   Coffee,
   BookOpen,
   Heart,
-  Expand,
   MessageCircle,
   MapPin,
   Users,
@@ -22,6 +21,7 @@ import {
   Clock,
   ScreenShare,
   FileUp,
+  Expand,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -225,7 +225,7 @@ export default function NordConnect() {
         </div>
       </header>
 
-      {/* Hero – ryddigere, uten demo-ruter */}
+      {/* Hero – ren uten demo-ruter */}
       <section className="max-w-4xl mx-auto px-4 pt-12 pb-8">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
@@ -376,12 +376,12 @@ export default function NordConnect() {
                       </Button>
                     )}
                     <Link
-  to={`/room/${r.id}`}
-  className="inline-flex items-center justify-center rounded-md border h-9 w-9"
-  title="Åpne som side"
->
-  <Expand className="h-4 w-4" />
-</Link>
+                      to={`/room/${r.id}`}
+                      className="inline-flex items-center justify-center rounded-md border h-9 w-9"
+                      title="Åpne som side"
+                    >
+                      <Expand className="h-4 w-4" />
+                    </Link>
                   </div>
                 </div>
 
@@ -457,35 +457,36 @@ export default function NordConnect() {
       </footer>
 
       {/* Aktivt rom – popup-dialog */}
-   <Dialog
-  open={!!activeRoom}
-  onOpenChange={(open) => !open && setActiveRoom(null)}
->
-  <DialogContent className="max-w-2xl relative">
-    {activeRoom && (
-      <Link
-        to={`/room/${activeRoom}`}
-        className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full border bg-white/80 hover:bg-slate-100"
-        title="Åpne som side"
+      <Dialog
+        open={!!activeRoom}
+        onOpenChange={(open) => !open && setActiveRoom(null)}
       >
-        <Expand className="h-4 w-4" />
-      </Link>
-    )}
+        {/* Større dialog + expand-ikon */}
+        <DialogContent className="max-w-3xl relative">
+          {activeRoom && (
+            <Link
+              to={`/room/${activeRoom}`}
+              className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full border bg-white/80 hover:bg-slate-100"
+              title="Åpne som side"
+            >
+              <Expand className="h-4 w-4" />
+            </Link>
+          )}
 
-    <DialogHeader>
-      <DialogTitle>
-        {rooms.find((r) => r.id === activeRoom)?.name || "Rom"}
-      </DialogTitle>
-      <DialogDescription>
-        Uformell prat. Kamera valgfritt. Husk å være inkluderende.
-      </DialogDescription>
-    </DialogHeader>
+          <DialogHeader>
+            <DialogTitle>
+              {rooms.find((r) => r.id === activeRoom)?.name || "Rom"}
+            </DialogTitle>
+            <DialogDescription>
+              Uformell prat. Kamera valgfritt. Husk å være inkluderende.
+            </DialogDescription>
+          </DialogHeader>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="md:col-span-2 bg-slate-50 rounded-xl p-3 border">
               <div className="text-xs text-slate-500 mb-2">
                 Tekstchat (mock)
               </div>
-              <div className="space-y-2 max-h-56 overflow-auto">
+              <div className="space-y-2 max-h-72 overflow-auto">
                 <Bubble
                   name="Anna"
                   text="Hei! Hvordan går det med innleveringen?"
@@ -522,34 +523,46 @@ export default function NordConnect() {
                   </div>
                 ))}
               </div>
-              <div className="mt-3 grid grid-cols-3 gap-2">
-                <Button variant="secondary">
-                  <Mic className="h-4 w-4 mr-1" />
-                  Mic
+
+              {/* Små ikonknapper for lyd/video/skjerm/fil */}
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Button
+                  variant="secondary"
+                  className="h-9 w-9 p-0"
+                  title="Mic"
+                >
+                  <Mic className="h-4 w-4" />
                 </Button>
-                <Button variant="secondary">
-                  <Video className="h-4 w-4 mr-1" />
-                  Kamera
+                <Button
+                  variant="secondary"
+                  className="h-9 w-9 p-0"
+                  title="Kamera"
+                >
+                  <Video className="h-4 w-4" />
                 </Button>
-                <Button variant="secondary">
-                  <Headphones className="h-4 w-4 mr-1" />
-                  Lyd
+                <Button
+                  variant="secondary"
+                  className="h-9 w-9 p-0"
+                  title="Lyd"
+                >
+                  <Headphones className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-9 w-9 p-0"
+                  title="Del skjerm (demo)"
+                >
+                  <ScreenShare className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="h-9 w-9 p-0"
+                  title="Del fil (demo)"
+                >
+                  <FileUp className="h-4 w-4" />
                 </Button>
               </div>
-              <Button
-                variant="outline"
-                className="mt-2 w-full"
-              >
-                <ScreenShare className="h-4 w-4 mr-1" />
-                Del skjerm (demo)
-              </Button>
-              <Button
-                variant="outline"
-                className="mt-2 w-full"
-              >
-                <FileUp className="h-4 w-4 mr-1" />
-                Del fil (demo)
-              </Button>
+
               <Button
                 className="mt-3 w-full"
                 variant="outline"
