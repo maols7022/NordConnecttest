@@ -120,6 +120,7 @@ export default function NordConnect() {
     "3 er i Kaffepraten nå – bli med!",
     "Fadder-kveld i Trivselsprat kl 19:30 i dag.",
   ]);
+  const [demoMenuOpen, setDemoMenuOpen] = useState(false);
 
   const filteredRooms = useMemo(() => {
     const q = query.toLowerCase();
@@ -184,13 +185,6 @@ export default function NordConnect() {
             <a href="#rooms" className="hover:underline">
               Rom
             </a>
-            {/* Nye test/demo-sider */}
-            <Link to="/video-demo" className="hover:underline">
-              Kamera-demo
-            </Link>
-            <Link to="/breakout-demo" className="hover:underline">
-              Breakout-demo
-            </Link>
           </nav>
 
           {/* Høyre: knapper + mobilmeny */}
@@ -224,9 +218,12 @@ export default function NordConnect() {
                     <a href="#rooms" className="hover:underline">
                       Rom
                     </a>
-                    {/* Demo-lenker også i mobilmeny */}
-                    <Link to="/video-demo" className="hover:underline">
-                      Kamera-demo
+                    {/* Demo-lenker direkte i mobilmenyen */}
+                    <Link to="/quiz-demo" className="hover:underline">
+                      Kamera-demo: Quizkveld
+                    </Link>
+                    <Link to="/study-demo" className="hover:underline">
+                      Kamera-demo: Studiegruppe
                     </Link>
                     <Link to="/breakout-demo" className="hover:underline">
                       Breakout-demo
@@ -265,6 +262,43 @@ export default function NordConnect() {
               <Monitor className="h-5 w-5 mr-2" />
               Se demo
             </Button>
+
+            {/* Demo-dropdown */}
+            <div className="relative">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setDemoMenuOpen((v) => !v)}
+              >
+                Demoer
+                <ChevronRight className="h-4 w-4 ml-1 transform rotate-90" />
+              </Button>
+              {demoMenuOpen && (
+                <div className="absolute right-0 mt-2 w-56 rounded-md border bg-white shadow-lg text-sm z-50">
+                  <Link
+                    to="/quiz-demo"
+                    className="block px-3 py-2 hover:bg-slate-50"
+                    onClick={() => setDemoMenuOpen(false)}
+                  >
+                    Kamera-demo: Quizkveld
+                  </Link>
+                  <Link
+                    to="/study-demo"
+                    className="block px-3 py-2 hover:bg-slate-50"
+                    onClick={() => setDemoMenuOpen(false)}
+                  >
+                    Kamera-demo: Studiegruppe
+                  </Link>
+                  <Link
+                    to="/breakout-demo"
+                    className="block px-3 py-2 hover:bg-slate-50"
+                    onClick={() => setDemoMenuOpen(false)}
+                  >
+                    Breakout-rom (demo)
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Varsel-ticker */}
@@ -475,7 +509,6 @@ export default function NordConnect() {
         open={!!activeRoom}
         onOpenChange={(open) => !open && setActiveRoom(null)}
       >
-        {/* Større dialog + expand-ikon */}
         <DialogContent className="max-w-5xl relative">
           {activeRoom && (
             <Link
