@@ -59,7 +59,7 @@ export default function BreakoutDemoPage() {
       <header className="border-b bg-white/80 backdrop-blur sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={() => nav(-1)}>
+            <Button variant="secondary" onClick={() => nav(-1)}>
               <ArrowLeft className="h-4 w-4 mr-2" />
               Tilbake
             </Button>
