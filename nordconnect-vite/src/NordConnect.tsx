@@ -4,6 +4,7 @@ import {
   Coffee,
   BookOpen,
   Heart,
+  Expand,
   MessageCircle,
   MapPin,
   Users,
