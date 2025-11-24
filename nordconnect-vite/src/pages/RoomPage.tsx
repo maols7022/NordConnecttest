@@ -94,29 +94,24 @@ export default function RoomPage() {
                   ))}
                 </div>
 
-                <div className="mt-3 grid grid-cols-3 gap-2">
-                  <Button variant="secondary">
-                    <Mic className="h-4 w-4 mr-1" />
-                    Mic
+                {/* Små ikonknapper: mic / kamera / lyd / skjerm / fil */}
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Button variant="secondary" className="h-9 w-9 p-0" title="Mic">
+                    <Mic className="h-4 w-4" />
                   </Button>
-                  <Button variant="secondary">
-                    <Video className="h-4 w-4 mr-1" />
-                    Kamera
+                  <Button variant="secondary" className="h-9 w-9 p-0" title="Kamera">
+                    <Video className="h-4 w-4" />
                   </Button>
-                  <Button variant="secondary">
-                    <Headphones className="h-4 w-4 mr-1" />
-                    Lyd
+                  <Button variant="secondary" className="h-9 w-9 p-0" title="Lyd">
+                    <Headphones className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" className="h-9 w-9 p-0" title="Del skjerm (demo)">
+                    <ScreenShare className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" className="h-9 w-9 p-0" title="Del fil (demo)">
+                    <FileUp className="h-4 w-4" />
                   </Button>
                 </div>
-
-                <Button variant="outline" className="mt-2 w-full">
-                  <ScreenShare className="h-4 w-4 mr-1" />
-                  Del skjerm (demo)
-                </Button>
-                <Button variant="outline" className="mt-2 w-full">
-                  <FileUp className="h-4 w-4 mr-1" />
-                  Del fil (demo)
-                </Button>
 
                 <Button className="mt-3 w-full" variant="outline" onClick={() => nav(-1)}>
                   Lukk rom (til forsiden)
