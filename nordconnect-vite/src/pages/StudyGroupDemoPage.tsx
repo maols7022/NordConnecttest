@@ -43,8 +43,15 @@ export default function StudyGroupDemoPage() {
   const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [isInRoom, setIsInRoom] = useState(false);
   const [highlightMode, setHighlightMode] = useState(false);
+  const [activeSpeaker, setActiveSpeaker] = useState<string>(studyParticipants[0]);
 
   const videoTiles = studyParticipants.slice(0, 4);
+
+  const cycleActiveSpeaker = () => {
+    const idx = studyParticipants.indexOf(activeSpeaker);
+    const nextIndex = (idx + 1) % studyParticipants.length;
+    setActiveSpeaker(studyParticipants[nextIndex]);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
@@ -103,40 +110,43 @@ export default function StudyGroupDemoPage() {
                         {/* Highlightet deltaker stort øverst */}
                         <div className="flex-1">
                           <VideoTile
-                            name={videoTiles[0]}
+                            name={activeSpeaker}
                             highlight
                             isScreenSharing={isScreenSharing}
-                            labelOverride="[ Highlightet deltaker – demo ]"
+                            labelOverride="[ Aktiv deltaker – highlight-visning ]"
                           />
                         </div>
 
                         {/* Tre små under */}
                         <div className="grid grid-cols-3 gap-2">
-                          {videoTiles.slice(1).map((name) => (
-                            <VideoTile
-                              key={name}
-                              name={name}
-                              small
-                              isScreenSharing={false}
-                            />
-                          ))}
+                          {videoTiles
+                            .filter(name => name !== activeSpeaker)
+                            .map(name => (
+                              <VideoTile
+                                key={name}
+                                name={name}
+                                small
+                                isScreenSharing={false}
+                              />
+                            ))}
                         </div>
                       </>
                     ) : (
-                      /* 2x2 grid med like store kamera */
+                      /* 2x2 grid med like store kamera, aktiv deltaker markeres med blå kant */
                       <div className="grid grid-cols-2 gap-2 flex-1">
-                        {videoTiles.map((name, idx) => (
+                        {videoTiles.map(name => (
                           <VideoTile
                             key={name}
                             name={name}
-                            isScreenSharing={idx === 0 && isScreenSharing}
+                            isScreenSharing={name === activeSpeaker && isScreenSharing}
+                            highlight={name === activeSpeaker}
                           />
                         ))}
                       </div>
                     )}
                   </div>
 
-                  {/* Overlay-info under video (fast tekst om rommet) */}
+                  {/* Info + status under video */}
                   <div className="flex items-center justify-between text-[11px] text-slate-600">
                     <div className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
@@ -217,10 +227,19 @@ export default function StudyGroupDemoPage() {
                     >
                       {highlightMode ? "Highlight av" : "Highlight på"}
                     </Button>
+
+                    {/* Neste som snakker */}
+                    <Button
+                      className="rounded-full px-4 py-2 text-xs"
+                      variant="outline"
+                      onClick={cycleActiveSpeaker}
+                    >
+                      Neste som snakker
+                    </Button>
                   </div>
                 </div>
 
-                {/* Deltakerliste – små chips */}
+                {/* Deltakerliste – små chips, klikker for å sette aktiv deltaker */}
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-semibold text-slate-700">
@@ -232,17 +251,27 @@ export default function StudyGroupDemoPage() {
                   </div>
 
                   <div className="flex flex-wrap gap-2">
-                    {studyParticipants.map((name) => (
-                      <div
-                        key={name}
-                        className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-white border text-[11px]"
-                      >
-                        <Avatar className="h-6 w-6 border">
-                          <AvatarFallback>{initials(name)}</AvatarFallback>
-                        </Avatar>
-                        <span className="truncate max-w-[80px]">{name}</span>
-                      </div>
-                    ))}
+                    {studyParticipants.map(name => {
+                      const isActive = name === activeSpeaker;
+                      return (
+                        <button
+                          key={name}
+                          type="button"
+                          onClick={() => setActiveSpeaker(name)}
+                          className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border text-[11px] cursor-pointer transition ${
+                            isActive
+                              ? "bg-blue-50 border-blue-400 text-blue-800"
+                              : "bg-white border-slate-200 text-slate-800 hover:bg-slate-50"
+                          }`}
+                        >
+                          <Avatar className="h-6 w-6 border border-slate-200">
+                            <AvatarFallback>{initials(name)}</AvatarFallback>
+                          </Avatar>
+                          <span className="truncate max-w-[80px]">{name}</span>
+                          {isActive && <span className="text-[9px]">• snakker nå</span>}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -326,7 +355,7 @@ function VideoTile({
           {name.charAt(0).toUpperCase()}
         </span>
         <span className="bg-black/50 px-2 py-0.5 rounded-full">
-          {name} {highlight && "• highlight"}
+          {name}
         </span>
       </div>
     </div>
