@@ -12,7 +12,6 @@ import {
   MicOff,
   Video,
   VideoOff,
-  ScreenShare,
   FileUp,
   MessageCircle,
   Send,
@@ -205,4 +204,107 @@ export default function BreakoutDemoPage() {
                           Bli med i rommet
                         </Button>
                         <Button variant="ghost" className="text-[11px] px-2">
-                          Flytt del
+                          Flytt deltakere
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+
+        {/* Chat nederst – beholdes som før */}
+        <section>
+          <Card>
+            <CardHeader className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <MessageCircle className="h-5 w-5 text-blue-600" />
+                <CardTitle className="text-base">Plenums-chat (demo)</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="border rounded-lg p-3 bg-slate-50">
+                <div className="space-y-2 max-h-44 overflow-auto text-sm">
+                  <ChatBubble name="Nina (vert)">
+                    Husk: Breakout starter om 2 minutter 👇
+                  </ChatBubble>
+                  <ChatBubble name="Anna">
+                    Klar! Skal vi levere oppsummering her etterpå?
+                  </ChatBubble>
+                  <ChatBubble name="Nina (vert)" align="right">
+                    Ja – legg igjen notatene her 😊
+                  </ChatBubble>
+                </div>
+
+                {/* INPUTRAD */}
+                <div className="mt-3 flex gap-2">
+                  <Button variant="outline" className="shrink-0">
+                    <FileUp className="h-4 w-4" />
+                  </Button>
+                  <Input placeholder="Skriv en melding…" className="flex-1" />
+                  <Button className="shrink-0">
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+function StatusIcon({ micOn, cameraOn }: { micOn: boolean; cameraOn: boolean }) {
+  return (
+    <div className="flex items-center gap-1">
+      <span
+        className={`inline-flex h-6 w-6 items-center justify-center rounded-full ${
+          micOn ? "bg-emerald-500/80" : "bg-red-500/80"
+        }`}
+      >
+        {micOn ? (
+          <Mic className="h-3 w-3 text-white" />
+        ) : (
+          <MicOff className="h-3 w-3 text-white" />
+        )}
+      </span>
+      <span
+        className={`inline-flex h-6 w-6 items-center justify-center rounded-full ${
+          cameraOn ? "bg-emerald-500/80" : "bg-slate-500/80"
+        }`}
+      >
+        {cameraOn ? (
+          <Video className="h-3 w-3 text-white" />
+        ) : (
+          <VideoOff className="h-3 w-3 text-white" />
+        )}
+      </span>
+    </div>
+  );
+}
+
+function ChatBubble({
+  name,
+  children,
+  align = "left",
+}: {
+  name: string;
+  children: React.ReactNode;
+  align?: "left" | "right";
+}) {
+  return (
+    <div className={`flex ${align === "right" ? "justify-end" : "justify-start"}`}>
+      <div
+        className={`max-w-[80%] rounded-2xl px-3 py-2 text-xs shadow-sm ${
+          align === "right" ? "bg-blue-600 text-white" : "bg-white border"
+        }`}
+      >
+        <div className="text-[9px] opacity-70 mb-1">{name}</div>
+        <div>{children}</div>
+      </div>
+    </div>
+  );
+}
