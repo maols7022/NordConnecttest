@@ -117,17 +117,53 @@ export default function BreakoutDemoPage() {
                   </div>
 
                   {/* Vert-kontroller */}
-                  <div className="flex flex-wrap gap-2 items-center">
-                    <Button variant="secondary" title="Mic">
-                      <Mic className="h-4 w-4" />
-                    </Button>
-                    <Button variant="secondary" title="Kamera">
-                      <Video className="h-4 w-4" />
-                    </Button>
-                    <Button variant="secondary" title="Del skjerm">
-                      <ScreenShare className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  <div className="flex items-center gap-2">
+  {/* Mute */}
+  <Button
+    className={`rounded-full p-3 transition ${
+      isMuted ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+    }`}
+    variant="ghost"
+    onClick={() => setIsMuted((prev) => !prev)}
+  >
+    {isMuted ? (
+      <MicOff className="h-5 w-5" />
+    ) : (
+      <Mic className="h-5 w-5" />
+    )}
+  </Button>
+
+  {/* Deafen */}
+  <Button
+    className={`rounded-full p-3 transition ${
+      isDeafened ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+    }`}
+    variant="ghost"
+    onClick={() => setIsDeafened((prev) => !prev)}
+  >
+    {isDeafened ? (
+      <HeadphonesOff className="h-5 w-5" /> // evt annet ikon du bruker
+    ) : (
+      <Headphones className="h-5 w-5" />
+    )}
+  </Button>
+
+  {/* Kamera av/på */}
+  <Button
+    className={`rounded-full p-3 transition ${
+      isCameraOff ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+    }`}
+    variant="ghost"
+    onClick={() => setIsCameraOff((prev) => !prev)}
+  >
+    {isCameraOff ? (
+      <VideoOff className="h-5 w-5" />
+    ) : (
+      <Video className="h-5 w-5" />
+    )}
+  </Button>
+</div>
+
                 </div>
 
                 {/* Breakout-romliste — scrollable */}
