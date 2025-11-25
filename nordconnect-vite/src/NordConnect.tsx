@@ -215,6 +215,50 @@ export default function NordConnect() {
             <a href="#rooms" className="hover:underline">
               Rom
             </a>
+
+            {/* Demoer-dropdown i toppmenyen */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setDemoMenuOpen((v) => !v)}
+                className="inline-flex items-center gap-1 hover:underline"
+              >
+                Demoer
+                <ChevronRight className="h-3 w-3 rotate-90" />
+              </button>
+              {demoMenuOpen && (
+                <div className="absolute right-0 mt-2 w-56 rounded-md border bg-white shadow-lg text-sm z-50">
+                  <Link
+                    to="/quiz-demo"
+                    className="block px-3 py-2 hover:bg-slate-50"
+                    onClick={() => setDemoMenuOpen(false)}
+                  >
+                    Kamera-demo: Quizkveld
+                  </Link>
+                  <Link
+                    to="/study-demo"
+                    className="block px-3 py-2 hover:bg-slate-50"
+                    onClick={() => setDemoMenuOpen(false)}
+                  >
+                    Kamera-demo: Studiegruppe
+                  </Link>
+                  <Link
+                    to="/breakout-demo"
+                    className="block px-3 py-2 hover:bg-slate-50"
+                    onClick={() => setDemoMenuOpen(false)}
+                  >
+                    Breakout-rom (demo)
+                  </Link>
+                  <Link
+                    to="/gamification-demo"
+                    className="block px-3 py-2 hover:bg-slate-50"
+                    onClick={() => setDemoMenuOpen(false)}
+                  >
+                    Gamification
+                  </Link>
+                </div>
+              )}
+            </div>
           </nav>
 
           {/* Høyre */}
@@ -250,7 +294,7 @@ export default function NordConnect() {
                       Rom
                     </a>
 
-                    {/* DEMO-lenker */}
+                    {/* DEMO-lenker på mobil (direkte) */}
                     <Link to="/quiz-demo" className="hover:underline">
                       Kamera-demo: Quiz
                     </Link>
@@ -271,7 +315,7 @@ export default function NordConnect() {
         </div>
       </header>
 
-      {/* HERO – venstrejustert + tidligere notif-bar */}
+      {/* HERO – venstrejustert, uten knapp, med notif-badges */}
       <section className="max-w-6xl mx-auto px-4 pt-12 pb-8">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
@@ -279,7 +323,7 @@ export default function NordConnect() {
           transition={{ duration: 0.5 }}
           className="text-left"
         >
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight max-w-2xl">
+          <h1 className="text-4xl md:text-5xl font-bold leading-tight max-w-3xl">
             Der nettstudenter møtes –{" "}
             <span className="text-blue-600">digitalt</span>
           </h1>
@@ -290,54 +334,7 @@ export default function NordConnect() {
             eller bare vær til stede.
           </p>
 
-          {/* Kun demo-meny som CTA – siden den faktisk gjør noe */}
-          <div className="mt-6 flex flex-wrap gap-3 justify-start">
-            <div className="relative">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setDemoMenuOpen((v) => !v)}
-              >
-                Demoer
-                <ChevronRight className="h-4 w-4 ml-1 transform rotate-90" />
-              </Button>
-
-              {demoMenuOpen && (
-                <div className="absolute right-0 mt-2 w-56 rounded-md border bg-white shadow-lg text-sm z-50">
-                  <Link
-                    to="/quiz-demo"
-                    className="block px-3 py-2 hover:bg-slate-50"
-                    onClick={() => setDemoMenuOpen(false)}
-                  >
-                    Kamera-demo: Quizkveld
-                  </Link>
-                  <Link
-                    to="/study-demo"
-                    className="block px-3 py-2 hover:bg-slate-50"
-                    onClick={() => setDemoMenuOpen(false)}
-                  >
-                    Kamera-demo: Studiegruppe
-                  </Link>
-                  <Link
-                    to="/breakout-demo"
-                    className="block px-3 py-2 hover:bg-slate-50"
-                    onClick={() => setDemoMenuOpen(false)}
-                  >
-                    Breakout-rom (demo)
-                  </Link>
-                  <Link
-                    to="/gamification-demo"
-                    className="block px-3 py-2 hover:bg-slate-50"
-                    onClick={() => setDemoMenuOpen(false)}
-                  >
-                    Gamification
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Notifikasjoner i “badge”-stil slik du likte dem */}
+          {/* Notifikasjoner slik du likte dem */}
           <div className="mt-6 flex items-center gap-2 text-sm text-slate-600 flex-wrap">
             <Clock className="h-4 w-4" />
             <div className="flex flex-wrap gap-2">
