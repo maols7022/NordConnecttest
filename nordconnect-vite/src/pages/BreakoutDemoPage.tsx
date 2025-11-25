@@ -56,6 +56,7 @@ export default function BreakoutDemoPage() {
   const [isMuted, setIsMuted] = useState(false);
   const [isDeafened, setIsDeafened] = useState(false);
   const [isCameraOff, setIsCameraOff] = useState(false);
+  const [isInMainRoom, setIsInMainRoom] = useState(false);
   const [activeRoomId, setActiveRoomId] = useState<string | null>(null); // hvilket breakout-rom du "er i"
 
   return (
@@ -86,8 +87,16 @@ export default function BreakoutDemoPage() {
         {/* Hovedseksjon: plenum + grupper */}
         <section>
           <Card>
-            <CardHeader>
+            <CardHeader className="flex items-center justify-between">
               <CardTitle>Plenumsrom + breakout-grupper</CardTitle>
+              <Button
+                size="sm"
+                className="text-xs"
+                variant={isInMainRoom ? "outline" : "default"}
+                onClick={() => setIsInMainRoom((prev) => !prev)}
+              >
+                {isInMainRoom ? "Forlat rommet" : "Bli med i rommet"}
+              </Button>
             </CardHeader>
             <CardContent>
               {/* Event-banner for økten */}
@@ -127,7 +136,7 @@ export default function BreakoutDemoPage() {
                         isMuted ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
                       }`}
                       variant="ghost"
-                      onClick={() => setIsMuted(prev => !prev)}
+                      onClick={() => setIsMuted((prev) => !prev)}
                     >
                       {isMuted ? (
                         <MicOff className="h-5 w-5" />
@@ -142,7 +151,7 @@ export default function BreakoutDemoPage() {
                         isDeafened ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
                       }`}
                       variant="ghost"
-                      onClick={() => setIsDeafened(prev => !prev)}
+                      onClick={() => setIsDeafened((prev) => !prev)}
                     >
                       {isDeafened ? (
                         <VolumeX className="h-5 w-5" />
@@ -157,7 +166,7 @@ export default function BreakoutDemoPage() {
                         isCameraOff ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
                       }`}
                       variant="ghost"
-                      onClick={() => setIsCameraOff(prev => !prev)}
+                      onClick={() => setIsCameraOff((prev) => !prev)}
                     >
                       {isCameraOff ? (
                         <VideoOff className="h-5 w-5" />
@@ -176,7 +185,9 @@ export default function BreakoutDemoPage() {
                     return (
                       <div
                         key={room.id}
-                        className="rounded-lg border bg-white p-3 space-y-2 shadow-sm"
+                        className={`rounded-lg border p-3 space-y-2 shadow-sm transition-colors ${
+                          isInThisRoom ? "bg-blue-50 border-blue-200" : "bg-white"
+                        }`}
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div>
@@ -187,23 +198,9 @@ export default function BreakoutDemoPage() {
                               {room.topic}
                             </div>
                           </div>
-                          <div className="flex flex-col items-end gap-1">
-                            <Button
-                              size="xs"
-                              className="text-[10px] px-2 py-1"
-                              variant={isInThisRoom ? "outline" : "default"}
-                              onClick={() =>
-                                setActiveRoomId(prev =>
-                                  prev === room.id ? null : room.id
-                                )
-                              }
-                            >
-                              {isInThisRoom ? "Forlat rommet" : "Bli med i rommet"}
-                            </Button>
-                            <Badge variant="outline" className="text-[10px]">
-                              {room.participants.length} deltakere
-                            </Badge>
-                          </div>
+                          <Badge variant="outline" className="text-[10px]">
+                            {room.participants.length} deltakere
+                          </Badge>
                         </div>
 
                         <div className="flex flex-wrap gap-1">
@@ -220,7 +217,23 @@ export default function BreakoutDemoPage() {
                           ))}
                         </div>
 
-                        <div className="flex justify-end mt-2">
+                        <div className="flex justify-end mt-2 gap-2">
+                          <Button
+                            size="xs"
+                            variant="outline"
+                            className={`text-[11px] px-2 ${
+                              isInThisRoom
+                                ? "border-slate-500 bg-slate-100"
+                                : "border-slate-200 bg-white"
+                            }`}
+                            onClick={() =>
+                              setActiveRoomId((prev) =>
+                                prev === room.id ? null : room.id
+                              )
+                            }
+                          >
+                            {isInThisRoom ? "Forlat rommet" : "Bli med i rommet"}
+                          </Button>
                           <Button variant="ghost" className="text-[11px] px-2">
                             Flytt deltakere
                           </Button>
