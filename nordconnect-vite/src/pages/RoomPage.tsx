@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -18,7 +18,16 @@ import {
   VolumeX,
 } from "lucide-react";
 
-const mockUsers = ["Anna", "Bjørn", "Chen", "Dina", "Elias", "Fatima", "Gustav", "Hanna"];
+const mockUsers = [
+  "Anna",
+  "Bjørn",
+  "Chen",
+  "Dina",
+  "Elias",
+  "Fatima",
+  "Gustav",
+  "Hanna",
+];
 
 const ROOM_INDEX: Record<
   string,
@@ -27,20 +36,40 @@ const ROOM_INDEX: Record<
     description: string;
   }
 > = {
-  kaffe: { name: "Kaffepraten", description: "Uformell prat. Kom og gå som du vil." },
-  fokus: { name: "Fokusrom – stille", description: "Pomodoro-økter og stille samskriving." },
-  ent1002: { name: "ENT1002 – Diskusjon", description: "Spørsmål, notater, og samarbeid." },
-  trivsel: { name: "Trivselsprat", description: "Trygt rom moderert av faddere." },
-  oslo: { name: "Oslo-området", description: "Møt andre i samme område." },
+  kaffe: {
+    name: "Kaffepraten",
+    description: "Uformell prat. Kom og gå som du vil.",
+  },
+  fokus: {
+    name: "Fokusrom – stille",
+    description: "Pomodoro-økter og stille samskriving.",
+  },
+  ent1002: {
+    name: "ENT1002 – Diskusjon",
+    description: "Spørsmål, notater, og samarbeid.",
+  },
+  trivsel: {
+    name: "Trivselsprat",
+    description: "Trygt rom moderert av faddere.",
+  },
+  oslo: {
+    name: "Oslo-området",
+    description: "Møt andre i samme område.",
+  },
 };
 
-// 🔁 Ikke mer random – bare ta de første n
 const peopleInRoom = (n: number) =>
   mockUsers.slice(0, Math.max(1, Math.min(n, mockUsers.length)));
 
 export default function RoomPage() {
   const { id } = useParams<{ id: string }>();
   const nav = useNavigate();
+  const location = useLocation();
+
+  // Hvis vi kom fra popup i NordConnect, er denne true
+  const joinedFromPopup =
+    (location.state as { joinedFromPopup?: boolean } | null)?.joinedFromPopup ??
+    false;
 
   const meta = id ? ROOM_INDEX[id] : undefined;
 
@@ -48,7 +77,9 @@ export default function RoomPage() {
   const [isDeafened, setIsDeafened] = useState(false);
   const [isCameraOff, setIsCameraOff] = useState(false);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
-  const [isInRoom, setIsInRoom] = useState(false);
+
+  // 🔥 Start som “i rommet” når vi kommer fra popup
+  const [isInRoom, setIsInRoom] = useState(joinedFromPopup);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
@@ -72,24 +103,27 @@ export default function RoomPage() {
       <main className="max-w-6xl mx-auto px-4 py-8">
         {meta ? (
           <div className="grid md:grid-cols-3 gap-4">
-            {/* Hoved-chatkort */}
+            {/* Hovedkort: info + chat + kamera */}
             <Card className="md:col-span-2">
               <CardHeader className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                 <div>
                   <CardTitle>{meta.name}</CardTitle>
-                  <div className="text-slate-600 text-sm">{meta.description}</div>
+                  <div className="text-slate-600 text-sm">
+                    {meta.description}
+                  </div>
                 </div>
                 <Button
                   size="sm"
                   className="text-xs mt-1 md:mt-0"
                   variant={isInRoom ? "outline" : "default"}
-                  onClick={() => setIsInRoom(prev => !prev)}
+                  onClick={() => setIsInRoom((prev) => !prev)}
                 >
                   {isInRoom ? "Forlat rommet" : "Bli med i rommet"}
                 </Button>
               </CardHeader>
+
               <CardContent>
-                {/* Kameravisning – dukker bare opp når du er i rommet og kamera er på */}
+                {/* Kameravisning – kun når du er i rommet og kamera er på */}
                 {isInRoom && !isCameraOff && (
                   <div className="mb-4">
                     <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-56 relative">
@@ -98,6 +132,7 @@ export default function RoomPage() {
                           [ Kameravisning – demo for dette rommet ]
                         </span>
                       </div>
+
                       <div className="absolute left-0 right-0 bottom-0 bg-black/50 backdrop-blur px-3 py-1.5 flex items-center justify-between">
                         <div className="text-[11px]">
                           <div className="font-medium">Du</div>
@@ -115,11 +150,23 @@ export default function RoomPage() {
                   </div>
                 )}
 
-                <div className="text-xs text-slate-500 mb-2">Tekstchat (mock)</div>
+                <div className="text-xs text-slate-500 mb-2">
+                  Tekstchat (mock)
+                </div>
                 <div className="space-y-2 max-h-72 overflow-auto bg-slate-50 border rounded-xl p-3">
-                  <Bubble name="Anna" text="Hei! Hvordan går det med innleveringen?" />
-                  <Bubble name="Bjørn" text="Tar en 25-min fokusøkt og så pause ☕" align="right" />
-                  <Bubble name="Chen" text="Noen som vil sparre på metode-delen?" />
+                  <Bubble
+                    name="Anna"
+                    text="Hei! Hvordan går det med innleveringen?"
+                  />
+                  <Bubble
+                    name="Bjørn"
+                    text="Tar en 25-min fokusøkt og så pause ☕"
+                    align="right"
+                  />
+                  <Bubble
+                    name="Chen"
+                    text="Noen som vil sparre på metode-delen?"
+                  />
                 </div>
                 <div className="mt-3 flex gap-2">
                   <Button variant="outline" className="shrink-0">
@@ -131,7 +178,7 @@ export default function RoomPage() {
               </CardContent>
             </Card>
 
-            {/* Sidepanel med deltakere og kontroller */}
+            {/* Sidepanel med deltakere + kontroller */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">Deltakere (mock)</CardTitle>
@@ -151,16 +198,18 @@ export default function RoomPage() {
                   ))}
                 </div>
 
-                {/* Ikonknapper – samme stil som andre sider */}
+                {/* Ikonknapper – samme stil som på demo-sidene */}
                 <div className="mt-2 flex flex-wrap gap-2">
                   {/* Mic */}
                   <Button
                     className={`rounded-full p-3 transition ${
-                      isMuted ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                      isMuted
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-foreground"
                     }`}
                     variant="ghost"
                     title="Mic av/på (demo)"
-                    onClick={() => setIsMuted(prev => !prev)}
+                    onClick={() => setIsMuted((prev) => !prev)}
                   >
                     {isMuted ? (
                       <MicOff className="h-4 w-4" />
@@ -172,11 +221,13 @@ export default function RoomPage() {
                   {/* Lyd (deafen) */}
                   <Button
                     className={`rounded-full p-3 transition ${
-                      isDeafened ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                      isDeafened
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-foreground"
                     }`}
                     variant="ghost"
                     title="Lyd av/på (demo)"
-                    onClick={() => setIsDeafened(prev => !prev)}
+                    onClick={() => setIsDeafened((prev) => !prev)}
                   >
                     {isDeafened ? (
                       <VolumeX className="h-4 w-4" />
@@ -188,11 +239,13 @@ export default function RoomPage() {
                   {/* Kamera */}
                   <Button
                     className={`rounded-full p-3 transition ${
-                      isCameraOff ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                      isCameraOff
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-foreground"
                     }`}
                     variant="ghost"
                     title="Aktiver/deaktiver kamera (demo)"
-                    onClick={() => setIsCameraOff(prev => !prev)}
+                    onClick={() => setIsCameraOff((prev) => !prev)}
                   >
                     {isCameraOff ? (
                       <VideoOff className="h-4 w-4" />
@@ -210,7 +263,7 @@ export default function RoomPage() {
                     }`}
                     variant="ghost"
                     title="Del skjerm (demo)"
-                    onClick={() => setIsScreenSharing(prev => !prev)}
+                    onClick={() => setIsScreenSharing((prev) => !prev)}
                   >
                     {isScreenSharing ? (
                       <ScreenShareOff className="h-4 w-4" />
@@ -220,7 +273,11 @@ export default function RoomPage() {
                   </Button>
                 </div>
 
-                <Button className="mt-4 w-full" variant="outline" onClick={() => nav(-1)}>
+                <Button
+                  className="mt-4 w-full"
+                  variant="outline"
+                  onClick={() => nav(-1)}
+                >
                   Lukk rom (til forsiden)
                 </Button>
               </CardContent>
