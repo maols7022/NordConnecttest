@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -54,6 +54,10 @@ function initials(name: string) {
 export default function BreakoutDemoPage() {
   const nav = useNavigate();
 
+  const [isMuted, setIsMuted] = useState(false);
+  const [isDeafened, setIsDeafened] = useState(false);
+  const [isCameraOff, setIsCameraOff] = useState(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
       {/* Topplinje */}
@@ -97,7 +101,6 @@ export default function BreakoutDemoPage() {
               <div className="grid md:grid-cols-3 gap-4">
                 {/* Plenums-visning / host */}
                 <div className="md:col-span-2 space-y-3">
-
                   {/* Større firkantet kameravisning */}
                   <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-96 relative">
                     <div className="w-full h-full bg-gradient-to-tr from-slate-800 to-slate-700 flex items-center justify-center">
@@ -112,58 +115,57 @@ export default function BreakoutDemoPage() {
                         <div className="text-xs font-medium">Nina (vert)</div>
                         <div className="text-[10px] text-slate-200/80">Presenterer</div>
                       </div>
-                      <StatusIcon micOn cameraOn />
+                      <StatusIcon micOn={!isMuted} cameraOn={!isCameraOff} />
                     </div>
                   </div>
 
                   {/* Vert-kontroller */}
                   <div className="flex items-center gap-2">
-  {/* Mute */}
-  <Button
-    className={`rounded-full p-3 transition ${
-      isMuted ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
-    }`}
-    variant="ghost"
-    onClick={() => setIsMuted((prev) => !prev)}
-  >
-    {isMuted ? (
-      <MicOff className="h-5 w-5" />
-    ) : (
-      <Mic className="h-5 w-5" />
-    )}
-  </Button>
+                    {/* Mute */}
+                    <Button
+                      className={`rounded-full p-3 transition ${
+                        isMuted ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                      }`}
+                      variant="ghost"
+                      onClick={() => setIsMuted((prev) => !prev)}
+                    >
+                      {isMuted ? (
+                        <MicOff className="h-5 w-5" />
+                      ) : (
+                        <Mic className="h-5 w-5" />
+                      )}
+                    </Button>
 
-  {/* Deafen */}
-  <Button
-    className={`rounded-full p-3 transition ${
-      isDeafened ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
-    }`}
-    variant="ghost"
-    onClick={() => setIsDeafened((prev) => !prev)}
-  >
-    {isDeafened ? (
-      <HeadphonesOff className="h-5 w-5" /> // evt annet ikon du bruker
-    ) : (
-      <Headphones className="h-5 w-5" />
-    )}
-  </Button>
+                    {/* Deafen */}
+                    <Button
+                      className={`rounded-full p-3 transition ${
+                        isDeafened ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                      }`}
+                      variant="ghost"
+                      onClick={() => setIsDeafened((prev) => !prev)}
+                    >
+                      {isDeafened ? (
+                        <VolumeX className="h-5 w-5" />
+                      ) : (
+                        <Headphones className="h-5 w-5" />
+                      )}
+                    </Button>
 
-  {/* Kamera av/på */}
-  <Button
-    className={`rounded-full p-3 transition ${
-      isCameraOff ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
-    }`}
-    variant="ghost"
-    onClick={() => setIsCameraOff((prev) => !prev)}
-  >
-    {isCameraOff ? (
-      <VideoOff className="h-5 w-5" />
-    ) : (
-      <Video className="h-5 w-5" />
-    )}
-  </Button>
-</div>
-
+                    {/* Kamera av/på */}
+                    <Button
+                      className={`rounded-full p-3 transition ${
+                        isCameraOff ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                      }`}
+                      variant="ghost"
+                      onClick={() => setIsCameraOff((prev) => !prev)}
+                    >
+                      {isCameraOff ? (
+                        <VideoOff className="h-5 w-5" />
+                      ) : (
+                        <Video className="h-5 w-5" />
+                      )}
+                    </Button>
+                  </div>
                 </div>
 
                 {/* Breakout-romliste — scrollable */}
@@ -203,100 +205,4 @@ export default function BreakoutDemoPage() {
                           Bli med i rommet
                         </Button>
                         <Button variant="ghost" className="text-[11px] px-2">
-                          Flytt deltakere
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-
-        {/* Chat nederst – beholdes som før */}
-        <section>
-          <Card>
-            <CardHeader className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <MessageCircle className="h-5 w-5 text-blue-600" />
-                <CardTitle className="text-base">Plenums-chat (demo)</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="border rounded-lg p-3 bg-slate-50">
-                <div className="space-y-2 max-h-44 overflow-auto text-sm">
-                  <ChatBubble name="Nina (vert)">
-                    Husk: Breakout starter om 2 minutter 👇
-                  </ChatBubble>
-                  <ChatBubble name="Anna">
-                    Klar! Skal vi levere oppsummering her etterpå?
-                  </ChatBubble>
-                  <ChatBubble name="Nina (vert)" align="right">
-                    Ja – legg igjen notatene her 😊
-                  </ChatBubble>
-                </div>
-
-                {/* INPUTRAD */}
-                <div className="mt-3 flex gap-2">
-                  <Button variant="outline" className="shrink-0">
-                    <FileUp className="h-4 w-4" />
-                  </Button>
-                  <Input placeholder="Skriv en melding…" className="flex-1" />
-                  <Button className="shrink-0">
-                    <Send className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </section>
-      </main>
-    </div>
-  );
-}
-
-function StatusIcon({ micOn, cameraOn }: { micOn: boolean; cameraOn: boolean }) {
-  return (
-    <div className="flex items-center gap-1">
-      <span
-        className={`inline-flex h-6 w-6 items-center justify-center rounded-full ${
-          micOn ? "bg-emerald-500/80" : "bg-red-500/80"
-        }`}
-      >
-        {micOn ? <Mic className="h-3 w-3 text-white" /> : <MicOff className="h-3 w-3 text-white" />}
-      </span>
-      <span
-        className={`inline-flex h-6 w-6 items-center justify-center rounded-full ${
-          cameraOn ? "bg-emerald-500/80" : "bg-slate-500/80"
-        }`}
-      >
-        {cameraOn ? <Video className="h-3 w-3 text-white" /> : <VideoOff className="h-3 w-3 text-white" />}
-      </span>
-    </div>
-  );
-}
-
-function ChatBubble({
-  name,
-  children,
-  align = "left",
-}: {
-  name: string;
-  children: React.ReactNode;
-  align?: "left" | "right";
-}) {
-  return (
-    <div className={`flex ${align === "right" ? "justify-end" : "justify-start"}`}>
-      <div
-        className={`max-w-[80%] rounded-2xl px-3 py-2 text-xs shadow-sm ${
-          align === "right" ? "bg-blue-600 text-white" : "bg-white border"
-        }`}
-      >
-        <div className="text-[9px] opacity-70 mb-1">{name}</div>
-        <div>{children}</div>
-      </div>
-    </div>
-  );
-}
+                          Flytt del
