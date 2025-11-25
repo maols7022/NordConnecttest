@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,11 +6,16 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import {
   Mic,
+  MicOff,
   Video,
-  Headphones,
+  VideoOff,
   ArrowLeft,
   ScreenShare,
+  ScreenShareOff,
   FileUp,
+  Users,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 
 const mockUsers = ["Anna", "Bjørn", "Chen", "Dina", "Elias", "Fatima", "Gustav", "Hanna"];
@@ -38,16 +43,28 @@ export default function RoomPage() {
 
   const meta = id ? ROOM_INDEX[id] : undefined;
 
+  const [isMuted, setIsMuted] = useState(false);
+  const [isDeafened, setIsDeafened] = useState(false);
+  const [isCameraOff, setIsCameraOff] = useState(false);
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
+  const [isInRoom, setIsInRoom] = useState(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
       {/* Enkel topplinje */}
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur border-b">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
-          <Button variant="outline" onClick={() => nav(-1)}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Tilbake
-          </Button>
-          <div className="text-sm text-slate-500">/room/{id}</div>
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Button variant="outline" onClick={() => nav(-1)}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Tilbake
+            </Button>
+            <div className="text-sm text-slate-500">/room/{id}</div>
+          </div>
+          <div className="hidden md:flex items-center gap-2 text-xs text-slate-500">
+            <Users className="h-4 w-4" />
+            <span>Åpent rom for nettstudenter (demo)</span>
+          </div>
         </div>
       </header>
 
@@ -56,9 +73,19 @@ export default function RoomPage() {
           <div className="grid md:grid-cols-3 gap-4">
             {/* Hoved-chatkort */}
             <Card className="md:col-span-2">
-              <CardHeader>
-                <CardTitle>{meta.name}</CardTitle>
-                <div className="text-slate-600 text-sm">{meta.description}</div>
+              <CardHeader className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <CardTitle>{meta.name}</CardTitle>
+                  <div className="text-slate-600 text-sm">{meta.description}</div>
+                </div>
+                <Button
+                  size="sm"
+                  className="text-xs mt-1 md:mt-0"
+                  variant={isInRoom ? "outline" : "default"}
+                  onClick={() => setIsInRoom(prev => !prev)}
+                >
+                  {isInRoom ? "Forlat rommet" : "Bli med i rommet"}
+                </Button>
               </CardHeader>
               <CardContent>
                 <div className="text-xs text-slate-500 mb-2">Tekstchat (mock)</div>
@@ -80,7 +107,7 @@ export default function RoomPage() {
                 <CardTitle className="text-base">Deltakere (mock)</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2 mb-3">
                   {peopleInRoom(6).map((p, i) => (
                     <div
                       key={p + i}
@@ -89,31 +116,90 @@ export default function RoomPage() {
                       <Avatar className="h-7 w-7 border">
                         <AvatarFallback>{p[0]}</AvatarFallback>
                       </Avatar>
-                      <span className="text-sm">{p}</span>
+                      <span className="text-sm truncate">{p}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* Ikonknapper i normal størrelse */}
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <Button variant="secondary" title="Mic">
-                    <Mic className="h-4 w-4" />
+                {/* Ikonknapper – samme stil som andre sider */}
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {/* Mic */}
+                  <Button
+                    className={`rounded-full p-3 transition ${
+                      isMuted ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                    }`}
+                    variant="ghost"
+                    title="Mic av/på (demo)"
+                    onClick={() => setIsMuted(prev => !prev)}
+                  >
+                    {isMuted ? (
+                      <MicOff className="h-4 w-4" />
+                    ) : (
+                      <Mic className="h-4 w-4" />
+                    )}
                   </Button>
-                  <Button variant="secondary" title="Kamera">
-                    <Video className="h-4 w-4" />
+
+                  {/* Lyd (deafen) */}
+                  <Button
+                    className={`rounded-full p-3 transition ${
+                      isDeafened ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                    }`}
+                    variant="ghost"
+                    title="Lyd av/på (demo)"
+                    onClick={() => setIsDeafened(prev => !prev)}
+                  >
+                    {isDeafened ? (
+                      <VolumeX className="h-4 w-4" />
+                    ) : (
+                      <Volume2 className="h-4 w-4" />
+                    )}
                   </Button>
-                  <Button variant="secondary" title="Lyd">
-                    <Headphones className="h-4 w-4" />
+
+                  {/* Kamera */}
+                  <Button
+                    className={`rounded-full p-3 transition ${
+                      isCameraOff ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                    }`}
+                    variant="ghost"
+                    title="Kamera av/på (demo)"
+                    onClick={() => setIsCameraOff(prev => !prev)}
+                  >
+                    {isCameraOff ? (
+                      <VideoOff className="h-4 w-4" />
+                    ) : (
+                      <Video className="h-4 w-4" />
+                    )}
                   </Button>
-                  <Button variant="outline" title="Del skjerm (demo)">
-                    <ScreenShare className="h-4 w-4" />
+
+                  {/* Del skjerm */}
+                  <Button
+                    className={`rounded-full p-3 transition ${
+                      isScreenSharing
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-muted text-foreground"
+                    }`}
+                    variant="ghost"
+                    title="Del skjerm (demo)"
+                    onClick={() => setIsScreenSharing(prev => !prev)}
+                  >
+                    {isScreenSharing ? (
+                      <ScreenShareOff className="h-4 w-4" />
+                    ) : (
+                      <ScreenShare className="h-4 w-4" />
+                    )}
                   </Button>
-                  <Button variant="outline" title="Del fil (demo)">
+
+                  {/* Del fil – statisk demo-knapp */}
+                  <Button
+                    variant="outline"
+                    className="rounded-full p-3"
+                    title="Del fil (demo)"
+                  >
                     <FileUp className="h-4 w-4" />
                   </Button>
                 </div>
 
-                <Button className="mt-3 w-full" variant="outline" onClick={() => nav(-1)}>
+                <Button className="mt-4 w-full" variant="outline" onClick={() => nav(-1)}>
                   Lukk rom (til forsiden)
                 </Button>
               </CardContent>
