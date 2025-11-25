@@ -41,6 +41,7 @@ export default function VideoDemoPage() {
   const [isDeafened, setIsDeafened] = useState(false);
   const [isCameraOff, setIsCameraOff] = useState(false);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
+  const [isInRoom, setIsInRoom] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
@@ -70,8 +71,16 @@ export default function VideoDemoPage() {
         {/* Hovedseksjon: video + deltakere */}
         <section>
           <Card>
-            <CardHeader>
+            <CardHeader className="flex items-center justify-between">
               <CardTitle>Quizkveld – live rom</CardTitle>
+              <Button
+                size="sm"
+                className="text-xs"
+                variant={isInRoom ? "outline" : "default"}
+                onClick={() => setIsInRoom(prev => !prev)}
+              >
+                {isInRoom ? "Forlat rommet" : "Bli med i rommet"}
+              </Button>
             </CardHeader>
             <CardContent>
               <EventBanner
@@ -169,20 +178,6 @@ export default function VideoDemoPage() {
                       ) : (
                         <ScreenShare className="h-5 w-5" />
                       )}
-                    </Button>
-                  </div>
-
-                  {/* Bli med / forlat rommet */}
-                  <div className="flex flex-wrap gap-2 mt-2">
-                    <Button size="sm" className="text-xs">
-                      Bli med i rommet
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="text-xs text-red-600 border-red-200"
-                    >
-                      Forlat rommet
                     </Button>
                   </div>
                 </div>
