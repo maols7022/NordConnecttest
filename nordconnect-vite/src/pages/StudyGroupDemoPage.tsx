@@ -42,6 +42,9 @@ export default function StudyGroupDemoPage() {
   const [isCameraOff, setIsCameraOff] = useState(false);
   const [isScreenSharing, setIsScreenSharing] = useState(false);
   const [isInRoom, setIsInRoom] = useState(false);
+  const [highlightMode, setHighlightMode] = useState(false);
+
+  const videoTiles = studyParticipants.slice(0, 4);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
@@ -93,27 +96,53 @@ export default function StudyGroupDemoPage() {
               <div className="grid md:grid-cols-3 gap-4">
                 {/* Video + kontroller */}
                 <div className="md:col-span-2 space-y-3">
-                  {/* Video/studierom */}
-                  <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-96 relative">
-                    <div className="w-full h-full bg-gradient-to-tr from-slate-800 to-slate-700 flex items-center justify-center">
-                      <span className="text-sm opacity-80 text-center px-4">
-                        {isScreenSharing
-                          ? "[ Skjermdeling – felles notater / oppgaver ]"
-                          : "[ Kameravisning – uformell studiegruppe – demo ]"}
-                      </span>
-                    </div>
-
-                    {/* Overlay */}
-                    <div className="absolute left-0 right-0 bottom-0 bg-black/50 backdrop-blur px-3 py-2 flex items-center justify-between">
-                      <div>
-                        <div className="text-xs font-medium">Studiegruppe – fag X</div>
-                        <div className="text-[10px] text-slate-200/80 flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          Torsdag – uformell økt
+                  {/* Videogrid / highlight-visning */}
+                  <div className="rounded-xl border overflow-hidden bg-slate-900 text-white p-3 h-[26rem] flex flex-col gap-2">
+                    {highlightMode ? (
+                      <>
+                        {/* Highlightet deltaker stort øverst */}
+                        <div className="flex-1">
+                          <VideoTile
+                            name={videoTiles[0]}
+                            highlight
+                            isScreenSharing={isScreenSharing}
+                            labelOverride="[ Highlightet deltaker – demo ]"
+                          />
                         </div>
+
+                        {/* Tre små under */}
+                        <div className="grid grid-cols-3 gap-2">
+                          {videoTiles.slice(1).map((name) => (
+                            <VideoTile
+                              key={name}
+                              name={name}
+                              small
+                              isScreenSharing={false}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    ) : (
+                      /* 2x2 grid med like store kamera */
+                      <div className="grid grid-cols-2 gap-2 flex-1">
+                        {videoTiles.map((name, idx) => (
+                          <VideoTile
+                            key={name}
+                            name={name}
+                            isScreenSharing={idx === 0 && isScreenSharing}
+                          />
+                        ))}
                       </div>
-                      <StatusIcon micOn={!isMuted} cameraOn={!isCameraOff} />
+                    )}
+                  </div>
+
+                  {/* Overlay-info under video (fast tekst om rommet) */}
+                  <div className="flex items-center justify-between text-[11px] text-slate-600">
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-3 w-3" />
+                      <span>Torsdager 18:00–19:30 – uformell leseøkt</span>
                     </div>
+                    <StatusIcon micOn={!isMuted} cameraOn={!isCameraOff} />
                   </div>
 
                   {/* Kontroller */}
@@ -178,6 +207,15 @@ export default function StudyGroupDemoPage() {
                       ) : (
                         <ScreenShare className="h-5 w-5" />
                       )}
+                    </Button>
+
+                    {/* Highlight-knapp */}
+                    <Button
+                      className="rounded-full px-4 py-2 text-xs"
+                      variant={highlightMode ? "default" : "outline"}
+                      onClick={() => setHighlightMode(prev => !prev)}
+                    >
+                      {highlightMode ? "Highlight av" : "Highlight på"}
                     </Button>
                   </div>
                 </div>
@@ -250,6 +288,47 @@ export default function StudyGroupDemoPage() {
           </Card>
         </section>
       </main>
+    </div>
+  );
+}
+
+/** En enkel “kameraflis” for demo */
+function VideoTile({
+  name,
+  highlight = false,
+  small = false,
+  isScreenSharing,
+  labelOverride,
+}: {
+  name: string;
+  highlight?: boolean;
+  small?: boolean;
+  isScreenSharing?: boolean;
+  labelOverride?: string;
+}) {
+  return (
+    <div
+      className={`relative rounded-lg overflow-hidden bg-gradient-to-tr from-slate-800 to-slate-700 border ${
+        highlight ? "border-blue-400" : "border-slate-700"
+      } ${small ? "aspect-video" : "h-full"}`}
+    >
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="text-[11px] opacity-80 text-center px-2">
+          {labelOverride
+            ? labelOverride
+            : isScreenSharing
+            ? "[ Skjermdeling – felles dokument/notater ]"
+            : "[ Kameravisning – demo ]"}
+        </span>
+      </div>
+      <div className="absolute left-2 bottom-2 flex items-center gap-2 text-[10px]">
+        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-black/60 border border-white/20">
+          {name.charAt(0).toUpperCase()}
+        </span>
+        <span className="bg-black/50 px-2 py-0.5 rounded-full">
+          {name} {highlight && "• highlight"}
+        </span>
+      </div>
     </div>
   );
 }
