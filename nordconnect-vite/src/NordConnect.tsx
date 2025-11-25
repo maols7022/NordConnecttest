@@ -523,14 +523,17 @@ export default function NordConnect() {
       >
         <DialogContent className="max-w-5xl relative">
 
-          {activeRoom && (
-            <Link
-              to={`/room/${activeRoom}`}
-              className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full border bg-white/80 hover:bg-slate-100"
-            >
-              <Expand className="h-4 w-4" />
-            </Link>
-          )}
+         {activeRoom && (
+  <Link
+    to={`/room/${activeRoom}`}
+    state={{ joinedFromPopup: true }}   // 👈 send med at vi allerede har blitt med
+    className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full border bg-white/80 hover:bg-slate-100"
+    title="Åpne som side"
+  >
+    <Expand className="h-4 w-4" />
+  </Link>
+)}
+
 
           <DialogHeader>
             <DialogTitle>
