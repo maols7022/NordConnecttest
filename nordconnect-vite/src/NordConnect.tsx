@@ -323,15 +323,15 @@ export default function NordConnect() {
           transition={{ duration: 0.5 }}
           className="text-left"
         >
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight max-w-3xl">
+          <h1 className="text-4xl md:text-5xl font-bold leading-tight max-w-none">
             Der nettstudenter møtes –{" "}
             <span className="text-blue-600">digitalt</span>
           </h1>
 
           <p className="mt-4 text-lg text-slate-600 max-w-xl">
             Lavterskel, uformelt og trygt fellesskap for studenter ved
-            Handelshøgskolen. Hopp inn i et rom når du vil – prat, studer
-            eller bare vær til stede.
+            Handelshøgskolen. Hopp inn i et rom når du vil – prate, studere
+            eller bare være til stede.
           </p>
 
           {/* Notifikasjoner slik du likte dem */}
