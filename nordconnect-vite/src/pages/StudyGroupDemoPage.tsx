@@ -1,23 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
   ArrowLeft,
+  Users,
   Mic,
   MicOff,
   Video,
   VideoOff,
-  Headphones,
   ScreenShare,
+  ScreenShareOff,
   FileUp,
   MessageCircle,
   Send,
+  Volume2,
+  VolumeX,
+  Clock,
 } from "lucide-react";
+import EventBanner from "@/components/EventBanner";
 
-const studyGroup = ["Gustav", "Hanna", "Ida", "Jonas"];
+const studyParticipants = ["Anna", "Bjørn", "Chen", "Dina"];
 
 function initials(name: string) {
   return name
@@ -31,152 +37,211 @@ function initials(name: string) {
 export default function StudyGroupDemoPage() {
   const nav = useNavigate();
 
+  const [isMuted, setIsMuted] = useState(false);
+  const [isDeafened, setIsDeafened] = useState(false);
+  const [isCameraOff, setIsCameraOff] = useState(false);
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
       {/* Topplinje */}
       <header className="border-b bg-white/80 backdrop-blur sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
-          <Button variant="outline" onClick={() => nav(-1)}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Tilbake
-          </Button>
-          <div>
-            <div className="text-sm font-semibold">Kamera-demo – Studiegruppe</div>
-            <div className="text-xs text-slate-500">
-              Viser en liten gruppe der noen har kamera på, noen bare skriver.
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <Button variant="outline" onClick={() => nav(-1)}>
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Tilbake
+            </Button>
+            <div>
+              <div className="text-sm font-semibold">Studiegruppe-rom</div>
+              <div className="text-xs text-slate-500">
+                Fast, sosialt rom for en liten studiegruppe.
+              </div>
             </div>
           </div>
+          <Badge variant="secondary" className="hidden md:inline-flex items-center gap-1">
+            <Users className="h-3 w-3" />
+            Liten gruppe (demo)
+          </Badge>
         </div>
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+        {/* Hovedseksjon: videorom + deltakere */}
         <section>
           <Card>
             <CardHeader>
-              <CardTitle>Studiegruppe – flere med kamera</CardTitle>
+              <CardTitle>Studiegrupperom – fast ukentlig økt</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-600 mb-4">
-                Her kan du vise hvordan små grupper ser ut – noen med kamera, noen
-                uten, noen som deltar mest i chat. Alt er kun demo-UI, ingen ekte
-                video/lyd.
-              </p>
+              <EventBanner
+                title="Studiegruppe i fag X"
+                subtitle="Liten, trygg gruppe som møtes jevnlig for å lese sammen."
+                host="Organisert av studentene selv"
+                time="Torsdager 18:00–19:30"
+              />
 
-              <div className="grid md:grid-cols-2 gap-4">
-                {studyGroup.map((name, i) => (
-                  <div
-                    key={name + i}
-                    className="rounded-xl border overflow-hidden bg-slate-900 text-white h-40 relative"
-                  >
-                    <div className="w-full h-full flex items-center justify-center bg-slate-800">
-                      {i < 3 ? (
-                        <span className="text-xs opacity-80">
-                          [ Kamera aktiv – demo ]
-                        </span>
-                      ) : (
-                        <div className="flex flex-col items-center gap-2">
-                          <Avatar className="h-10 w-10 border">
-                            <AvatarFallback>{initials(name)}</AvatarFallback>
-                          </Avatar>
-                          <span className="text-[11px] opacity-80">
-                            Kamera av – deltar i chat
-                          </span>
-                        </div>
-                      )}
+              <div className="grid md:grid-cols-3 gap-4">
+                {/* Video + kontroller */}
+                <div className="md:col-span-2 space-y-3">
+                  {/* Video/studierom */}
+                  <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-96 relative">
+                    <div className="w-full h-full bg-gradient-to-tr from-slate-800 to-slate-700 flex items-center justify-center">
+                      <span className="text-sm opacity-80 text-center px-4">
+                        {isScreenSharing
+                          ? "[ Skjermdeling – felles notater / oppgaver ]"
+                          : "[ Kameravisning – uformell studiegruppe – demo ]"}
+                      </span>
                     </div>
+
+                    {/* Overlay */}
                     <div className="absolute left-0 right-0 bottom-0 bg-black/50 backdrop-blur px-3 py-2 flex items-center justify-between">
                       <div>
-                        <div className="text-xs font-medium">{name}</div>
-                        <div className="text-[10px] text-slate-200/80">
-                          Student
+                        <div className="text-xs font-medium">Studiegruppe – fag X</div>
+                        <div className="text-[10px] text-slate-200/80 flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          Torsdag – uformell økt
                         </div>
                       </div>
-                      <StatusIcon micOn={i !== 2} cameraOn={i < 3} />
+                      <StatusIcon micOn={!isMuted} cameraOn={!isCameraOff} />
                     </div>
                   </div>
-                ))}
-              </div>
 
-              <div className="mt-4 flex items-center justify-between gap-3 flex-wrap">
-                <div className="flex flex-wrap gap-2">
-                  <Button variant="secondary" title="Mic">
-                    <Mic className="h-4 w-4" />
-                  </Button>
-                  <Button variant="secondary" title="Kamera">
-                    <Video className="h-4 w-4" />
-                  </Button>
-                  <Button variant="secondary" title="Lyd">
-                    <Headphones className="h-4 w-4" />
-                  </Button>
-                  {/* Del skjerm i mørk stil som de andre */}
-                  <Button variant="secondary" title="Del skjerm (demo)">
-                    <ScreenShare className="h-4 w-4" />
-                  </Button>
-                  {/* Merk: Del fil er flyttet ned til chat */}
+                  {/* Kontroller */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    {/* Mute */}
+                    <Button
+                      className={`rounded-full p-3 transition ${
+                        isMuted ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                      }`}
+                      variant="ghost"
+                      onClick={() => setIsMuted(prev => !prev)}
+                    >
+                      {isMuted ? (
+                        <MicOff className="h-5 w-5" />
+                      ) : (
+                        <Mic className="h-5 w-5" />
+                      )}
+                    </Button>
+
+                    {/* Deafen */}
+                    <Button
+                      className={`rounded-full p-3 transition ${
+                        isDeafened ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                      }`}
+                      variant="ghost"
+                      onClick={() => setIsDeafened(prev => !prev)}
+                    >
+                      {isDeafened ? (
+                        <VolumeX className="h-5 w-5" />
+                      ) : (
+                        <Volume2 className="h-5 w-5" />
+                      )}
+                    </Button>
+
+                    {/* Kamera */}
+                    <Button
+                      className={`rounded-full p-3 transition ${
+                        isCameraOff ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                      }`}
+                      variant="ghost"
+                      onClick={() => setIsCameraOff(prev => !prev)}
+                    >
+                      {isCameraOff ? (
+                        <VideoOff className="h-5 w-5" />
+                      ) : (
+                        <Video className="h-5 w-5" />
+                      )}
+                    </Button>
+
+                    {/* Del skjerm */}
+                    <Button
+                      className={`rounded-full p-3 transition ${
+                        isScreenSharing
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-foreground"
+                      }`}
+                      variant="ghost"
+                      onClick={() => setIsScreenSharing(prev => !prev)}
+                    >
+                      {isScreenSharing ? (
+                        <ScreenShareOff className="h-5 w-5" />
+                      ) : (
+                        <ScreenShare className="h-5 w-5" />
+                      )}
+                    </Button>
+                  </div>
                 </div>
-                <p className="text-[11px] text-slate-500">
-                  I praksis kan noen ha kamera av og kun bidra gjennom skriftlig chat.
-                </p>
+
+                {/* Deltakerkort */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-slate-700">
+                      Studiegruppen
+                    </span>
+                    <Badge variant="outline" className="text-[10px]">
+                      {studyParticipants.length} medlemmer
+                    </Badge>
+                  </div>
+
+                  <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-1">
+                    {studyParticipants.map((name, idx) => (
+                      <div
+                        key={name}
+                        className="flex items-center gap-2 rounded-lg border bg-white px-2 py-2 text-xs"
+                      >
+                        <Avatar className="h-7 w-7 border">
+                          <AvatarFallback>{initials(name)}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium truncate">{name}</div>
+                          <div className="text-[10px] text-slate-500">
+                            {idx === 0 ? "Initiativtaker" : "Medlem"}
+                          </div>
+                        </div>
+                        <span className="text-[10px] text-emerald-600">● tilkoblet</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
         </section>
 
-        {/* Tekstchat – skriftlig deltakelse */}
+        {/* Chat / notater */}
         <section>
           <Card>
             <CardHeader className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <MessageCircle className="h-5 w-5 text-blue-600" />
-                <CardTitle className="text-base">Tekstchat i studiegruppa (demo)</CardTitle>
+                <CardTitle className="text-base">Felles notater / chat (demo)</CardTitle>
               </div>
-              <span className="text-xs text-slate-500">
-                God løsning for de som ikke vil ha kamera eller lyd.
-              </span>
             </CardHeader>
             <CardContent>
               <div className="border rounded-lg p-3 bg-slate-50">
-                <div className="text-xs text-slate-500 mb-2">
-                  Eksempel på skriftlig deltakelse:
-                </div>
                 <div className="space-y-2 max-h-44 overflow-auto text-sm">
-                  <ChatBubble name="Ida">
-                    Jeg har det litt hektisk hjemme, så jeg skriver heller svar her enn å ha mic på 💬
+                  <ChatBubble name="Anna">
+                    Skal vi ta gjennomgang av oppgave 3 sammen nå?
                   </ChatBubble>
-                  <ChatBubble name="Gustav">
-                    Noen som vil dele skjerm og vise hvordan dere har løst oppgave 3?
+                  <ChatBubble name="Bjørn">
+                    Ja! Jeg sleit spesielt med del b).
                   </ChatBubble>
-                  <ChatBubble name="Jonas">
-                    Jeg synes det er lettere å formulere meg skriftlig enn muntlig, håper det er ok 😊
-                  </ChatBubble>
-                  <ChatBubble name="Hanna" align="right">
-                    Ja! Chat er supert – bare skriv når du vil, så kan vi ta muntlig oppfølging om du vil senere.
+                  <ChatBubble name="Chen" align="right">
+                    Jeg kan dele skjerm og vise hvordan jeg løste den.
                   </ChatBubble>
                 </div>
 
-                {/* INPUTRAD: del fil + skriv + send */}
+                {/* INPUTRAD */}
                 <div className="mt-3 flex gap-2">
-                  <Button
-                    variant="outline"
-                    type="button"
-                    title="Del fil (demo)"
-                    className="shrink-0"
-                  >
+                  <Button variant="outline" className="shrink-0">
                     <FileUp className="h-4 w-4" />
                   </Button>
-                  <Input
-                    placeholder="Skriv en melding… (demo – ikke ekte chat)"
-                    className="flex-1"
-                  />
-                  <Button type="button" className="shrink-0">
+                  <Input placeholder="Skriv en melding eller et notat…" className="flex-1" />
+                  <Button className="shrink-0">
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>
-
-                <p className="mt-2 text-[11px] text-slate-500">
-                  I en ekte løsning ville du kunne bruke chat til å stille spørsmål, gi svar
-                  og følge med – selv om du ikke ønsker å snakke, og eventuelt legge ved filer.
-                </p>
               </div>
             </CardContent>
           </Card>
