@@ -88,6 +88,32 @@ export default function RoomPage() {
                 </Button>
               </CardHeader>
               <CardContent>
+                {/* Kameravisning – dukker bare opp når du er i rommet og kamera er på */}
+                {isInRoom && !isCameraOff && (
+                  <div className="mb-4">
+                    <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-56 relative">
+                      <div className="w-full h-full bg-gradient-to-tr from-slate-800 to-slate-700 flex items-center justify-center">
+                        <span className="text-sm opacity-80 text-center px-4">
+                          [ Kameravisning – demo for dette rommet ]
+                        </span>
+                      </div>
+                      <div className="absolute left-0 right-0 bottom-0 bg-black/50 backdrop-blur px-3 py-1.5 flex items-center justify-between">
+                        <div className="text-[11px]">
+                          <div className="font-medium">Du</div>
+                          <div className="text-[10px] text-slate-200/80">
+                            Kamera aktivert (mock)
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1 text-[10px] text-slate-100/80">
+                          {isMuted ? "Mic av" : "Mic på"} •{" "}
+                          {isDeafened ? "Lyd av" : "Lyd på"} •{" "}
+                          {isScreenSharing ? "Skjermdeling" : "Ingen deling"}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 <div className="text-xs text-slate-500 mb-2">Tekstchat (mock)</div>
                 <div className="space-y-2 max-h-72 overflow-auto bg-slate-50 border rounded-xl p-3">
                   <Bubble name="Anna" text="Hei! Hvordan går det med innleveringen?" />
@@ -161,7 +187,7 @@ export default function RoomPage() {
                       isCameraOff ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
                     }`}
                     variant="ghost"
-                    title="Kamera av/på (demo)"
+                    title="Aktiver/deaktiver kamera (demo)"
                     onClick={() => setIsCameraOff(prev => !prev)}
                   >
                     {isCameraOff ? (
