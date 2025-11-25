@@ -10,7 +10,6 @@ import {
   Sparkles,
   Shield,
   Smile,
-  PlayCircle,
   Bell,
   Mic,
   MicOff,
@@ -136,7 +135,7 @@ export default function NordConnect() {
 
   const [demoMenuOpen, setDemoMenuOpen] = useState(false);
 
-  // Kontroller for popup rom
+  // Kontroller for popup-rom
   const [isMuted, setIsMuted] = useState(false);
   const [isDeafened, setIsDeafened] = useState(false);
   const [isCameraOff, setIsCameraOff] = useState(false);
@@ -272,7 +271,7 @@ export default function NordConnect() {
         </div>
       </header>
 
-      {/* HERO – venstrejustert + live notifikasjoner */}
+      {/* HERO – venstrejustert + tidligere notif-bar */}
       <section className="max-w-6xl mx-auto px-4 pt-12 pb-8">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
@@ -291,13 +290,8 @@ export default function NordConnect() {
             eller bare vær til stede.
           </p>
 
-          {/* CTA + demomeny (foreløpig som før) */}
+          {/* Kun demo-meny som CTA – siden den faktisk gjør noe */}
           <div className="mt-6 flex flex-wrap gap-3 justify-start">
-            <Button size="lg">
-              <PlayCircle className="h-5 w-5 mr-2" />
-              Bli med nå
-            </Button>
-
             <div className="relative">
               <Button
                 type="button"
@@ -343,19 +337,15 @@ export default function NordConnect() {
             </div>
           </div>
 
-          {/* LIVE NOTIFIKASJONS-BAR */}
-          <div className="mt-6 space-y-2 max-w-xl">
-            {notifications.map((n, i) => (
-              <div
-                key={i}
-                className="px-4 py-2 bg-blue-50 border border-blue-100 rounded-lg text-sm text-blue-800 flex items-center gap-2 shadow-sm"
-              >
-                <Sparkles className="h-4 w-4 text-blue-500" />
-                <span>{n}</span>
-              </div>
-            ))}
-            <div className="text-[11px] text-slate-500 mt-1">
-              I en ekte løsning kunne disse kobles mot faktiske rom og tider (f.eks. Kaffepraten, Trivselsprat).
+          {/* Notifikasjoner i “badge”-stil slik du likte dem */}
+          <div className="mt-6 flex items-center gap-2 text-sm text-slate-600 flex-wrap">
+            <Clock className="h-4 w-4" />
+            <div className="flex flex-wrap gap-2">
+              {notifications.map((n, i) => (
+                <Badge key={i} variant="secondary">
+                  {n}
+                </Badge>
+              ))}
             </div>
           </div>
         </motion.div>
