@@ -56,6 +56,7 @@ export default function BreakoutDemoPage() {
   const [isMuted, setIsMuted] = useState(false);
   const [isDeafened, setIsDeafened] = useState(false);
   const [isCameraOff, setIsCameraOff] = useState(false);
+  const [activeRoomId, setActiveRoomId] = useState<string | null>(null); // hvilket breakout-rom du "er i"
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
@@ -126,7 +127,7 @@ export default function BreakoutDemoPage() {
                         isMuted ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
                       }`}
                       variant="ghost"
-                      onClick={() => setIsMuted((prev) => !prev)}
+                      onClick={() => setIsMuted(prev => !prev)}
                     >
                       {isMuted ? (
                         <MicOff className="h-5 w-5" />
@@ -141,7 +142,7 @@ export default function BreakoutDemoPage() {
                         isDeafened ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
                       }`}
                       variant="ghost"
-                      onClick={() => setIsDeafened((prev) => !prev)}
+                      onClick={() => setIsDeafened(prev => !prev)}
                     >
                       {isDeafened ? (
                         <VolumeX className="h-5 w-5" />
@@ -156,7 +157,7 @@ export default function BreakoutDemoPage() {
                         isCameraOff ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
                       }`}
                       variant="ghost"
-                      onClick={() => setIsCameraOff((prev) => !prev)}
+                      onClick={() => setIsCameraOff(prev => !prev)}
                     >
                       {isCameraOff ? (
                         <VideoOff className="h-5 w-5" />
@@ -169,46 +170,64 @@ export default function BreakoutDemoPage() {
 
                 {/* Breakout-rom i kort – 3 i bredden på desktop */}
                 <div className="grid gap-3 md:grid-cols-3">
-                  {breakoutRooms.map((room) => (
-                    <div key={room.id} className="rounded-lg border bg-white p-3 space-y-2 shadow-sm">
-                      <div className="flex items-center justify-between gap-2">
-                        <div>
-                          <div className="text-xs font-semibold text-slate-800">
-                            {room.name}
+                  {breakoutRooms.map((room) => {
+                    const isInThisRoom = activeRoomId === room.id;
+
+                    return (
+                      <div
+                        key={room.id}
+                        className="rounded-lg border bg-white p-3 space-y-2 shadow-sm"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <div className="text-xs font-semibold text-slate-800">
+                              {room.name}
+                            </div>
+                            <div className="text-[11px] text-slate-500">
+                              {room.topic}
+                            </div>
                           </div>
-                          <div className="text-[11px] text-slate-500">
-                            {room.topic}
+                          <div className="flex flex-col items-end gap-1">
+                            <Button
+                              size="xs"
+                              className="text-[10px] px-2 py-1"
+                              variant={isInThisRoom ? "outline" : "default"}
+                              onClick={() =>
+                                setActiveRoomId(prev =>
+                                  prev === room.id ? null : room.id
+                                )
+                              }
+                            >
+                              {isInThisRoom ? "Forlat rommet" : "Bli med i rommet"}
+                            </Button>
+                            <Badge variant="outline" className="text-[10px]">
+                              {room.participants.length} deltakere
+                            </Badge>
                           </div>
                         </div>
-                        <Badge variant="secondary" className="text-[10px]">
-                          {room.participants.length} deltakere
-                        </Badge>
-                      </div>
 
-                      <div className="flex flex-wrap gap-1">
-                        {room.participants.map((name) => (
-                          <div
-                            key={room.id + name}
-                            className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-slate-50 border text-[11px]"
-                          >
-                            <Avatar className="h-5 w-5 border">
-                              <AvatarFallback>{initials(name)}</AvatarFallback>
-                            </Avatar>
-                            <span className="truncate max-w-[70px]">{name}</span>
-                          </div>
-                        ))}
-                      </div>
+                        <div className="flex flex-wrap gap-1">
+                          {room.participants.map((name) => (
+                            <div
+                              key={room.id + name}
+                              className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-slate-50 border text-[11px]"
+                            >
+                              <Avatar className="h-5 w-5 border">
+                                <AvatarFallback>{initials(name)}</AvatarFallback>
+                              </Avatar>
+                              <span className="truncate max-w-[70px]">{name}</span>
+                            </div>
+                          ))}
+                        </div>
 
-                      <div className="flex gap-2 mt-2">
-                        <Button variant="outline" className="text-xs flex-1">
-                          Bli med i rommet
-                        </Button>
-                        <Button variant="ghost" className="text-[11px] px-2">
-                          Flytt deltakere
-                        </Button>
+                        <div className="flex justify-end mt-2">
+                          <Button variant="ghost" className="text-[11px] px-2">
+                            Flytt deltakere
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </CardContent>
