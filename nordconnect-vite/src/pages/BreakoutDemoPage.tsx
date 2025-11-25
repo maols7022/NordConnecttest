@@ -16,6 +16,8 @@ import {
   FileUp,
   MessageCircle,
   Send,
+  Headphones,
+  HeadphonesOff,
 } from "lucide-react";
 import EventBanner from "@/components/EventBanner";
 
