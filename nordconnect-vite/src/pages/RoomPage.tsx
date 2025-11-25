@@ -34,8 +34,9 @@ const ROOM_INDEX: Record<
   oslo: { name: "Oslo-området", description: "Møt andre i samme område." },
 };
 
+// 🔁 Ikke mer random – bare ta de første n
 const peopleInRoom = (n: number) =>
-  [...mockUsers].sort(() => Math.random() - 0.5).slice(0, Math.max(1, Math.min(n, mockUsers.length)));
+  mockUsers.slice(0, Math.max(1, Math.min(n, mockUsers.length)));
 
 export default function RoomPage() {
   const { id } = useParams<{ id: string }>();
