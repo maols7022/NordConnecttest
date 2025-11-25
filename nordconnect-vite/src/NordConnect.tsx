@@ -494,7 +494,12 @@ export default function NordConnect() {
             <ul className="mt-2 space-y-1">
               <li><a className="hover:underline" href="#about">Om prosjektet</a></li>
               <li><a className="hover:underline" href="#rooms">Rom</a></li>
-              <li><a className="hover:underline" href="#how">Slik funker det</a></li>
+              <li>
+  <Link className="hover:underline" to="/how-it-works">
+    Slik funker det
+  </Link>
+</li>
+
             </ul>
           </div>
 
