@@ -221,31 +221,30 @@ export default function BreakoutDemoPage() {
                         </div>
 
                         {/* Knapperekke festet i bunnen */}
-                        <div className="flex justify-end gap-2 pt-2 mt-2 border-t border-slate-100">
-                          <Button
-                            size="xs"
-                            variant="outline"
-                            className={`text-[11px] px-3 rounded-full ${
-                              isInThisRoom
-                                ? "border-slate-500 bg-slate-100"
-                                : "border-slate-200 bg-white"
-                            }`}
-                            onClick={() =>
-                              setActiveRoomId((prev) =>
-                                prev === room.id ? null : room.id
-                              )
-                            }
-                          >
-                            {isInThisRoom ? "Forlat rommet" : "Bli med i rommet"}
-                          </Button>
-                          <Button
-                            size="xs"
-                            variant="outline"
-                            className="text-[11px] px-3 rounded-full border-slate-200 bg-white"
-                          >
-                            Flytt deltakere
-                          </Button>
-                        </div>
+                        <{/* Knapperekke festet i bunnen – midtstilt */}
+<div className="flex justify-center gap-3 pt-3 mt-3 border-t border-slate-200">
+  <Button
+    variant="outline"
+    className={`text-xs px-4 py-1.5 rounded-full font-medium ${
+      isInThisRoom
+        ? "border-slate-500 bg-slate-100"
+        : "border-slate-300 bg-white"
+    }`}
+    onClick={() =>
+      setActiveRoomId((prev) => (prev === room.id ? null : room.id))
+    }
+  >
+    {isInThisRoom ? "Forlat rommet" : "Bli med i rommet"}
+  </Button>
+
+  <Button
+    variant="outline"
+    className="text-xs px-4 py-1.5 rounded-full font-medium border-slate-300 bg-white"
+  >
+    Flytt deltakere
+  </Button>
+</div>
+
                       </div>
                     );
                   })}
