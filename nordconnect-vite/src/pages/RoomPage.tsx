@@ -121,8 +121,11 @@ export default function RoomPage() {
                   <Bubble name="Chen" text="Noen som vil sparre på metode-delen?" />
                 </div>
                 <div className="mt-3 flex gap-2">
-                  <Input placeholder="Skriv en melding…" />
-                  <Button>Send</Button>
+                  <Button variant="outline" className="shrink-0">
+                    <FileUp className="h-4 w-4" />
+                  </Button>
+                  <Input placeholder="Skriv en melding…" className="flex-1" />
+                  <Button className="shrink-0">Send</Button>
                 </div>
               </CardContent>
             </Card>
@@ -213,15 +216,6 @@ export default function RoomPage() {
                     ) : (
                       <ScreenShare className="h-4 w-4" />
                     )}
-                  </Button>
-
-                  {/* Del fil – statisk demo-knapp */}
-                  <Button
-                    variant="outline"
-                    className="rounded-full p-3"
-                    title="Del fil (demo)"
-                  >
-                    <FileUp className="h-4 w-4" />
                   </Button>
                 </div>
 
