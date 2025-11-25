@@ -13,10 +13,13 @@ import {
   Video,
   VideoOff,
   ScreenShare,
+  ScreenShareOff,
   FileUp,
   Clock,
   MessageCircle,
   Send,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import EventBanner from "@/components/EventBanner";
 
@@ -34,9 +37,10 @@ function initials(name: string) {
 export default function VideoDemoPage() {
   const nav = useNavigate();
 
-  // enkel state for demo av mic/kamera på vert
-  const [hostMicOn, setHostMicOn] = useState(true);
-  const [hostCamOn, setHostCamOn] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isDeafened, setIsDeafened] = useState(false);
+  const [isCameraOff, setIsCameraOff] = useState(false);
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
@@ -49,134 +53,155 @@ export default function VideoDemoPage() {
               Tilbake
             </Button>
             <div>
-              <div className="text-sm font-semibold">Kamera-demo – arrangementrom</div>
+              <div className="text-sm font-semibold">Quiz-arrangement</div>
               <div className="text-xs text-slate-500">
-                Viser et digitalt arrangement der verten har kamera på, og andre kan delta
-                muntlig eller skriftlig.
+                Live quiz med vert, chat og deltakere.
               </div>
             </div>
           </div>
-          <div className="hidden md:flex items-center gap-2 text-xs text-slate-500">
-            <Clock className="h-3 w-3" />
-            <span>Arrangement: 19:00–20:00 (demo)</span>
-          </div>
+          <Badge variant="secondary" className="hidden md:inline-flex items-center gap-1">
+            <Users className="h-3 w-3" />
+            {quizParticipants.length} påmeldte (demo)
+          </Badge>
         </div>
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">
-        {/* Hovedkort: vert med kamera */}
+        {/* Hovedseksjon: video + deltakere */}
         <section>
           <Card>
-            <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-              <div>
-                {/* ny, mer generell overskrift */}
-                <CardTitle>Arrangementrom – vert med kamera</CardTitle>
-                <p className="text-sm text-slate-600 mt-1">
-                  Verten har kamera på, deltakerne kan velge selv. Noen er med på lyd, andre
-                  deltar kun i chat. Alt du ser her er kun visuell demo.
-                </p>
-              </div>
-              <Badge variant="secondary" className="flex items-center gap-1">
-                <Users className="h-3 w-3" />
-                18 deltakere (demo)
-              </Badge>
+            <CardHeader>
+              <CardTitle>Quizkveld – live rom</CardTitle>
             </CardHeader>
             <CardContent>
-              {/* Event-banner øverst i rommet – her sier vi at det er quizkveld */}
               <EventBanner
-                title="Quizkveld – tema: entreprenørskap"
-                subtitle="Uformelt digitalt arrangement for nettstudenter."
-                host="Nina (fagansvarlig)"
-                time="19:00–20:00"
+                title="Quizkveld for nettstudenter"
+                subtitle="Lavterskel quiz for å bli kjent på tvers av studieprogram."
+                host="Nina (vert / quizmaster)"
+                time="20:00–21:00"
               />
 
               <div className="grid md:grid-cols-3 gap-4">
-                {/* Vert-video */}
-                <div className="md:col-span-2">
-                  <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-56 relative">
+                {/* Video + kontroller */}
+                <div className="md:col-span-2 space-y-3">
+                  {/* Video/kameraområde */}
+                  <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-96 relative">
                     <div className="w-full h-full bg-gradient-to-tr from-slate-800 to-slate-700 flex items-center justify-center">
-                      <span className="text-sm opacity-80">
-                        [ Vert med kamera aktiv – demo ]
+                      <span className="text-sm opacity-80 text-center px-4">
+                        {isScreenSharing
+                          ? "[ Skjermdeling – quiz-spørsmål vises her ]"
+                          : "[ Vert – kameravisning / quiz-master – demo ]"}
                       </span>
                     </div>
+
+                    {/* Overlay nederst */}
                     <div className="absolute left-0 right-0 bottom-0 bg-black/50 backdrop-blur px-3 py-2 flex items-center justify-between">
                       <div>
                         <div className="text-xs font-medium">Nina (vert)</div>
-                        <div className="text-[10px] text-slate-200/80">
-                          Fagansvarlig / host
+                        <div className="text-[10px] text-slate-200/80 flex items-center gap-1">
+                          <Clock className="h-3 w-3" />
+                          Pågår nå – runde 2/4
                         </div>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <StatusIcon micOn={hostMicOn} cameraOn={hostCamOn} />
-                      </div>
+                      <StatusIcon micOn={!isMuted} cameraOn={!isCameraOff} />
                     </div>
-                    <div className="absolute top-2 left-2">
-                      <Badge variant="destructive" className="text-[10px] px-2 py-0.5">
-                        LIVE
-                      </Badge>
-                    </div>
+                  </div>
+
+                  {/* Kontroller */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    {/* Mute */}
+                    <Button
+                      className={`rounded-full p-3 transition ${
+                        isMuted ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                      }`}
+                      variant="ghost"
+                      onClick={() => setIsMuted(prev => !prev)}
+                    >
+                      {isMuted ? (
+                        <MicOff className="h-5 w-5" />
+                      ) : (
+                        <Mic className="h-5 w-5" />
+                      )}
+                    </Button>
+
+                    {/* Deafen */}
+                    <Button
+                      className={`rounded-full p-3 transition ${
+                        isDeafened ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                      }`}
+                      variant="ghost"
+                      onClick={() => setIsDeafened(prev => !prev)}
+                    >
+                      {isDeafened ? (
+                        <VolumeX className="h-5 w-5" />
+                      ) : (
+                        <Volume2 className="h-5 w-5" />
+                      )}
+                    </Button>
+
+                    {/* Kamera */}
+                    <Button
+                      className={`rounded-full p-3 transition ${
+                        isCameraOff ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+                      }`}
+                      variant="ghost"
+                      onClick={() => setIsCameraOff(prev => !prev)}
+                    >
+                      {isCameraOff ? (
+                        <VideoOff className="h-5 w-5" />
+                      ) : (
+                        <Video className="h-5 w-5" />
+                      )}
+                    </Button>
+
+                    {/* Del skjerm */}
+                    <Button
+                      className={`rounded-full p-3 transition ${
+                        isScreenSharing
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-foreground"
+                      }`}
+                      variant="ghost"
+                      onClick={() => setIsScreenSharing(prev => !prev)}
+                    >
+                      {isScreenSharing ? (
+                        <ScreenShareOff className="h-5 w-5" />
+                      ) : (
+                        <ScreenShare className="h-5 w-5" />
+                      )}
+                    </Button>
                   </div>
                 </div>
 
-                {/* Deltakere i små ruter */}
+                {/* Deltakerliste */}
                 <div className="space-y-3">
-                  <div className="text-xs text-slate-500">
-                    Eksempel på deltakere (demo)
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-slate-700">
+                      Deltakere i rommet
+                    </span>
+                    <Badge variant="outline" className="text-[10px]">
+                      {quizParticipants.length} tilkoblet
+                    </Badge>
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {quizParticipants.map((name, i) => (
+
+                  <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-1">
+                    {quizParticipants.map((name, idx) => (
                       <div
-                        key={name + i}
-                        className="rounded-lg border bg-slate-50 p-2 flex items-center justify-between gap-2"
+                        key={name}
+                        className="flex items-center gap-2 rounded-lg border bg-white px-2 py-2 text-xs"
                       >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <Avatar className="h-7 w-7 border">
-                            <AvatarFallback>{initials(name)}</AvatarFallback>
-                          </Avatar>
-                          <span className="text-xs font-medium truncate">
-                            {name}
-                          </span>
+                        <Avatar className="h-7 w-7 border">
+                          <AvatarFallback>{initials(name)}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-medium truncate">{name}</div>
+                          <div className="text-[10px] text-slate-500">
+                            {idx === 0 ? "Med-vert" : "Deltaker"}
+                          </div>
                         </div>
-                        <StatusIcon
-                          micOn={i < 2}
-                          cameraOn={i === 0 || i === 1}
-                        />
+                        <span className="text-[10px] text-emerald-600">● aktiv</span>
                       </div>
                     ))}
-                  </div>
-
-                  {/* Kontroller (nå interaktive, uten ekstra hvite knapper) */}
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {/* MIC-toggle */}
-                    <Button
-                      variant={hostMicOn ? "secondary" : "outline"}
-                      title={hostMicOn ? "Slå av mikrofon (demo)" : "Skru på mikrofon (demo)"}
-                      onClick={() => setHostMicOn((v) => !v)}
-                    >
-                      {hostMicOn ? (
-                        <Mic className="h-4 w-4" />
-                      ) : (
-                        <MicOff className="h-4 w-4" />
-                      )}
-                    </Button>
-
-                    {/* KAMERA-toggle */}
-                    <Button
-                      variant={hostCamOn ? "secondary" : "outline"}
-                      title={hostCamOn ? "Slå av kamera (demo)" : "Skru på kamera (demo)"}
-                      onClick={() => setHostCamOn((v) => !v)}
-                    >
-                      {hostCamOn ? (
-                        <Video className="h-4 w-4" />
-                      ) : (
-                        <VideoOff className="h-4 w-4" />
-                      )}
-                    </Button>
-
-                    {/* Del skjerm – mørk knapp, som før */}
-                    <Button variant="secondary" title="Del skjerm (demo)">
-                      <ScreenShare className="h-4 w-4" />
-                    </Button>
                   </div>
                 </div>
               </div>
@@ -184,61 +209,39 @@ export default function VideoDemoPage() {
           </Card>
         </section>
 
-        {/* Tekstchat – skriftlig deltakelse */}
+        {/* Chat / quiz-kommentarer */}
         <section>
           <Card>
             <CardHeader className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <MessageCircle className="h-5 w-5 text-blue-600" />
-                <CardTitle className="text-base">Tekstchat (demo)</CardTitle>
+                <CardTitle className="text-base">Quiz-chat (demo)</CardTitle>
               </div>
-              <span className="text-xs text-slate-500">
-                Viser at du kan delta kun skriftlig – uten kamera og mic.
-              </span>
             </CardHeader>
             <CardContent>
               <div className="border rounded-lg p-3 bg-slate-50">
-                <div className="text-xs text-slate-500 mb-2">
-                  Eksempel på meldinger:
-                </div>
                 <div className="space-y-2 max-h-44 overflow-auto text-sm">
-                  <ChatBubble name="Anna">
-                    Jeg følger bare med i chat i dag, men quiz høres gøy ut 😄
+                  <ChatBubble name="Nina (vert)">
+                    Skriv svaret deres i chatten – én melding per gruppe 🙌
                   </ChatBubble>
-                  <ChatBubble name="Bjørn">
-                    Kan noen gjenta spørsmålet? Jeg fikk ikke helt med meg.
+                  <ChatBubble name="Gruppe 1 – Anna">
+                    Vi går for alternativ B!
                   </ChatBubble>
-                  <ChatBubble name="Chen">
-                    Jeg vil helst ikke ha kamera på, men skriver gjerne svar her 😊
-                  </ChatBubble>
-                  <ChatBubble name="Nina (vert)" align="right">
-                    Helt fint å delta bare skriftlig – alle må gjøre det som føles komfortabelt 💙
+                  <ChatBubble name="Gruppe 2 – Elias" align="right">
+                    C her ✅
                   </ChatBubble>
                 </div>
 
-                {/* INPUTRAD: del fil + skriv + send */}
+                {/* INPUTRAD */}
                 <div className="mt-3 flex gap-2">
-                  <Button
-                    variant="outline"
-                    type="button"
-                    title="Del fil (demo)"
-                    className="shrink-0"
-                  >
+                  <Button variant="outline" className="shrink-0">
                     <FileUp className="h-4 w-4" />
                   </Button>
-                  <Input
-                    placeholder="Skriv en melding… (demo – ikke ekte chat)"
-                    className="flex-1"
-                  />
-                  <Button type="button" className="shrink-0">
+                  <Input placeholder="Skriv en melding…" className="flex-1" />
+                  <Button className="shrink-0">
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>
-
-                <p className="mt-2 text-[11px] text-slate-500">
-                  I en ekte løsning ville dette vært en fullverdig chat, der enkelte
-                  kanskje kun skriver, mens andre både snakker og skriver – og kan legge ved filer.
-                </p>
               </div>
             </CardContent>
           </Card>
