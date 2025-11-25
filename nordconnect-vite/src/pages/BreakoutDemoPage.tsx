@@ -97,9 +97,9 @@ export default function BreakoutDemoPage() {
                 time="18:00–19:30"
               />
 
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="space-y-4">
                 {/* Plenums-visning / host */}
-                <div className="md:col-span-2 space-y-3">
+                <div className="space-y-3">
                   {/* Større firkantet kameravisning */}
                   <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-96 relative">
                     <div className="w-full h-full bg-gradient-to-tr from-slate-800 to-slate-700 flex items-center justify-center">
@@ -167,7 +167,7 @@ export default function BreakoutDemoPage() {
                   </div>
                 </div>
 
-                {/* Breakout-romliste — scrollable */}
+                {/* Breakout-romliste — under kamera, scrollable hvis høy */}
                 <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
                   {breakoutRooms.map((room) => (
                     <div key={room.id} className="rounded-lg border bg-white p-3 space-y-2">
