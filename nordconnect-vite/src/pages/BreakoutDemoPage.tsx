@@ -220,31 +220,31 @@ export default function BreakoutDemoPage() {
                           </div>
                         </div>
 
-                        {/* Knapperekke festet i bunnen */}
-                        <{/* Knapperekke festet i bunnen – midtstilt */}
-<div className="flex justify-center gap-3 pt-3 mt-3 border-t border-slate-200">
-  <Button
-    variant="outline"
-    className={`text-xs px-4 py-1.5 rounded-full font-medium ${
-      isInThisRoom
-        ? "border-slate-500 bg-slate-100"
-        : "border-slate-300 bg-white"
-    }`}
-    onClick={() =>
-      setActiveRoomId((prev) => (prev === room.id ? null : room.id))
-    }
-  >
-    {isInThisRoom ? "Forlat rommet" : "Bli med i rommet"}
-  </Button>
+                        {/* Knapperekke festet i bunnen – midtstilt */}
+                        <div className="flex justify-center gap-3 pt-3 mt-3 border-t border-slate-200">
+                          <Button
+                            variant="outline"
+                            className={`text-xs px-4 py-1.5 rounded-full font-medium ${
+                              isInThisRoom
+                                ? "border-slate-500 bg-slate-100"
+                                : "border-slate-300 bg-white"
+                            }`}
+                            onClick={() =>
+                              setActiveRoomId((prev) =>
+                                prev === room.id ? null : room.id
+                              )
+                            }
+                          >
+                            {isInThisRoom ? "Forlat rommet" : "Bli med i rommet"}
+                          </Button>
 
-  <Button
-    variant="outline"
-    className="text-xs px-4 py-1.5 rounded-full font-medium border-slate-300 bg-white"
-  >
-    Flytt deltakere
-  </Button>
-</div>
-
+                          <Button
+                            variant="outline"
+                            className="text-xs px-4 py-1.5 rounded-full font-medium border-slate-300 bg-white"
+                          >
+                            Flytt deltakere
+                          </Button>
+                        </div>
                       </div>
                     );
                   })}
