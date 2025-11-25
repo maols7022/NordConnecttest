@@ -15,7 +15,7 @@ import {
   FileUp,
   MessageCircle,
   Send,
-  Headphones,
+  Volume2,
   VolumeX,
 } from "lucide-react";
 import EventBanner from "@/components/EventBanner";
@@ -135,7 +135,7 @@ export default function BreakoutDemoPage() {
                       )}
                     </Button>
 
-                    {/* Deafen */}
+                    {/* Deafen – Volume2 / VolumeX */}
                     <Button
                       className={`rounded-full p-3 transition ${
                         isDeafened ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
@@ -146,7 +146,7 @@ export default function BreakoutDemoPage() {
                       {isDeafened ? (
                         <VolumeX className="h-5 w-5" />
                       ) : (
-                        <Headphones className="h-5 w-5" />
+                        <Volume2 className="h-5 w-5" />
                       )}
                     </Button>
 
@@ -167,10 +167,10 @@ export default function BreakoutDemoPage() {
                   </div>
                 </div>
 
-                {/* Breakout-romliste — under kamera, scrollable hvis høy */}
-                <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
+                {/* Breakout-rom i kort – 3 i bredden på desktop */}
+                <div className="grid gap-3 md:grid-cols-3">
                   {breakoutRooms.map((room) => (
-                    <div key={room.id} className="rounded-lg border bg-white p-3 space-y-2">
+                    <div key={room.id} className="rounded-lg border bg-white p-3 space-y-2 shadow-sm">
                       <div className="flex items-center justify-between gap-2">
                         <div>
                           <div className="text-xs font-semibold text-slate-800">
