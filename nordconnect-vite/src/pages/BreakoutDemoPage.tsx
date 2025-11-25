@@ -185,43 +185,47 @@ export default function BreakoutDemoPage() {
                     return (
                       <div
                         key={room.id}
-                        className={`rounded-lg border p-3 space-y-2 shadow-sm transition-colors ${
+                        className={`rounded-lg border p-3 shadow-sm transition-colors flex flex-col ${
                           isInThisRoom ? "bg-blue-50 border-blue-200" : "bg-white"
                         }`}
                       >
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <div className="text-xs font-semibold text-slate-800">
-                              {room.name}
+                        {/* Innhold: tittel + deltakere */}
+                        <div className="flex-1 space-y-2">
+                          <div className="flex items-start justify-between gap-2">
+                            <div>
+                              <div className="text-xs font-semibold text-slate-800">
+                                {room.name}
+                              </div>
+                              <div className="text-[11px] text-slate-500">
+                                {room.topic}
+                              </div>
                             </div>
-                            <div className="text-[11px] text-slate-500">
-                              {room.topic}
-                            </div>
+                            <Badge variant="outline" className="text-[10px]">
+                              {room.participants.length} deltakere
+                            </Badge>
                           </div>
-                          <Badge variant="outline" className="text-[10px]">
-                            {room.participants.length} deltakere
-                          </Badge>
+
+                          <div className="flex flex-wrap gap-1">
+                            {room.participants.map((name) => (
+                              <div
+                                key={room.id + name}
+                                className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-slate-50 border text-[11px]"
+                              >
+                                <Avatar className="h-5 w-5 border">
+                                  <AvatarFallback>{initials(name)}</AvatarFallback>
+                                </Avatar>
+                                <span className="truncate max-w-[70px]">{name}</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-1">
-                          {room.participants.map((name) => (
-                            <div
-                              key={room.id + name}
-                              className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-slate-50 border text-[11px]"
-                            >
-                              <Avatar className="h-5 w-5 border">
-                                <AvatarFallback>{initials(name)}</AvatarFallback>
-                              </Avatar>
-                              <span className="truncate max-w-[70px]">{name}</span>
-                            </div>
-                          ))}
-                        </div>
-
-                        <div className="flex justify-end mt-2 gap-2">
+                        {/* Knapperekke festet i bunnen */}
+                        <div className="flex justify-end gap-2 pt-2 mt-2 border-t border-slate-100">
                           <Button
                             size="xs"
                             variant="outline"
-                            className={`text-[11px] px-2 ${
+                            className={`text-[11px] px-3 rounded-full ${
                               isInThisRoom
                                 ? "border-slate-500 bg-slate-100"
                                 : "border-slate-200 bg-white"
@@ -234,7 +238,11 @@ export default function BreakoutDemoPage() {
                           >
                             {isInThisRoom ? "Forlat rommet" : "Bli med i rommet"}
                           </Button>
-                          <Button variant="ghost" className="text-[11px] px-2">
+                          <Button
+                            size="xs"
+                            variant="outline"
+                            className="text-[11px] px-3 rounded-full border-slate-200 bg-white"
+                          >
                             Flytt deltakere
                           </Button>
                         </div>
