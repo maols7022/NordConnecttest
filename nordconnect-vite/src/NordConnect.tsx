@@ -191,23 +191,31 @@ export default function NordConnect() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
-
       {/* TOPPLINJE */}
       <header className="sticky top-0 z-50 backdrop-blur bg-white/70 border-b">
         <div className="max-w-6xl mx-auto px-4 py-3 grid grid-cols-3 items-center">
-
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-2xl bg-blue-600 text-white grid place-items-center font-bold">NC</div>
+            <div className="h-9 w-9 rounded-2xl bg-blue-600 text-white grid place-items-center font-bold">
+              NC
+            </div>
             <span className="font-semibold">NordConnect</span>
-            <Badge variant="secondary" className="ml-2">Beta</Badge>
+            <Badge variant="secondary" className="ml-2">
+              Beta
+            </Badge>
           </div>
 
           {/* Meny */}
           <nav className="hidden md:flex items-center gap-6 text-sm justify-center">
-            <a href="#about" className="hover:underline">Om</a>
-            <Link to="/how-it-works" className="hover:underline">Slik funker det</Link>
-            <a href="#rooms" className="hover:underline">Rom</a>
+            <a href="#about" className="hover:underline">
+              Om
+            </a>
+            <Link to="/how-it-works" className="hover:underline">
+              Slik funker det
+            </Link>
+            <a href="#rooms" className="hover:underline">
+              Rom
+            </a>
           </nav>
 
           {/* Høyre */}
@@ -233,51 +241,71 @@ export default function NordConnect() {
                   </SheetHeader>
 
                   <div className="mt-6 grid gap-4">
-                    <a href="#about" className="hover:underline">Om</a>
-                    <Link to="/how-it-works" className="hover:underline">Slik funker det</Link>
-                    <a href="#rooms" className="hover:underline">Rom</a>
+                    <a href="#about" className="hover:underline">
+                      Om
+                    </a>
+                    <Link to="/how-it-works" className="hover:underline">
+                      Slik funker det
+                    </Link>
+                    <a href="#rooms" className="hover:underline">
+                      Rom
+                    </a>
 
                     {/* DEMO-lenker */}
-                    <Link to="/quiz-demo" className="hover:underline">Kamera-demo: Quiz</Link>
-                    <Link to="/study-demo" className="hover:underline">Kamera-demo: Studiegruppe</Link>
-                    <Link to="/breakout-demo" className="hover:underline">Breakout-demo</Link>
-
-                    {/* NY! */}
-                    <Link to="/gamification-demo" className="hover:underline">Gamification</Link>
+                    <Link to="/quiz-demo" className="hover:underline">
+                      Kamera-demo: Quiz
+                    </Link>
+                    <Link to="/study-demo" className="hover:underline">
+                      Kamera-demo: Studiegruppe
+                    </Link>
+                    <Link to="/breakout-demo" className="hover:underline">
+                      Breakout-demo
+                    </Link>
+                    <Link to="/gamification-demo" className="hover:underline">
+                      Gamification
+                    </Link>
                   </div>
                 </SheetContent>
               </Sheet>
             </div>
-
           </div>
         </div>
       </header>
 
-      {/* HERO */}
-      <section className="max-w-4xl mx-auto px-4 pt-12 pb-8">
+      {/* HERO – venstrejustert + live notifikasjoner */}
+      <section className="max-w-6xl mx-auto px-4 pt-12 pb-8">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
+          className="text-left"
         >
-          <h1 className="text-3xl md:text-5xl font-bold">
-            Der nettstudenter møtes – <span className="text-blue-600">digitalt</span>
+          <h1 className="text-4xl md:text-5xl font-bold leading-tight max-w-2xl">
+            Der nettstudenter møtes –{" "}
+            <span className="text-blue-600">digitalt</span>
           </h1>
 
-          <p className="mt-4 text-lg text-slate-600">
-            Lavterskel og trygt fellesskap for studenter. Hopp inn når du vil – helt frivillig.
+          <p className="mt-4 text-lg text-slate-600 max-w-xl">
+            Lavterskel, uformelt og trygt fellesskap for studenter ved
+            Handelshøgskolen. Hopp inn i et rom når du vil – prat, studer
+            eller bare vær til stede.
           </p>
 
-          <div className="mt-6 flex flex-wrap gap-3">
+          {/* CTA + demomeny (foreløpig som før) */}
+          <div className="mt-6 flex flex-wrap gap-3 justify-start">
             <Button size="lg">
-              <PlayCircle className="h-5 w-5 mr-2" /> Bli med nå
+              <PlayCircle className="h-5 w-5 mr-2" />
+              Bli med nå
             </Button>
 
-            {/* DEMO-meny */}
             <div className="relative">
-              <Button variant="outline" onClick={() => setDemoMenuOpen((v) => !v)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setDemoMenuOpen((v) => !v)}
+              >
                 Demoer
-                <ChevronRight className="h-4 w-4 ml-1 rotate-90" />
+                <ChevronRight className="h-4 w-4 ml-1 transform rotate-90" />
               </Button>
 
               {demoMenuOpen && (
@@ -289,7 +317,6 @@ export default function NordConnect() {
                   >
                     Kamera-demo: Quizkveld
                   </Link>
-
                   <Link
                     to="/study-demo"
                     className="block px-3 py-2 hover:bg-slate-50"
@@ -297,7 +324,6 @@ export default function NordConnect() {
                   >
                     Kamera-demo: Studiegruppe
                   </Link>
-
                   <Link
                     to="/breakout-demo"
                     className="block px-3 py-2 hover:bg-slate-50"
@@ -305,8 +331,6 @@ export default function NordConnect() {
                   >
                     Breakout-rom (demo)
                   </Link>
-
-                  {/* NY — Gamification */}
                   <Link
                     to="/gamification-demo"
                     className="block px-3 py-2 hover:bg-slate-50"
@@ -319,14 +343,20 @@ export default function NordConnect() {
             </div>
           </div>
 
-          {/* NOTIFIKASJONER */}
-          <div className="mt-6 flex items-center gap-2 text-sm text-slate-600">
-            <Clock className="h-4 w-4" />
+          {/* LIVE NOTIFIKASJONS-BAR */}
+          <div className="mt-6 space-y-2 max-w-xl">
             {notifications.map((n, i) => (
-              <Badge key={i} variant="secondary" className="mr-2">
-                {n}
-              </Badge>
+              <div
+                key={i}
+                className="px-4 py-2 bg-blue-50 border border-blue-100 rounded-lg text-sm text-blue-800 flex items-center gap-2 shadow-sm"
+              >
+                <Sparkles className="h-4 w-4 text-blue-500" />
+                <span>{n}</span>
+              </div>
             ))}
+            <div className="text-[11px] text-slate-500 mt-1">
+              I en ekte løsning kunne disse kobles mot faktiske rom og tider (f.eks. Kaffepraten, Trivselsprat).
+            </div>
           </div>
         </motion.div>
       </section>
@@ -334,7 +364,6 @@ export default function NordConnect() {
       {/* ABOUT */}
       <section id="about" className="max-w-6xl mx-auto px-4 py-12">
         <div className="grid md:grid-cols-3 gap-6">
-
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -367,7 +396,6 @@ export default function NordConnect() {
               Lenkes fra Canvas/Teams. Korte faste møtetidspunkt.
             </CardContent>
           </Card>
-
         </div>
       </section>
 
@@ -411,7 +439,9 @@ export default function NordConnect() {
                   <p className="text-sm text-slate-600">{r.description}</p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {r.tags.map((t) => (
-                      <Badge key={t} variant="outline">#{t}</Badge>
+                      <Badge key={t} variant="outline">
+                        #{t}
+                      </Badge>
                     ))}
                   </div>
                 </div>
@@ -424,7 +454,9 @@ export default function NordConnect() {
 
                   <div className="flex gap-2">
                     {joined === r.id ? (
-                      <Button variant="outline" onClick={() => handleLeave(r.id)}>Forlat</Button>
+                      <Button variant="outline" onClick={() => handleLeave(r.id)}>
+                        Forlat
+                      </Button>
                     ) : (
                       <Button
                         onClick={() => {
@@ -473,7 +505,6 @@ export default function NordConnect() {
                     </DialogContent>
                   </Dialog>
                 </div>
-
               </CardContent>
             </Card>
           ))}
@@ -483,7 +514,6 @@ export default function NordConnect() {
       {/* FOOTER */}
       <footer className="border-t mt-12">
         <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6 text-sm text-slate-600">
-
           <div>
             <div className="font-semibold text-slate-800">NordConnect</div>
             <p className="mt-2">Den digitale studentstua for nettstudenter.</p>
@@ -492,14 +522,21 @@ export default function NordConnect() {
           <div>
             <div className="font-semibold text-slate-800">Lenker</div>
             <ul className="mt-2 space-y-1">
-              <li><a className="hover:underline" href="#about">Om prosjektet</a></li>
-              <li><a className="hover:underline" href="#rooms">Rom</a></li>
               <li>
-  <Link className="hover:underline" to="/how-it-works">
-    Slik funker det
-  </Link>
-</li>
-
+                <a className="hover:underline" href="#about">
+                  Om prosjektet
+                </a>
+              </li>
+              <li>
+                <a className="hover:underline" href="#rooms">
+                  Rom
+                </a>
+              </li>
+              <li>
+                <Link className="hover:underline" to="/how-it-works">
+                  Slik funker det
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -510,7 +547,6 @@ export default function NordConnect() {
               <li>personvern@nordconnect.example</li>
             </ul>
           </div>
-
         </div>
 
         <div className="text-center text-xs text-slate-400 pb-6">
@@ -518,27 +554,20 @@ export default function NordConnect() {
         </div>
       </footer>
 
-      {/* --------------------------------------------- */}
       {/* POPUP: Aktivt rom */}
-      {/* --------------------------------------------- */}
-
       <Dialog
         open={!!activeRoom}
         onOpenChange={(open) => !open && setActiveRoom(null)}
       >
         <DialogContent className="max-w-5xl relative">
-
-         {activeRoom && (
-  <Link
-    to={`/room/${activeRoom}`}
-    state={{ joinedFromPopup: true }}   // 👈 send med at vi allerede har blitt med
-    className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full border bg-white/80 hover:bg-slate-100"
-    title="Åpne som side"
-  >
-    <Expand className="h-4 w-4" />
-  </Link>
-)}
-
+          {activeRoom && (
+            <Link
+              to={`/room/${activeRoom}`}
+              className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full border bg-white/80 hover:bg-slate-100"
+            >
+              <Expand className="h-4 w-4" />
+            </Link>
+          )}
 
           <DialogHeader>
             <DialogTitle>
@@ -550,10 +579,8 @@ export default function NordConnect() {
           </DialogHeader>
 
           <div className="grid md:grid-cols-3 gap-4">
-
             {/* VENSTRE: Kamera + chat */}
             <div className="md:col-span-2 rounded-xl p-3 border bg-slate-50">
-
               {/* Kamera visning */}
               {!isCameraOff && (
                 <div className="mb-3 rounded-xl border overflow-hidden bg-slate-900 text-white h-48 relative">
@@ -573,9 +600,19 @@ export default function NordConnect() {
               <div className="text-xs text-slate-500 mb-2">Tekstchat (mock)</div>
 
               <div className="space-y-2 max-h-72 overflow-auto bg-white border rounded-xl p-3">
-                <Bubble name="Anna" text="Hei! Hvordan går det med innleveringen?" />
-                <Bubble name="Bjørn" text="Tar en 25-min fokusøkt ☕" align="right" />
-                <Bubble name="Chen" text="Noen som vil sparre på metode-delen?" />
+                <Bubble
+                  name="Anna"
+                  text="Hei! Hvordan går det med innleveringen?"
+                />
+                <Bubble
+                  name="Bjørn"
+                  text="Tar en 25-min fokusøkt ☕"
+                  align="right"
+                />
+                <Bubble
+                  name="Chen"
+                  text="Noen som vil sparre på metode-delen?"
+                />
               </div>
 
               <div className="mt-3 flex gap-2">
@@ -585,17 +622,18 @@ export default function NordConnect() {
                 <Input placeholder="Skriv en melding…" className="flex-1" />
                 <Button className="shrink-0">Send</Button>
               </div>
-
             </div>
 
             {/* HØYRE: Deltakere + kontroller */}
             <div className="bg-white rounded-xl p-3 border">
-
               <div className="text-xs text-slate-500 mb-2">Deltakere</div>
 
               <div className="grid grid-cols-2 gap-2">
                 {peopleInRoom(6).map((p, i) => (
-                  <div key={p + i} className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg">
+                  <div
+                    key={p + i}
+                    className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg"
+                  >
                     <Avatar className="h-7 w-7 border">
                       <AvatarFallback>{p[0]}</AvatarFallback>
                     </Avatar>
@@ -606,51 +644,73 @@ export default function NordConnect() {
 
               {/* Knapperekke */}
               <div className="mt-3 flex flex-wrap gap-2">
-
                 {/* Mic */}
                 <Button
                   className={`rounded-full p-3 ${
-                    isMuted ? "bg-primary text-primary-foreground" : "bg-muted"
+                    isMuted
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
                   }`}
                   variant="ghost"
                   onClick={() => setIsMuted((prev) => !prev)}
                 >
-                  {isMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                  {isMuted ? (
+                    <MicOff className="h-4 w-4" />
+                  ) : (
+                    <Mic className="h-4 w-4" />
+                  )}
                 </Button>
 
                 {/* Lyd */}
                 <Button
                   className={`rounded-full p-3 ${
-                    isDeafened ? "bg-primary text-primary-foreground" : "bg-muted"
+                    isDeafened
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
                   }`}
                   variant="ghost"
                   onClick={() => setIsDeafened((prev) => !prev)}
                 >
-                  {isDeafened ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                  {isDeafened ? (
+                    <VolumeX className="h-4 w-4" />
+                  ) : (
+                    <Volume2 className="h-4 w-4" />
+                  )}
                 </Button>
 
                 {/* Kamera */}
                 <Button
                   className={`rounded-full p-3 ${
-                    isCameraOff ? "bg-primary text-primary-foreground" : "bg-muted"
+                    isCameraOff
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
                   }`}
                   variant="ghost"
                   onClick={() => setIsCameraOff((prev) => !prev)}
                 >
-                  {isCameraOff ? <VideoOff className="h-4 w-4" /> : <Video className="h-4 w-4" />}
+                  {isCameraOff ? (
+                    <VideoOff className="h-4 w-4" />
+                  ) : (
+                    <Video className="h-4 w-4" />
+                  )}
                 </Button>
 
                 {/* Skjermdeling */}
                 <Button
                   className={`rounded-full p-3 ${
-                    isScreenSharing ? "bg-primary text-primary-foreground" : "bg-muted"
+                    isScreenSharing
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
                   }`}
                   variant="ghost"
                   onClick={() => setIsScreenSharing((prev) => !prev)}
                 >
-                  {isScreenSharing ? <ScreenShareOff className="h-4 w-4" /> : <ScreenShare className="h-4 w-4" />}
+                  {isScreenSharing ? (
+                    <ScreenShareOff className="h-4 w-4" />
+                  ) : (
+                    <ScreenShare className="h-4 w-4" />
+                  )}
                 </Button>
-
               </div>
 
               <Button
@@ -660,13 +720,10 @@ export default function NordConnect() {
               >
                 Lukk rom
               </Button>
-
             </div>
-
           </div>
         </DialogContent>
       </Dialog>
-
     </div>
   );
 }
