@@ -13,15 +13,19 @@ import {
   PlayCircle,
   Bell,
   Mic,
+  MicOff,
   Video,
-  Headphones,
+  VideoOff,
   Monitor,
   Globe,
   ChevronRight,
   Clock,
   ScreenShare,
+  ScreenShareOff,
   FileUp,
   Expand,
+  Volume2,
+  VolumeX,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -122,6 +126,12 @@ export default function NordConnect() {
   ]);
   const [demoMenuOpen, setDemoMenuOpen] = useState(false);
 
+  // States for demo-kontroller i aktivt rom-dialog
+  const [isMuted, setIsMuted] = useState(false);
+  const [isDeafened, setIsDeafened] = useState(false);
+  const [isCameraOff, setIsCameraOff] = useState(false);
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
+
   const filteredRooms = useMemo(() => {
     const q = query.toLowerCase();
     return rooms.filter(
@@ -139,6 +149,11 @@ export default function NordConnect() {
         r.id === roomId ? { ...r, online: r.online + 1 } : r
       )
     );
+    // når vi blir med i popup, kan vi resette demo-kontroller
+    setIsMuted(false);
+    setIsDeafened(false);
+    setIsCameraOff(false);
+    setIsScreenSharing(false);
   };
 
   const handleLeave = (roomId: string) => {
@@ -175,14 +190,17 @@ export default function NordConnect() {
           </div>
 
           {/* Midten: meny */}
-         <nav className="hidden md:flex items-center gap-6 text-sm justify-center">
-  <a href="#about" className="hover:underline">Om</a>
-  <Link to="/how-it-works" className="hover:underline">
-    Slik funker det
-  </Link>
-  <a href="#rooms" className="hover:underline">Rom</a>
-</nav>
-
+          <nav className="hidden md:flex items-center gap-6 text-sm justify-center">
+            <a href="#about" className="hover:underline">
+              Om
+            </a>
+            <Link to="/how-it-works" className="hover:underline">
+              Slik funker det
+            </Link>
+            <a href="#rooms" className="hover:underline">
+              Rom
+            </a>
+          </nav>
 
           {/* Høyre: knapper + mobilmeny */}
           <div className="flex items-center justify-end gap-2">
@@ -210,8 +228,8 @@ export default function NordConnect() {
                       Om
                     </a>
                     <Link to="/how-it-works" className="hover:underline">
-  Slik funker det
-</Link>
+                      Slik funker det
+                    </Link>
                     <a href="#rooms" className="hover:underline">
                       Rom
                     </a>
@@ -255,7 +273,12 @@ export default function NordConnect() {
               <PlayCircle className="h-5 w-5 mr-2" />
               Bli med nå
             </Button>
-            <Button size="lg" variant="outline">
+            <Button
+              size="lg"
+              variant="outline"
+              type="button"
+              onClick={() => setDemoMenuOpen((v) => !v)}
+            >
               <Monitor className="h-5 w-5 mr-2" />
               Se demo
             </Button>
@@ -526,11 +549,38 @@ export default function NordConnect() {
             </DialogDescription>
           </DialogHeader>
           <div className="grid md:grid-cols-3 gap-4">
-            <div className="md:col-span-2 bg-slate-50 rounded-xl p-3 border">
+            {/* Venstre: kamera + chat */}
+            <div className="md:col-span-2 rounded-xl p-3 border bg-slate-50">
+              {/* Kamera-demo inne i popupen – dukker opp når kamera er på */}
+              {!isCameraOff && (
+                <div className="mb-3 rounded-xl border overflow-hidden bg-slate-900 text-white h-48 relative">
+                  <div className="w-full h-full bg-gradient-to-tr from-slate-800 to-slate-700 flex items-center justify-center">
+                    <span className="text-sm opacity-80 text-center px-4">
+                      [ Kameravisning – rom-demo ]
+                    </span>
+                  </div>
+                  <div className="absolute left-0 right-0 bottom-0 bg-black/50 backdrop-blur px-3 py-1.5 flex items-center justify-between text-[10px]">
+                    <div>
+                      <div className="font-medium">Du</div>
+                      <div className="text-slate-200/80">
+                        {isScreenSharing
+                          ? "Skjermdeling aktiv (demo)"
+                          : "Kamera aktivert (demo)"}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 text-slate-100/80">
+                      <span>{isMuted ? "Mic av" : "Mic på"}</span>
+                      <span>•</span>
+                      <span>{isDeafened ? "Lyd av" : "Lyd på"}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="text-xs text-slate-500 mb-2">
                 Tekstchat (mock)
               </div>
-              <div className="space-y-2 max-h-72 overflow-auto">
+              <div className="space-y-2 max-h-72 overflow-auto bg-white rounded-xl border p-3">
                 <Bubble
                   name="Anna"
                   text="Hei! Hvordan går det med innleveringen?"
@@ -550,6 +600,8 @@ export default function NordConnect() {
                 <Button>Send</Button>
               </div>
             </div>
+
+            {/* Høyre: deltakere + kontroller */}
             <div className="bg-white rounded-xl p-3 border">
               <div className="text-xs text-slate-500 mb-2">
                 Deltakere (mock)
@@ -568,21 +620,86 @@ export default function NordConnect() {
                 ))}
               </div>
 
-              {/* Ikonknapper i normal størrelse */}
+              {/* Ikonknapper – interaktive, samme stil som RoomPage */}
               <div className="mt-3 flex flex-wrap gap-2">
-                <Button variant="secondary" title="Mic">
-                  <Mic className="h-4 w-4" />
+                {/* Mic */}
+                <Button
+                  className={`rounded-full p-3 transition ${
+                    isMuted
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-foreground"
+                  }`}
+                  variant="ghost"
+                  title="Mic av/på (demo)"
+                  onClick={() => setIsMuted((prev) => !prev)}
+                >
+                  {isMuted ? (
+                    <MicOff className="h-4 w-4" />
+                  ) : (
+                    <Mic className="h-4 w-4" />
+                  )}
                 </Button>
-                <Button variant="secondary" title="Kamera">
-                  <Video className="h-4 w-4" />
+
+                {/* Lyd (deafen) */}
+                <Button
+                  className={`rounded-full p-3 transition ${
+                    isDeafened
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-foreground"
+                  }`}
+                  variant="ghost"
+                  title="Lyd av/på (demo)"
+                  onClick={() => setIsDeafened((prev) => !prev)}
+                >
+                  {isDeafened ? (
+                    <VolumeX className="h-4 w-4" />
+                  ) : (
+                    <Volume2 className="h-4 w-4" />
+                  )}
                 </Button>
-                <Button variant="secondary" title="Lyd">
-                  <Headphones className="h-4 w-4" />
+
+                {/* Kamera */}
+                <Button
+                  className={`rounded-full p-3 transition ${
+                    isCameraOff
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-foreground"
+                  }`}
+                  variant="ghost"
+                  title="Kamera av/på (demo)"
+                  onClick={() => setIsCameraOff((prev) => !prev)}
+                >
+                  {isCameraOff ? (
+                    <VideoOff className="h-4 w-4" />
+                  ) : (
+                    <Video className="h-4 w-4" />
+                  )}
                 </Button>
-                <Button variant="outline" title="Del skjerm (demo)">
-                  <ScreenShare className="h-4 w-4" />
+
+                {/* Del skjerm */}
+                <Button
+                  className={`rounded-full p-3 transition ${
+                    isScreenSharing
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-foreground"
+                  }`}
+                  variant="ghost"
+                  title="Del skjerm (demo)"
+                  onClick={() => setIsScreenSharing((prev) => !prev)}
+                >
+                  {isScreenSharing ? (
+                    <ScreenShareOff className="h-4 w-4" />
+                  ) : (
+                    <ScreenShare className="h-4 w-4" />
+                  )}
                 </Button>
-                <Button variant="outline" title="Del fil (demo)">
+
+                {/* Del fil – statisk demo-knapp */}
+                <Button
+                  variant="outline"
+                  className="rounded-full p-3"
+                  title="Del fil (demo)"
+                >
                   <FileUp className="h-4 w-4" />
                 </Button>
               </div>
