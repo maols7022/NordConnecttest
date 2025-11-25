@@ -47,7 +47,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
 // Mock-data
@@ -110,10 +109,9 @@ const initialRooms = [
   },
 ];
 
-const peopleInRoom = (n: number) => {
-  const shuffled = [...mockUsers].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, Math.max(1, Math.min(n, mockUsers.length)));
-};
+// 🔁 Ikke mer random – fast rekkefølge
+const peopleInRoom = (n: number) =>
+  mockUsers.slice(0, Math.max(1, Math.min(n, mockUsers.length)));
 
 export default function NordConnect() {
   const [rooms, setRooms] = useState(initialRooms);
@@ -456,9 +454,9 @@ export default function NordConnect() {
                 {/* Info-dialog */}
                 <div className="mt-3">
                   <Dialog>
-                    <DialogTrigger asChild>
+                    <Dialog.Trigger asChild>
                       <Button variant="outline">Info</Button>
-                    </DialogTrigger>
+                    </Dialog.Trigger>
                     <DialogContent>
                       <DialogHeader>
                         <DialogTitle>{r.name}</DialogTitle>
