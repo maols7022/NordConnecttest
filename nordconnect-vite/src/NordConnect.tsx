@@ -197,9 +197,9 @@ export default function NordConnect() {
 
           {/* Meny (desktop) */}
           <nav className="hidden md:flex items-center gap-6 text-sm justify-center">
-            <a href="#about" className="hover:underline">
+            <Link to="/about" className="hover:underline">
               Om
-            </a>
+            </Link>
             <Link to="/how-it-works" className="hover:underline">
               Slik funker det
             </Link>
@@ -467,9 +467,9 @@ export default function NordConnect() {
             <div className="font-semibold text-slate-800">Lenker</div>
             <ul className="mt-2 space-y-1">
               <li>
-                <a className="hover:underline" href="#about">
+                <Link className="hover:underline" to="/about">
                   Om prosjektet
-                </a>
+                </Link>
               </li>
               <li>
                 <a className="hover:underline" href="#rooms">
@@ -592,12 +592,8 @@ export default function NordConnect() {
               <div className="mt-3 flex flex-wrap gap-2">
                 {/* Mic */}
                 <Button
-                  className={`rounded-full p-3 ${
-                    isMuted
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
-                  }`}
-                  variant="ghost"
+                  className="rounded-full p-3"
+                  variant="outline"
                   onClick={() => setIsMuted((prev) => !prev)}
                 >
                   {isMuted ? (
@@ -609,12 +605,8 @@ export default function NordConnect() {
 
                 {/* Lyd */}
                 <Button
-                  className={`rounded-full p-3 ${
-                    isDeafened
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
-                  }`}
-                  variant="ghost"
+                  className="rounded-full p-3"
+                  variant="outline"
                   onClick={() => setIsDeafened((prev) => !prev)}
                 >
                   {isDeafened ? (
@@ -626,12 +618,8 @@ export default function NordConnect() {
 
                 {/* Kamera */}
                 <Button
-                  className={`rounded-full p-3 ${
-                    isCameraOff
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
-                  }`}
-                  variant="ghost"
+                  className="rounded-full p-3"
+                  variant="outline"
                   onClick={() => setIsCameraOff((prev) => !prev)}
                 >
                   {isCameraOff ? (
@@ -643,12 +631,8 @@ export default function NordConnect() {
 
                 {/* Skjermdeling */}
                 <Button
-                  className={`rounded-full p-3 ${
-                    isScreenSharing
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted"
-                  }`}
-                  variant="ghost"
+                  className="rounded-full p-3"
+                  variant="outline"
                   onClick={() => setIsScreenSharing((prev) => !prev)}
                 >
                   {isScreenSharing ? (
@@ -688,7 +672,11 @@ function Bubble({
   align?: "left" | "right";
 }) {
   return (
-    <div className={`flex ${align === "right" ? "justify-end" : "justify-start"}`}>
+    <div
+      className={`flex ${
+        align === "right" ? "justify-end" : "justify-start"
+      }`}
+    >
       <div
         className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm ${
           align === "right" ? "bg-blue-600 text-white" : "bg-white border"
