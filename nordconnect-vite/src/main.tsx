@@ -10,6 +10,7 @@ import BreakoutDemoPage from "./pages/BreakoutDemoPage"; // Breakout-rom
 import HowItWorksPage from "./pages/HowItWorksPage";
 import GamificationDemoPage from "./pages/GamificationDemoPage"; // NY: Gamification-demo
 import SafetyPage from "./pages/SafetyPage";
+import AboutProjectPage from "./pages/AboutProjectPage";
 
 import "./index.css";
 
@@ -25,6 +26,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Route path="/how-it-works" element={<HowItWorksPage />} />
         <Route path="/gamification-demo" element={<GamificationDemoPage />} /> {/* NY */}
         <Route path="/safety" element={<SafetyPage />} />
+        <Route path="/about" element={<AboutProjectPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
