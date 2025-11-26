@@ -197,15 +197,18 @@ export default function NordConnect() {
 
           {/* Meny (desktop) */}
           <nav className="hidden md:flex items-center gap-6 text-sm justify-center">
-            <a href="#about" className="hover:underline">
-              Om
-            </a>
-            <Link to="/how-it-works" className="hover:underline">
-              Slik funker det
-            </Link>
-            <a href="#rooms" className="hover:underline">
-              Rom
-            </a>
+  <a href="#about" className="hover:underline">
+    Om
+  </a>
+  <Link to="/how-it-works" className="hover:underline">
+    Slik funker det
+  </Link>
+  <Link to="/safety" className="hover:underline">
+    Trygghet
+  </Link>
+  <a href="#rooms" className="hover:underline">
+    Rom
+  </a>
 
             {/* Demoer-dropdown i toppmenyen (kun desktop) */}
             <div className="relative">
