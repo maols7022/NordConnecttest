@@ -266,37 +266,40 @@ export default function NordConnect() {
       </header>
 
       {/* HERO – venstrejustert, én-linjes overskrift, bredere tekst */}
-      <section className="max-w-6xl mx-auto px-4 pt-12 pb-8">
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-left"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight max-w-none whitespace-nowrap">
-            Der nettstudenter møtes –{" "}
-            <span className="text-blue-600">digitalt</span>
-          </h1>
+<section className="max-w-6xl mx-auto px-4 pt-12 pb-8">
+  <motion.div
+    initial={{ opacity: 0, y: 8 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.5 }}
+    className="text-left"
+  >
+    <h1 className="text-4xl md:text-5xl font-bold leading-tight max-w-none whitespace-nowrap">
+      Der nettstudenter møtes –{" "}
+      <span className="text-blue-600">digitalt</span>
+    </h1>
 
-          <p className="mt-4 text-lg text-slate-600 max-w-2xl">
-            Lavterskel, uformelt og trygt fellesskap for studenter ved
-            Handelshøgskolen. Hopp inn i et rom når du vil – prat, studer
-            eller bare vær til stede.
-          </p>
+    <p className="mt-4 text-lg text-slate-600 max-w-2xl">
+      Lavterskel, uformelt og trygt fellesskap for studenter ved
+      Handelshøgskolen. Hopp inn i et rom når du vil – prat, studer
+      eller bare vær til stede.
+    </p>
 
-          {/* Notifikasjoner slik du likte dem */}
-          <div className="mt-6 flex items-center gap-2 text-sm text-slate-600 flex-wrap">
-            <Clock className="h-4 w-4" />
-            <div className="flex flex-wrap gap-2">
-              {notifications.map((n, i) => (
-                <Badge key={i} variant="secondary">
-                  {n}
-                </Badge>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-      </section>
+    {/* Fremhevet, men fortsatt minimalistisk aktivitetsbar */}
+    <div className="mt-6 inline-flex items-center gap-3 text-sm text-slate-700 px-4 py-2 rounded-full bg-slate-100/80 border border-slate-200 shadow-sm">
+      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/80 border border-slate-200">
+        <Clock className="h-3.5 w-3.5 text-slate-500" />
+      </span>
+      <div className="flex flex-wrap gap-2">
+        {notifications.map((n, i) => (
+          <Badge key={i} variant="secondary">
+            {n}
+          </Badge>
+        ))}
+      </div>
+    </div>
+  </motion.div>
+</section>
+
 
       {/* ABOUT */}
       <section id="about" className="max-w-6xl mx-auto px-4 py-12">
