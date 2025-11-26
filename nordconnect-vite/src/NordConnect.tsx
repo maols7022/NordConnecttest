@@ -39,6 +39,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from "@/components/ui/sheet";
 
 import {
@@ -276,36 +277,53 @@ export default function NordConnect() {
                 <SheetTrigger asChild>
                   <Button variant="outline">Meny</Button>
                 </SheetTrigger>
-
                 <SheetContent>
                   <SheetHeader>
                     <SheetTitle>NordConnect</SheetTitle>
                   </SheetHeader>
 
                   <div className="mt-6 grid gap-4">
-                    <a href="#about" className="hover:underline">
-                      Om
-                    </a>
-                    <Link to="/how-it-works" className="hover:underline">
-                      Slik funker det
-                    </Link>
-                    <a href="#rooms" className="hover:underline">
-                      Rom
-                    </a>
+                    <SheetClose asChild>
+                      <a href="#about" className="hover:underline">
+                        Om
+                      </a>
+                    </SheetClose>
 
-                    {/* DEMO-lenker på mobil (direkte) */}
-                    <Link to="/quiz-demo" className="hover:underline">
-                      Kamera-demo: Quiz
-                    </Link>
-                    <Link to="/study-demo" className="hover:underline">
-                      Kamera-demo: Studiegruppe
-                    </Link>
-                    <Link to="/breakout-demo" className="hover:underline">
-                      Breakout-demo
-                    </Link>
-                    <Link to="/gamification-demo" className="hover:underline">
-                      Gamification
-                    </Link>
+                    <SheetClose asChild>
+                      <Link to="/how-it-works" className="hover:underline">
+                        Slik funker det
+                      </Link>
+                    </SheetClose>
+
+                    <SheetClose asChild>
+                      <a href="#rooms" className="hover:underline">
+                        Rom
+                      </a>
+                    </SheetClose>
+
+                    <SheetClose asChild>
+                      <Link to="/quiz-demo" className="hover:underline">
+                        Kamera-demo: Quiz
+                      </Link>
+                    </SheetClose>
+
+                    <SheetClose asChild>
+                      <Link to="/study-demo" className="hover:underline">
+                        Kamera-demo: Studiegruppe
+                      </Link>
+                    </SheetClose>
+
+                    <SheetClose asChild>
+                      <Link to="/breakout-demo" className="hover:underline">
+                        Breakout-demo
+                      </Link>
+                    </SheetClose>
+
+                    <SheetClose asChild>
+                      <Link to="/gamification-demo" className="hover:underline">
+                        Gamification
+                      </Link>
+                    </SheetClose>
                   </div>
                 </SheetContent>
               </Sheet>
@@ -314,7 +332,7 @@ export default function NordConnect() {
         </div>
       </header>
 
-      {/* HERO – venstrejustert, uten knapp, med notif-badges */}
+      {/* HERO – venstrejustert, én-linjes overskrift, bredere tekst */}
       <section className="max-w-6xl mx-auto px-4 pt-12 pb-8">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
@@ -322,12 +340,12 @@ export default function NordConnect() {
           transition={{ duration: 0.5 }}
           className="text-left"
         >
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight max-w-3xl">
+          <h1 className="text-4xl md:text-5xl font-bold leading-tight max-w-none whitespace-nowrap">
             Der nettstudenter møtes –{" "}
             <span className="text-blue-600">digitalt</span>
           </h1>
 
-          <p className="mt-4 text-lg text-slate-600 max-w-xl">
+          <p className="mt-4 text-lg text-slate-600 max-w-2xl">
             Lavterskel, uformelt og trygt fellesskap for studenter ved
             Handelshøgskolen. Hopp inn i et rom når du vil – prat, studer
             eller bare vær til stede.
