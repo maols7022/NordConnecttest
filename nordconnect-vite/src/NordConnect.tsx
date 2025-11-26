@@ -197,15 +197,18 @@ export default function NordConnect() {
 
           {/* Meny (desktop) */}
           <nav className="hidden md:flex items-center gap-6 text-sm justify-center">
-  <Link to="/how-it-works" className="hover:underline">
-    Slik funker det
-  </Link>
-  <Link to="/safety" className="hover:underline">
-    Trygghet
-  </Link>
-  <a href="#rooms" className="hover:underline">
-    Rom
-  </a>
+            <a href="#about" className="hover:underline">
+              Om
+            </a>
+            <Link to="/how-it-works" className="hover:underline">
+              Slik funker det
+            </Link>
+            <Link to="/safety" className="hover:underline">
+              Trygghet
+            </Link>
+            <a href="#rooms" className="hover:underline">
+              Rom
+            </a>
 
             {/* Demoer-dropdown i toppmenyen (kun desktop) */}
             <div className="relative">
@@ -265,41 +268,40 @@ export default function NordConnect() {
         </div>
       </header>
 
-      {/* HERO – venstrejustert, én-linjes overskrift, bredere tekst */}
-<section className="max-w-6xl mx-auto px-4 pt-12 pb-8">
-  <motion.div
-    initial={{ opacity: 0, y: 8 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5 }}
-    className="text-left"
-  >
-    <h1 className="text-4xl md:text-5xl font-bold leading-tight max-w-none whitespace-nowrap">
-      Der nettstudenter møtes –{" "}
-      <span className="text-blue-600">digitalt</span>
-    </h1>
+      {/* HERO – venstrejustert, én-linjes overskrift, fremhevet aktivitetsbar */}
+      <section className="max-w-6xl mx-auto px-4 pt-12 pb-8">
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-left"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold leading-tight max-w-none whitespace-nowrap">
+            Der nettstudenter møtes –{" "}
+            <span className="text-blue-600">digitalt</span>
+          </h1>
 
-    <p className="mt-4 text-lg text-slate-600 max-w-2xl">
-      Lavterskel, uformelt og trygt fellesskap for studenter ved
-      Handelshøgskolen. Hopp inn i et rom når du vil – prat, studer
-      eller bare vær til stede.
-    </p>
+          <p className="mt-4 text-lg text-slate-600 max-w-2xl">
+            Lavterskel, uformelt og trygt fellesskap for studenter ved
+            Handelshøgskolen. Hopp inn i et rom når du vil – prat, studer
+            eller bare vær til stede.
+          </p>
 
-    {/* Fremhevet, men fortsatt minimalistisk aktivitetsbar */}
-    <div className="mt-6 inline-flex items-center gap-3 text-sm text-slate-700 px-4 py-2 rounded-full bg-slate-100/80 border border-slate-200 shadow-sm">
-      <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/80 border border-slate-200">
-        <Clock className="h-3.5 w-3.5 text-slate-500" />
-      </span>
-      <div className="flex flex-wrap gap-2">
-        {notifications.map((n, i) => (
-          <Badge key={i} variant="secondary">
-            {n}
-          </Badge>
-        ))}
-      </div>
-    </div>
-  </motion.div>
-</section>
-
+          {/* Fremhevet, men fortsatt minimalistisk aktivitetsbar */}
+          <div className="mt-6 inline-flex items-center gap-3 text-sm text-slate-700 px-4 py-2 rounded-full bg-slate-100/80 border border-slate-200 shadow-sm">
+            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/80 border border-slate-200">
+              <Clock className="h-3.5 w-3.5 text-slate-500" />
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {notifications.map((n, i) => (
+                <Badge key={i} variant="secondary">
+                  {n}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </section>
 
       {/* ABOUT */}
       <section id="about" className="max-w-6xl mx-auto px-4 py-12">
@@ -408,6 +410,7 @@ export default function NordConnect() {
                       </Button>
                     )}
 
+                    {/* Expand fra forsiden: IKKE joined-state */}
                     <Link
                       to={`/room/${r.id}`}
                       className="inline-flex items-center justify-center rounded-md border h-9 w-9"
@@ -503,6 +506,8 @@ export default function NordConnect() {
           {activeRoom && (
             <Link
               to={`/room/${activeRoom}`}
+              // Viktig: her sender vi med at brukeren allerede har "blitt med"
+              state={{ joinedFromPopup: joined === activeRoom }}
               className="absolute right-4 top-4 inline-flex h-8 w-8 items-center justify-center rounded-full border bg-white/80 hover:bg-slate-100"
             >
               <Expand className="h-4 w-4" />
