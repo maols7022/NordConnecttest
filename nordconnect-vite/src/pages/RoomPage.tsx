@@ -31,11 +31,26 @@ const ROOM_INDEX: Record<
     description: string;
   }
 > = {
-  kaffe: { name: "Kaffepraten", description: "Uformell prat. Kom og gå som du vil." },
-  fokus: { name: "Fokusrom – stille", description: "Pomodoro-økter og stille samskriving." },
-  ent1002: { name: "ENT1002 – Diskusjon", description: "Spørsmål, notater, og samarbeid." },
-  trivsel: { name: "Trivselsprat", description: "Trygt rom moderert av faddere." },
-  oslo: { name: "Oslo-området", description: "Møt andre i samme område." },
+  kaffe: {
+    name: "Kaffepraten",
+    description: "Uformell prat. Kom og gå som du vil.",
+  },
+  fokus: {
+    name: "Fokusrom – stille",
+    description: "Pomodoro-økter og stille samskriving.",
+  },
+  ent1002: {
+    name: "ENT1002 – Diskusjon",
+    description: "Spørsmål, notater, og samarbeid.",
+  },
+  trivsel: {
+    name: "Trivselsprat",
+    description: "Trygt rom moderert av faddere.",
+  },
+  oslo: {
+    name: "Oslo-området",
+    description: "Møt andre i samme område.",
+  },
 };
 
 // Stabil deltakerliste – ingen randomisering
@@ -75,40 +90,55 @@ export default function RoomPage() {
           <div className="grid md:grid-cols-3 gap-4">
             {/* Hoved-chatkort + kamera-demo */}
             <Card className="md:col-span-2">
-              <CardHeader>
-                <CardTitle>{meta.name}</CardTitle>
-                <div className="text-slate-600 text-sm">{meta.description}</div>
+              <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <CardTitle>{meta.name}</CardTitle>
+                  <div className="text-slate-600 text-sm">
+                    {meta.description}
+                  </div>
+                </div>
+                {/* Bli med / Forlat-knapp oppe til høyre */}
+                <Button
+                  variant={joined ? "outline" : "default"}
+                  className="mt-2 sm:mt-0"
+                  onClick={() => setJoined((prev) => !prev)}
+                >
+                  {joined ? "Forlat rommet" : "Bli med i rommet"}
+                </Button>
               </CardHeader>
               <CardContent>
-                {/* Kamera-knapp + evt. kameravisning */}
-                <div className="mb-4 space-y-3">
-                  <Button
-                    variant="outline"
-                    onClick={() => setCameraOn((prev) => !prev)}
-                  >
-                    {cameraOn ? "Skru av kamera (demo)" : "Aktiver kamera (demo)"}
-                  </Button>
-
-                  {cameraOn && (
-                    <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-56 mb-2 relative">
-                      <div className="w-full h-full flex items-center justify-center">
-                        <span className="text-sm opacity-80">
-                          [ Kamera – demo i dette rommet ]
-                        </span>
-                      </div>
-                      <div className="absolute left-0 right-0 bottom-0 bg-black/50 px-3 py-1 text-[10px] flex justify-between">
-                        <span>Du</span>
-                        <span>Kamera på (demo)</span>
-                      </div>
+                {/* Kameravisning styrt av kamera-ikonet i sidepanelet */}
+                {cameraOn && (
+                  <div className="mb-4 rounded-xl border overflow-hidden bg-slate-900 text-white h-56 relative">
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="text-sm opacity-80">
+                        [ Kamera – demo i dette rommet ]
+                      </span>
                     </div>
-                  )}
-                </div>
+                    <div className="absolute left-0 right-0 bottom-0 bg-black/50 px-3 py-1 text-[10px] flex justify-between">
+                      <span>Du</span>
+                      <span>Kamera på (demo)</span>
+                    </div>
+                  </div>
+                )}
 
-                <div className="text-xs text-slate-500 mb-2">Tekstchat (mock)</div>
+                <div className="text-xs text-slate-500 mb-2">
+                  Tekstchat (mock)
+                </div>
                 <div className="space-y-2 max-h-72 overflow-auto bg-slate-50 border rounded-xl p-3">
-                  <Bubble name="Anna" text="Hei! Hvordan går det med innleveringen?" />
-                  <Bubble name="Bjørn" text="Tar en 25-min fokusøkt og så pause ☕" align="right" />
-                  <Bubble name="Chen" text="Noen som vil sparre på metode-delen?" />
+                  <Bubble
+                    name="Anna"
+                    text="Hei! Hvordan går det med innleveringen?"
+                  />
+                  <Bubble
+                    name="Bjørn"
+                    text="Tar en 25-min fokusøkt og så pause ☕"
+                    align="right"
+                  />
+                  <Bubble
+                    name="Chen"
+                    text="Noen som vil sparre på metode-delen?"
+                  />
                 </div>
 
                 {/* INPUTRAD med del fil-knapp */}
@@ -128,16 +158,7 @@ export default function RoomPage() {
                 <CardTitle className="text-base">Deltakere (mock)</CardTitle>
               </CardHeader>
               <CardContent>
-                {/* Bli med / Forlat-knapp styrt av joinedFromPopup + local state */}
-                <Button
-                  className="w-full mb-3"
-                  variant={joined ? "default" : "outline"}
-                  onClick={() => setJoined((prev) => !prev)}
-                >
-                  {joined ? "Forlat rommet" : "Bli med i rommet"}
-                </Button>
-
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2 mb-3">
                   {peopleInRoom(6).map((p, i) => (
                     <div
                       key={p + i}
@@ -151,12 +172,16 @@ export default function RoomPage() {
                   ))}
                 </div>
 
-                {/* Ikonknapper i normal størrelse */}
-                <div className="mt-3 flex flex-wrap gap-2">
+                {/* Ikonknapper – kamera-ikonet styrer kameraOn */}
+                <div className="mt-1 flex flex-wrap gap-2">
                   <Button variant="secondary" title="Mic">
                     <Mic className="h-4 w-4" />
                   </Button>
-                  <Button variant="secondary" title="Kamera">
+                  <Button
+                    variant={cameraOn ? "secondary" : "outline"}
+                    title="Kamera (demo)"
+                    onClick={() => setCameraOn((prev) => !prev)}
+                  >
                     <Video className="h-4 w-4" />
                   </Button>
                   <Button variant="secondary" title="Lyd">
@@ -200,7 +225,11 @@ function Bubble({
   align?: "left" | "right";
 }) {
   return (
-    <div className={`flex ${align === "right" ? "justify-end" : "justify-start"}`}>
+    <div
+      className={`flex ${
+        align === "right" ? "justify-end" : "justify-start"
+      }`}
+    >
       <div
         className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm ${
           align === "right" ? "bg-blue-600 text-white" : "bg-white border"
