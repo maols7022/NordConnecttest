@@ -57,7 +57,6 @@ const ROOM_INDEX: Record<
   },
 };
 
-// Stabil deltakerliste – ingen randomisering
 const peopleInRoom = (n: number) =>
   mockUsers.slice(0, Math.max(1, Math.min(n, mockUsers.length)));
 
@@ -73,19 +72,28 @@ export default function RoomPage() {
 
   const [joined, setJoined] = React.useState<boolean>(joinedFromPopup);
 
-  // Kamera visning styres av kamera-ikonet
   const [cameraOn, setCameraOn] = React.useState<boolean>(false);
-
-  // Interaktive kontroller – alle knapper er hvite, kun ikonet endres
   const [micMuted, setMicMuted] = React.useState<boolean>(false);
   const [soundMuted, setSoundMuted] = React.useState<boolean>(false);
   const [screenSharing, setScreenSharing] = React.useState<boolean>(false);
 
   const meta = id ? ROOM_INDEX[id] : undefined;
 
+  // Når man forlater rommet – slå av alt
+  const resetState = () => {
+    setCameraOn(false);
+    setMicMuted(false);
+    setSoundMuted(false);
+    setScreenSharing(false);
+  };
+
+  const toggleJoin = () => {
+    if (joined) resetState();
+    setJoined((prev) => !prev);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
-      {/* Enkel topplinje */}
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur border-b">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
           <Button variant="outline" onClick={() => nav(-1)}>
@@ -99,33 +107,34 @@ export default function RoomPage() {
       <main className="max-w-6xl mx-auto px-4 py-8">
         {meta ? (
           <div className="grid md:grid-cols-3 gap-4">
-            {/* Hoved-chatkort + kamera-demo */}
             <Card className="md:col-span-2">
-              <CardHeader className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <CardHeader className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                 <div>
                   <CardTitle>{meta.name}</CardTitle>
                   <div className="text-slate-600 text-sm">
                     {meta.description}
                   </div>
                 </div>
-                {/* Bli med / Forlat-knapp oppe til høyre */}
+
+                {/* Bli med / Forlat */}
                 <Button
                   variant={joined ? "outline" : "default"}
-                  className="mt-2 sm:mt-0"
-                  onClick={() => setJoined((prev) => !prev)}
+                  onClick={toggleJoin}
                 >
                   {joined ? "Forlat rommet" : "Bli med i rommet"}
                 </Button>
               </CardHeader>
+
               <CardContent>
-                {/* Kameravisning – styres av kamera-ikonet */}
-                {cameraOn && (
+                {/* Kamera – viser kun hvis joined === true */}
+                {cameraOn && joined && (
                   <div className="mb-4 rounded-xl border overflow-hidden bg-slate-900 text-white h-56 relative">
                     <div className="w-full h-full flex items-center justify-center">
                       <span className="text-sm opacity-80">
                         [ Kamera – demo i dette rommet ]
                       </span>
                     </div>
+
                     <div className="absolute left-0 right-0 bottom-0 bg-black/50 px-3 py-1 text-[10px] flex justify-between">
                       <span>Du</span>
                       <span>Kamera på (demo)</span>
@@ -133,37 +142,23 @@ export default function RoomPage() {
                   </div>
                 )}
 
-                <div className="text-xs text-slate-500 mb-2">
-                  Tekstchat (mock)
-                </div>
+                <div className="text-xs text-slate-500 mb-2">Tekstchat (mock)</div>
+
                 <div className="space-y-2 max-h-72 overflow-auto bg-slate-50 border rounded-xl p-3">
-                  <Bubble
-                    name="Anna"
-                    text="Hei! Hvordan går det med innleveringen?"
-                  />
-                  <Bubble
-                    name="Bjørn"
-                    text="Tar en 25-min fokusøkt og så pause ☕"
-                    align="right"
-                  />
-                  <Bubble
-                    name="Chen"
-                    text="Noen som vil sparre på metode-delen?"
-                  />
+                  <Bubble name="Anna" text="Hei! Hvordan går det med innleveringen?" />
+                  <Bubble name="Bjørn" text="Tar en 25-min fokusøkt og så pause ☕" align="right" />
+                  <Bubble name="Chen" text="Noen som vil sparre på metode-delen?" />
                 </div>
 
-                {/* INPUTRAD med del fil-knapp */}
                 <div className="mt-3 flex gap-2">
-                  <Button variant="outline" className="shrink-0">
-                    <FileUp className="h-4 w-4" />
-                  </Button>
+                  <Button variant="outline"><FileUp className="h-4 w-4" /></Button>
                   <Input placeholder="Skriv en melding…" className="flex-1" />
-                  <Button className="shrink-0">Send</Button>
+                  <Button>Send</Button>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Sidepanel med deltakere og kontroller */}
+            {/* Sidepanel */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">Deltakere (mock)</CardTitle>
@@ -183,51 +178,39 @@ export default function RoomPage() {
                   ))}
                 </div>
 
-                {/* Ikonknapper – alle hvite (outline), strek-ikon når "aktiv" */}
+                {/* Kontroll-knapper – disabled hvis man ikke har joinet */}
                 <div className="mt-1 flex flex-wrap gap-2">
                   {/* Mic */}
                   <Button
+                    disabled={!joined}
                     variant="outline"
-                    title="Mic"
                     onClick={() => setMicMuted((prev) => !prev)}
                   >
-                    {micMuted ? (
-                      <MicOff className="h-4 w-4" />
-                    ) : (
-                      <Mic className="h-4 w-4" />
-                    )}
+                    {micMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
                   </Button>
 
                   {/* Kamera */}
                   <Button
+                    disabled={!joined}
                     variant="outline"
-                    title="Kamera (demo)"
                     onClick={() => setCameraOn((prev) => !prev)}
                   >
-                    {cameraOn ? (
-                      <Video className="h-4 w-4" />
-                    ) : (
-                      <VideoOff className="h-4 w-4" />
-                    )}
+                    {cameraOn ? <Video className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
                   </Button>
 
-                  {/* Lyd – Volume2 / VolumeX */}
+                  {/* Lyd */}
                   <Button
+                    disabled={!joined}
                     variant="outline"
-                    title="Lyd av/på"
                     onClick={() => setSoundMuted((prev) => !prev)}
                   >
-                    {soundMuted ? (
-                      <VolumeX className="h-4 w-4" />
-                    ) : (
-                      <Volume2 className="h-4 w-4" />
-                    )}
+                    {soundMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
                   </Button>
 
                   {/* Skjermdeling */}
                   <Button
+                    disabled={!joined}
                     variant="outline"
-                    title="Del skjerm (demo)"
                     onClick={() => setScreenSharing((prev) => !prev)}
                   >
                     {screenSharing ? (
@@ -271,11 +254,7 @@ function Bubble({
   align?: "left" | "right";
 }) {
   return (
-    <div
-      className={`flex ${
-        align === "right" ? "justify-end" : "justify-start"
-      }`}
-    >
+    <div className={`flex ${align === "right" ? "justify-end" : "justify-start"}`}>
       <div
         className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm shadow-sm ${
           align === "right" ? "bg-blue-600 text-white" : "bg-white border"
