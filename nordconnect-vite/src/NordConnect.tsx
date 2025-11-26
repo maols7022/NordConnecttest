@@ -410,9 +410,10 @@ export default function NordConnect() {
                       </Button>
                     )}
 
-                    {/* Expand fra forsiden: IKKE joined-state */}
+                    {/* Expand fra forsiden: eksplisitt joinedFromPopup: false */}
                     <Link
                       to={`/room/${r.id}`}
+                      state={{ joinedFromPopup: false }}
                       className="inline-flex items-center justify-center rounded-md border h-9 w-9"
                     >
                       <Expand className="h-4 w-4" />
