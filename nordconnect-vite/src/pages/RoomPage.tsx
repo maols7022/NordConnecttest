@@ -9,7 +9,8 @@ import {
   MicOff,
   Video,
   VideoOff,
-  Headphones,
+  Volume2,
+  VolumeX,
   ArrowLeft,
   ScreenShare,
   ScreenShareOff,
@@ -210,17 +211,16 @@ export default function RoomPage() {
                     )}
                   </Button>
 
-                  {/* Lyd */}
+                  {/* Lyd – Volume2 / VolumeX */}
                   <Button
                     variant="outline"
                     title="Lyd av/på"
                     onClick={() => setSoundMuted((prev) => !prev)}
                   >
                     {soundMuted ? (
-                      // "Strek" ved å bruke gjennomskinnelighet forskjellig
-                      <Headphones className="h-4 w-4 line-through" />
+                      <VolumeX className="h-4 w-4" />
                     ) : (
-                      <Headphones className="h-4 w-4" />
+                      <Volume2 className="h-4 w-4" />
                     )}
                   </Button>
 
