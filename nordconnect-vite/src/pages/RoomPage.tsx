@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,16 +6,11 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import {
   Mic,
-  MicOff,
   Video,
-  VideoOff,
+  Headphones,
   ArrowLeft,
   ScreenShare,
-  ScreenShareOff,
   FileUp,
-  Users,
-  Volume2,
-  VolumeX,
 } from "lucide-react";
 
 const mockUsers = [
@@ -36,28 +31,14 @@ const ROOM_INDEX: Record<
     description: string;
   }
 > = {
-  kaffe: {
-    name: "Kaffepraten",
-    description: "Uformell prat. Kom og gå som du vil.",
-  },
-  fokus: {
-    name: "Fokusrom – stille",
-    description: "Pomodoro-økter og stille samskriving.",
-  },
-  ent1002: {
-    name: "ENT1002 – Diskusjon",
-    description: "Spørsmål, notater, og samarbeid.",
-  },
-  trivsel: {
-    name: "Trivselsprat",
-    description: "Trygt rom moderert av faddere.",
-  },
-  oslo: {
-    name: "Oslo-området",
-    description: "Møt andre i samme område.",
-  },
+  kaffe: { name: "Kaffepraten", description: "Uformell prat. Kom og gå som du vil." },
+  fokus: { name: "Fokusrom – stille", description: "Pomodoro-økter og stille samskriving." },
+  ent1002: { name: "ENT1002 – Diskusjon", description: "Spørsmål, notater, og samarbeid." },
+  trivsel: { name: "Trivselsprat", description: "Trygt rom moderert av faddere." },
+  oslo: { name: "Oslo-området", description: "Møt andre i samme område." },
 };
 
+// Stabil deltakerliste – ingen randomisering
 const peopleInRoom = (n: number) =>
   mockUsers.slice(0, Math.max(1, Math.min(n, mockUsers.length)));
 
@@ -66,108 +47,71 @@ export default function RoomPage() {
   const nav = useNavigate();
   const location = useLocation();
 
-  // Hvis vi kom fra popup i NordConnect, er denne true
   const joinedFromPopup =
-    (location.state as { joinedFromPopup?: boolean } | null)?.joinedFromPopup ??
-    false;
+    typeof location.state === "object" &&
+    location.state !== null &&
+    (location.state as any).joinedFromPopup === true;
+
+  const [joined, setJoined] = React.useState<boolean>(joinedFromPopup);
+  const [cameraOn, setCameraOn] = React.useState<boolean>(false);
 
   const meta = id ? ROOM_INDEX[id] : undefined;
-
-  const [isMuted, setIsMuted] = useState(false);
-  const [isDeafened, setIsDeafened] = useState(false);
-  const [isCameraOff, setIsCameraOff] = useState(false);
-  const [isScreenSharing, setIsScreenSharing] = useState(false);
-
-  // 🔥 Start som “i rommet” når vi kommer fra popup
-  const [isInRoom, setIsInRoom] = useState(joinedFromPopup);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white text-slate-900">
       {/* Enkel topplinje */}
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur border-b">
-        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={() => nav(-1)}>
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Tilbake
-            </Button>
-            <div className="text-sm text-slate-500">/room/{id}</div>
-          </div>
-          <div className="hidden md:flex items-center gap-2 text-xs text-slate-500">
-            <Users className="h-4 w-4" />
-            <span>Åpent rom for nettstudenter (demo)</span>
-          </div>
+        <div className="max-w-6xl mx-auto px-4 py-3 flex items-center gap-3">
+          <Button variant="outline" onClick={() => nav(-1)}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Tilbake
+          </Button>
+          <div className="text-sm text-slate-500">/room/{id}</div>
         </div>
       </header>
 
       <main className="max-w-6xl mx-auto px-4 py-8">
         {meta ? (
           <div className="grid md:grid-cols-3 gap-4">
-            {/* Hovedkort: info + chat + kamera */}
+            {/* Hoved-chatkort + kamera-demo */}
             <Card className="md:col-span-2">
-              <CardHeader className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <CardTitle>{meta.name}</CardTitle>
-                  <div className="text-slate-600 text-sm">
-                    {meta.description}
-                  </div>
-                </div>
-                <Button
-                  size="sm"
-                  className="text-xs mt-1 md:mt-0"
-                  variant={isInRoom ? "outline" : "default"}
-                  onClick={() => setIsInRoom((prev) => !prev)}
-                >
-                  {isInRoom ? "Forlat rommet" : "Bli med i rommet"}
-                </Button>
+              <CardHeader>
+                <CardTitle>{meta.name}</CardTitle>
+                <div className="text-slate-600 text-sm">{meta.description}</div>
               </CardHeader>
-
               <CardContent>
-                {/* Kameravisning – kun når du er i rommet og kamera er på */}
-                {isInRoom && !isCameraOff && (
-                  <div className="mb-4">
-                    <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-56 relative">
-                      <div className="w-full h-full bg-gradient-to-tr from-slate-800 to-slate-700 flex items-center justify-center">
-                        <span className="text-sm opacity-80 text-center px-4">
-                          [ Kameravisning – demo for dette rommet ]
+                {/* Kamera-knapp + evt. kameravisning */}
+                <div className="mb-4 space-y-3">
+                  <Button
+                    variant="outline"
+                    onClick={() => setCameraOn((prev) => !prev)}
+                  >
+                    {cameraOn ? "Skru av kamera (demo)" : "Aktiver kamera (demo)"}
+                  </Button>
+
+                  {cameraOn && (
+                    <div className="rounded-xl border overflow-hidden bg-slate-900 text-white h-56 mb-2 relative">
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="text-sm opacity-80">
+                          [ Kamera – demo i dette rommet ]
                         </span>
                       </div>
-
-                      <div className="absolute left-0 right-0 bottom-0 bg-black/50 backdrop-blur px-3 py-1.5 flex items-center justify-between">
-                        <div className="text-[11px]">
-                          <div className="font-medium">Du</div>
-                          <div className="text-[10px] text-slate-200/80">
-                            Kamera aktivert (mock)
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-1 text-[10px] text-slate-100/80">
-                          {isMuted ? "Mic av" : "Mic på"} •{" "}
-                          {isDeafened ? "Lyd av" : "Lyd på"} •{" "}
-                          {isScreenSharing ? "Skjermdeling" : "Ingen deling"}
-                        </div>
+                      <div className="absolute left-0 right-0 bottom-0 bg-black/50 px-3 py-1 text-[10px] flex justify-between">
+                        <span>Du</span>
+                        <span>Kamera på (demo)</span>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
 
-                <div className="text-xs text-slate-500 mb-2">
-                  Tekstchat (mock)
-                </div>
+                <div className="text-xs text-slate-500 mb-2">Tekstchat (mock)</div>
                 <div className="space-y-2 max-h-72 overflow-auto bg-slate-50 border rounded-xl p-3">
-                  <Bubble
-                    name="Anna"
-                    text="Hei! Hvordan går det med innleveringen?"
-                  />
-                  <Bubble
-                    name="Bjørn"
-                    text="Tar en 25-min fokusøkt og så pause ☕"
-                    align="right"
-                  />
-                  <Bubble
-                    name="Chen"
-                    text="Noen som vil sparre på metode-delen?"
-                  />
+                  <Bubble name="Anna" text="Hei! Hvordan går det med innleveringen?" />
+                  <Bubble name="Bjørn" text="Tar en 25-min fokusøkt og så pause ☕" align="right" />
+                  <Bubble name="Chen" text="Noen som vil sparre på metode-delen?" />
                 </div>
+
+                {/* INPUTRAD med del fil-knapp */}
                 <div className="mt-3 flex gap-2">
                   <Button variant="outline" className="shrink-0">
                     <FileUp className="h-4 w-4" />
@@ -178,13 +122,22 @@ export default function RoomPage() {
               </CardContent>
             </Card>
 
-            {/* Sidepanel med deltakere + kontroller */}
+            {/* Sidepanel med deltakere og kontroller */}
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">Deltakere (mock)</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-2 gap-2 mb-3">
+                {/* Bli med / Forlat-knapp styrt av joinedFromPopup + local state */}
+                <Button
+                  className="w-full mb-3"
+                  variant={joined ? "default" : "outline"}
+                  onClick={() => setJoined((prev) => !prev)}
+                >
+                  {joined ? "Forlat rommet" : "Bli med i rommet"}
+                </Button>
+
+                <div className="grid grid-cols-2 gap-2">
                   {peopleInRoom(6).map((p, i) => (
                     <div
                       key={p + i}
@@ -193,88 +146,29 @@ export default function RoomPage() {
                       <Avatar className="h-7 w-7 border">
                         <AvatarFallback>{p[0]}</AvatarFallback>
                       </Avatar>
-                      <span className="text-sm truncate">{p}</span>
+                      <span className="text-sm">{p}</span>
                     </div>
                   ))}
                 </div>
 
-                {/* Ikonknapper – samme stil som på demo-sidene */}
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {/* Mic */}
-                  <Button
-                    className={`rounded-full p-3 transition ${
-                      isMuted
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-foreground"
-                    }`}
-                    variant="ghost"
-                    title="Mic av/på (demo)"
-                    onClick={() => setIsMuted((prev) => !prev)}
-                  >
-                    {isMuted ? (
-                      <MicOff className="h-4 w-4" />
-                    ) : (
-                      <Mic className="h-4 w-4" />
-                    )}
+                {/* Ikonknapper i normal størrelse */}
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Button variant="secondary" title="Mic">
+                    <Mic className="h-4 w-4" />
                   </Button>
-
-                  {/* Lyd (deafen) */}
-                  <Button
-                    className={`rounded-full p-3 transition ${
-                      isDeafened
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-foreground"
-                    }`}
-                    variant="ghost"
-                    title="Lyd av/på (demo)"
-                    onClick={() => setIsDeafened((prev) => !prev)}
-                  >
-                    {isDeafened ? (
-                      <VolumeX className="h-4 w-4" />
-                    ) : (
-                      <Volume2 className="h-4 w-4" />
-                    )}
+                  <Button variant="secondary" title="Kamera">
+                    <Video className="h-4 w-4" />
                   </Button>
-
-                  {/* Kamera */}
-                  <Button
-                    className={`rounded-full p-3 transition ${
-                      isCameraOff
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-foreground"
-                    }`}
-                    variant="ghost"
-                    title="Aktiver/deaktiver kamera (demo)"
-                    onClick={() => setIsCameraOff((prev) => !prev)}
-                  >
-                    {isCameraOff ? (
-                      <VideoOff className="h-4 w-4" />
-                    ) : (
-                      <Video className="h-4 w-4" />
-                    )}
+                  <Button variant="secondary" title="Lyd">
+                    <Headphones className="h-4 w-4" />
                   </Button>
-
-                  {/* Del skjerm */}
-                  <Button
-                    className={`rounded-full p-3 transition ${
-                      isScreenSharing
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-foreground"
-                    }`}
-                    variant="ghost"
-                    title="Del skjerm (demo)"
-                    onClick={() => setIsScreenSharing((prev) => !prev)}
-                  >
-                    {isScreenSharing ? (
-                      <ScreenShareOff className="h-4 w-4" />
-                    ) : (
-                      <ScreenShare className="h-4 w-4" />
-                    )}
+                  <Button variant="outline" title="Del skjerm (demo)">
+                    <ScreenShare className="h-4 w-4" />
                   </Button>
                 </div>
 
                 <Button
-                  className="mt-4 w-full"
+                  className="mt-3 w-full"
                   variant="outline"
                   onClick={() => nav(-1)}
                 >
