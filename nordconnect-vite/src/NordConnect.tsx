@@ -39,7 +39,6 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  SheetClose,
 } from "@/components/ui/sheet";
 
 import {
@@ -134,6 +133,7 @@ export default function NordConnect() {
   ]);
 
   const [demoMenuOpen, setDemoMenuOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false); // kontrollert mobilmeny
 
   // Kontroller for popup-rom
   const [isMuted, setIsMuted] = useState(false);
@@ -273,7 +273,7 @@ export default function NordConnect() {
 
             {/* Mobilmeny */}
             <div className="md:hidden">
-              <Sheet>
+              <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
                 <SheetTrigger asChild>
                   <Button variant="outline">Meny</Button>
                 </SheetTrigger>
@@ -283,47 +283,61 @@ export default function NordConnect() {
                   </SheetHeader>
 
                   <div className="mt-6 grid gap-4">
-                    <SheetClose asChild>
-                      <a href="#about" className="hover:underline">
-                        Om
-                      </a>
-                    </SheetClose>
+                    <a
+                      href="#about"
+                      className="hover:underline"
+                      onClick={() => setIsSheetOpen(false)}
+                    >
+                      Om
+                    </a>
 
-                    <SheetClose asChild>
-                      <Link to="/how-it-works" className="hover:underline">
-                        Slik funker det
-                      </Link>
-                    </SheetClose>
+                    <Link
+                      to="/how-it-works"
+                      className="hover:underline"
+                      onClick={() => setIsSheetOpen(false)}
+                    >
+                      Slik funker det
+                    </Link>
 
-                    <SheetClose asChild>
-                      <a href="#rooms" className="hover:underline">
-                        Rom
-                      </a>
-                    </SheetClose>
+                    <a
+                      href="#rooms"
+                      className="hover:underline"
+                      onClick={() => setIsSheetOpen(false)}
+                    >
+                      Rom
+                    </a>
 
-                    <SheetClose asChild>
-                      <Link to="/quiz-demo" className="hover:underline">
-                        Kamera-demo: Quiz
-                      </Link>
-                    </SheetClose>
+                    <Link
+                      to="/quiz-demo"
+                      className="hover:underline"
+                      onClick={() => setIsSheetOpen(false)}
+                    >
+                      Kamera-demo: Quiz
+                    </Link>
 
-                    <SheetClose asChild>
-                      <Link to="/study-demo" className="hover:underline">
-                        Kamera-demo: Studiegruppe
-                      </Link>
-                    </SheetClose>
+                    <Link
+                      to="/study-demo"
+                      className="hover:underline"
+                      onClick={() => setIsSheetOpen(false)}
+                    >
+                      Kamera-demo: Studiegruppe
+                    </Link>
 
-                    <SheetClose asChild>
-                      <Link to="/breakout-demo" className="hover:underline">
-                        Breakout-demo
-                      </Link>
-                    </SheetClose>
+                    <Link
+                      to="/breakout-demo"
+                      className="hover:underline"
+                      onClick={() => setIsSheetOpen(false)}
+                    >
+                      Breakout-demo
+                    </Link>
 
-                    <SheetClose asChild>
-                      <Link to="/gamification-demo" className="hover:underline">
-                        Gamification
-                      </Link>
-                    </SheetClose>
+                    <Link
+                      to="/gamification-demo"
+                      className="hover:underline"
+                      onClick={() => setIsSheetOpen(false)}
+                    >
+                      Gamification
+                    </Link>
                   </div>
                 </SheetContent>
               </Sheet>
