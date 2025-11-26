@@ -6,10 +6,13 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import {
   Mic,
+  MicOff,
   Video,
+  VideoOff,
   Headphones,
   ArrowLeft,
   ScreenShare,
+  ScreenShareOff,
   FileUp,
 } from "lucide-react";
 
@@ -68,7 +71,14 @@ export default function RoomPage() {
     (location.state as any).joinedFromPopup === true;
 
   const [joined, setJoined] = React.useState<boolean>(joinedFromPopup);
+
+  // Kamera visning styres av kamera-ikonet
   const [cameraOn, setCameraOn] = React.useState<boolean>(false);
+
+  // Interaktive kontroller – alle knapper er hvite, kun ikonet endres
+  const [micMuted, setMicMuted] = React.useState<boolean>(false);
+  const [soundMuted, setSoundMuted] = React.useState<boolean>(false);
+  const [screenSharing, setScreenSharing] = React.useState<boolean>(false);
 
   const meta = id ? ROOM_INDEX[id] : undefined;
 
@@ -107,7 +117,7 @@ export default function RoomPage() {
                 </Button>
               </CardHeader>
               <CardContent>
-                {/* Kameravisning styrt av kamera-ikonet i sidepanelet */}
+                {/* Kameravisning – styres av kamera-ikonet */}
                 {cameraOn && (
                   <div className="mb-4 rounded-xl border overflow-hidden bg-slate-900 text-white h-56 relative">
                     <div className="w-full h-full flex items-center justify-center">
@@ -172,23 +182,59 @@ export default function RoomPage() {
                   ))}
                 </div>
 
-                {/* Ikonknapper – kamera-ikonet styrer kameraOn */}
+                {/* Ikonknapper – alle hvite (outline), strek-ikon når "aktiv" */}
                 <div className="mt-1 flex flex-wrap gap-2">
-                  <Button variant="secondary" title="Mic">
-                    <Mic className="h-4 w-4" />
-                  </Button>
+                  {/* Mic */}
                   <Button
-                    variant={cameraOn ? "secondary" : "outline"}
+                    variant="outline"
+                    title="Mic"
+                    onClick={() => setMicMuted((prev) => !prev)}
+                  >
+                    {micMuted ? (
+                      <MicOff className="h-4 w-4" />
+                    ) : (
+                      <Mic className="h-4 w-4" />
+                    )}
+                  </Button>
+
+                  {/* Kamera */}
+                  <Button
+                    variant="outline"
                     title="Kamera (demo)"
                     onClick={() => setCameraOn((prev) => !prev)}
                   >
-                    <Video className="h-4 w-4" />
+                    {cameraOn ? (
+                      <Video className="h-4 w-4" />
+                    ) : (
+                      <VideoOff className="h-4 w-4" />
+                    )}
                   </Button>
-                  <Button variant="secondary" title="Lyd">
-                    <Headphones className="h-4 w-4" />
+
+                  {/* Lyd */}
+                  <Button
+                    variant="outline"
+                    title="Lyd av/på"
+                    onClick={() => setSoundMuted((prev) => !prev)}
+                  >
+                    {soundMuted ? (
+                      // "Strek" ved å bruke gjennomskinnelighet forskjellig
+                      <Headphones className="h-4 w-4 line-through" />
+                    ) : (
+                      <Headphones className="h-4 w-4" />
+                    )}
                   </Button>
-                  <Button variant="outline" title="Del skjerm (demo)">
-                    <ScreenShare className="h-4 w-4" />
+
+                  {/* Skjermdeling */}
+                  <Button
+                    variant="outline"
+                    title="Del skjerm (demo)"
+                    onClick={() => setScreenSharing((prev) => !prev)}
+                  >
+                    {screenSharing ? (
+                      <ScreenShareOff className="h-4 w-4" />
+                    ) : (
+                      <ScreenShare className="h-4 w-4" />
+                    )}
                   </Button>
                 </div>
 
