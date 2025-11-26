@@ -34,14 +34,6 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -132,6 +124,8 @@ export default function NordConnect() {
     "Fadder-kveld i Trivselsprat kl 19:30 i dag.",
   ]);
 
+  const [demoMenuOpen, setDemoMenuOpen] = useState(false);
+
   // Kontroller for popup-rom
   const [isMuted, setIsMuted] = useState(false);
   const [isDeafened, setIsDeafened] = useState(false);
@@ -212,12 +206,53 @@ export default function NordConnect() {
             <a href="#rooms" className="hover:underline">
               Rom
             </a>
-            <Link to="/quiz-demo" className="hover:underline">
-              Demoer
-            </Link>
+
+            {/* Demoer-dropdown i toppmenyen (kun desktop) */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setDemoMenuOpen((v) => !v)}
+                className="inline-flex items-center gap-1 hover:underline"
+              >
+                Demoer
+                <ChevronRight className="h-3 w-3 rotate-90" />
+              </button>
+              {demoMenuOpen && (
+                <div className="absolute right-0 mt-2 w-56 rounded-md border bg-white shadow-lg text-sm z-50">
+                  <Link
+                    to="/quiz-demo"
+                    className="block px-3 py-2 hover:bg-slate-50"
+                    onClick={() => setDemoMenuOpen(false)}
+                  >
+                    Kamera-demo: Quizkveld
+                  </Link>
+                  <Link
+                    to="/study-demo"
+                    className="block px-3 py-2 hover:bg-slate-50"
+                    onClick={() => setDemoMenuOpen(false)}
+                  >
+                    Kamera-demo: Studiegruppe
+                  </Link>
+                  <Link
+                    to="/breakout-demo"
+                    className="block px-3 py-2 hover:bg-slate-50"
+                    onClick={() => setDemoMenuOpen(false)}
+                  >
+                    Breakout-rom (demo)
+                  </Link>
+                  <Link
+                    to="/gamification-demo"
+                    className="block px-3 py-2 hover:bg-slate-50"
+                    onClick={() => setDemoMenuOpen(false)}
+                  >
+                    Gamification
+                  </Link>
+                </div>
+              )}
+            </div>
           </nav>
 
-          {/* Høyre */}
+          {/* Høyre (kun desktop) */}
           <div className="flex items-center justify-end gap-2">
             <Button variant="ghost" className="hidden md:inline-flex">
               <Bell className="h-4 w-4 mr-2" /> Varsler
@@ -226,44 +261,6 @@ export default function NordConnect() {
             <Button className="hidden md:inline-flex">
               <Globe className="h-4 w-4 mr-2" /> Logg inn
             </Button>
-
-            {/* Mobilmeny */}
-            <div className="md:hidden">
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="outline">Meny</Button>
-                </SheetTrigger>
-                <SheetContent>
-                  <SheetHeader>
-                    <SheetTitle>NordConnect</SheetTitle>
-                  </SheetHeader>
-
-                  <div className="mt-6 grid gap-4">
-                    <a href="#about" className="hover:underline">
-                      Om
-                    </a>
-                    <Link to="/how-it-works" className="hover:underline">
-                      Slik funker det
-                    </Link>
-                    <a href="#rooms" className="hover:underline">
-                      Rom
-                    </a>
-                    <Link to="/quiz-demo" className="hover:underline">
-                      Kamera-demo: Quiz
-                    </Link>
-                    <Link to="/study-demo" className="hover:underline">
-                      Kamera-demo: Studiegruppe
-                    </Link>
-                    <Link to="/breakout-demo" className="hover:underline">
-                      Breakout-demo
-                    </Link>
-                    <Link to="/gamification-demo" className="hover:underline">
-                      Gamification
-                    </Link>
-                  </div>
-                </SheetContent>
-              </Sheet>
-            </div>
           </div>
         </div>
       </header>
